@@ -1,8 +1,11 @@
+import type { PointerEvent } from "react";
 import type { CharacterPosition, CustomCharacter } from "../types/characters";
 
 type CustomCharacterProps = {
   character: CustomCharacter;
   position: CharacterPosition;
+  onPointerDown?: (event: PointerEvent<HTMLDivElement>) => void;
+  isDragging?: boolean;
 };
 
 const shapeMap: Record<string, string> = {
@@ -26,16 +29,17 @@ const shapeMap: Record<string, string> = {
   default: "12%"
 };
 
-export function CustomCharacter({ character, position }: CustomCharacterProps) {
+export function CustomCharacter({ character, position, onPointerDown, isDragging = false }: CustomCharacterProps) {
   const { components } = character;
 
   return (
     <div
-      className="custom-character"
+      className={`custom-character draggable-character${isDragging ? " dragging" : ""}`}
       style={{
         left: position.x,
         top: position.y
       }}
+      onPointerDown={onPointerDown}
     >
       <div
         className="custom-head"

@@ -1,6 +1,7 @@
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, PointerEvent, useEffect, useMemo, useRef, useState } from "react";
 import { CharacterCreatorModal } from "./components/CharacterCreatorModal";
 import { CustomCharacter as CustomCharacterView } from "./components/CustomCharacter";
+import { SceneBackground } from "./components/backgrounds/SceneBackground";
 import { MAX_CUSTOM_CHARACTERS, createDefaultComponents } from "./constants/characterCreator";
 import type { CharacterComponentKey, CharacterPosition, CustomCharacter } from "./types/characters";
 import { storage } from "./utils/storage";
@@ -17,6 +18,18 @@ const createDefaultDraft = (): CharacterDraft => ({
   components: createDefaultComponents()
 });
 
+const BASE_CHARACTER_DEFAULTS: Record<string, CharacterPosition> = {
+  penguin: { x: 140, y: 120 },
+  bear: { x: 520, y: 120 }
+};
+
+const CHARACTER_SIZES = {
+  base: { width: 300, height: 300 },
+  custom: { width: 140, height: 180 }
+} as const;
+
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
 function App() {
   const [isNightMode, setIsNightMode] = useState(() => storage.getNightMode());
   const [selectedBackground, setSelectedBackground] = useState(() => storage.getSelectedBackground());
@@ -29,8 +42,22 @@ function App() {
   const [isCreatorOpen, setIsCreatorOpen] = useState(false);
   const [characterDraft, setCharacterDraft] = useState<CharacterDraft>(() => createDefaultDraft());
   const [creatorError, setCreatorError] = useState("");
+  const [draggingCharacterId, setDraggingCharacterId] = useState<string | null>(null);
+
+  const dragStateRef = useRef<{
+    id: string;
+    pointerOffsetX: number;
+    pointerOffsetY: number;
+    width: number;
+    height: number;
+  } | null>(null);
 
   const modeLabel = useMemo(() => (isNightMode ? "Night Mode" : "Day Mode"), [isNightMode]);
+  const customCharacterIds = useMemo(() => customCharacters.map((character) => character.id), [customCharacters]);
+  const draggableCharacterIds = useMemo(
+    () => ["penguin", "bear", ...customCharacterIds],
+    [customCharacterIds]
+  );
 
   useEffect(() => {
     document.body.classList.toggle("dark-mode", isNightMode);
@@ -56,13 +83,57 @@ function App() {
     storage.setCharacterPositions(characterPositions);
   }, [characterPositions]);
 
+  useEffect(() => {
+    setCharacterPositions((prev) => ({
+      ...BASE_CHARACTER_DEFAULTS,
+      ...prev
+    }));
+  }, []);
+
+  useEffect(() => {
+    const wanderInterval = window.setInterval(() => {
+      setCharacterPositions((prev) => {
+        const next = { ...prev };
+
+        draggableCharacterIds.forEach((id) => {
+          if (dragStateRef.current?.id === id) {
+            return;
+          }
+
+          if (Math.random() > 0.35) {
+            return;
+          }
+
+          const isCustomCharacter = customCharacterIds.includes(id);
+          const size = isCustomCharacter ? CHARACTER_SIZES.custom : CHARACTER_SIZES.base;
+          const current = next[id] ?? (isCustomCharacter ? { x: 200, y: 220 } : BASE_CHARACTER_DEFAULTS[id]);
+          const deltaX = Math.floor(Math.random() * 121) - 60;
+          const deltaY = Math.floor(Math.random() * 101) - 50;
+          const maxX = Math.max(0, window.innerWidth - size.width);
+          const maxY = Math.max(0, window.innerHeight - size.height);
+
+          next[id] = {
+            x: clamp(current.x + deltaX, 0, maxX),
+            y: clamp(current.y + deltaY, 0, maxY)
+          };
+        });
+
+        return next;
+      });
+    }, 1800);
+
+    return () => {
+      window.clearInterval(wanderInterval);
+    };
+  }, [customCharacterIds, draggableCharacterIds]);
+
   const handleModeChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIsNightMode(event.target.checked);
   };
 
   const handleResetCustomCharacters = () => {
     setCustomCharacters([]);
-    setCharacterPositions({});
+    setCharacterPositions({ ...BASE_CHARACTER_DEFAULTS });
     storage.resetCustomCharacters();
   };
 
@@ -116,17 +187,72 @@ function App() {
     }));
   };
 
-  const withDarkMode = (className: string) => (isNightMode ? `${className} dark-mode` : className);
+  const startDrag =
+    (id: string, size: { width: number; height: number }) => (event: PointerEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      const currentPosition = characterPositions[id] ?? BASE_CHARACTER_DEFAULTS[id] ?? { x: 200, y: 220 };
+      dragStateRef.current = {
+        id,
+        pointerOffsetX: event.clientX - currentPosition.x,
+        pointerOffsetY: event.clientY - currentPosition.y,
+        width: size.width,
+        height: size.height
+      };
+      setDraggingCharacterId(id);
+    };
+
+  useEffect(() => {
+    const handlePointerMove = (event: globalThis.PointerEvent) => {
+      const dragState = dragStateRef.current;
+      if (!dragState) {
+        return;
+      }
+
+      const maxX = Math.max(0, window.innerWidth - dragState.width);
+      const maxY = Math.max(0, window.innerHeight - dragState.height);
+      const nextPosition = {
+        x: clamp(event.clientX - dragState.pointerOffsetX, 0, maxX),
+        y: clamp(event.clientY - dragState.pointerOffsetY, 0, maxY)
+      };
+
+      setCharacterPositions((prev) => ({
+        ...prev,
+        [dragState.id]: nextPosition
+      }));
+    };
+
+    const stopDragging = () => {
+      if (!dragStateRef.current) {
+        return;
+      }
+      dragStateRef.current = null;
+      setDraggingCharacterId(null);
+    };
+
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", stopDragging);
+    window.addEventListener("pointercancel", stopDragging);
+
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", stopDragging);
+      window.removeEventListener("pointercancel", stopDragging);
+    };
+  }, []);
 
   return (
     <>
-      <div className={withDarkMode("left-mountain")}></div>
-      <div className={withDarkMode("back-mountain")}></div>
-      <div className={withDarkMode("sun")}></div>
-      <div className="igloo">
-        <img src="https://www.pngall.com/wp-content/uploads/4/Igloo-PNG-Image-HD.png" />
-      </div>
-      <div className="penguin">
+      <SceneBackground isNightMode={isNightMode} />
+      <div
+        className={`penguin draggable-character${draggingCharacterId === "penguin" ? " dragging" : ""}`}
+        style={{
+          position: "absolute",
+          left: (characterPositions.penguin ?? BASE_CHARACTER_DEFAULTS.penguin).x,
+          top: (characterPositions.penguin ?? BASE_CHARACTER_DEFAULTS.penguin).y,
+          margin: 0
+        }}
+        onPointerDown={startDrag("penguin", CHARACTER_SIZES.base)}
+      >
         <div className="penguin-head">
           <div className="face left"></div>
           <div className="face right"></div>
@@ -153,7 +279,14 @@ function App() {
           <div className="foot right"></div>
         </div>
       </div>
-      <div className="bear">
+      <div
+        className={`bear draggable-character${draggingCharacterId === "bear" ? " dragging" : ""}`}
+        style={{
+          left: (characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear).x,
+          top: (characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear).y
+        }}
+        onPointerDown={startDrag("bear", CHARACTER_SIZES.base)}
+      >
         <div className="bear-head">
           <div className="bear_ear left">
             <div className="bear_ear_in left"></div>
@@ -189,10 +322,10 @@ function App() {
           key={character.id}
           character={character}
           position={characterPositions[character.id] ?? character.position}
+          onPointerDown={startDrag(character.id, CHARACTER_SIZES.custom)}
+          isDragging={draggingCharacterId === character.id}
         />
       ))}
-
-      <div className={withDarkMode("ground")}></div>
       <div className="switch-container">
         <label className="switch">
           <input type="checkbox" id="mode-switch" checked={isNightMode} onChange={handleModeChange} />
