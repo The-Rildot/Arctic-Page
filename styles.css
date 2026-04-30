@@ -558,9 +558,13 @@ body {
 /*Switch Visual*/
 
 .switch-container {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  gap: 8px;
 }
 
 .switch {
@@ -614,4 +618,105 @@ input:checked + .slider:before {
   margin-left: 10px;
   font-size: 18px;
   z-index: 3;
+}
+
+/* Custom character visuals */
+
+.custom-character {
+  width: 140px;
+  height: 180px;
+  position: absolute;
+  z-index: 4;
+  user-select: none;
+}
+
+.custom-head {
+  width: 86px;
+  height: 72px;
+  margin: 0 auto;
+  position: relative;
+  border: 2px solid rgba(15, 23, 42, 0.2);
+}
+
+.custom-eyes {
+  display: flex;
+  justify-content: space-between;
+  width: 48px;
+  margin: 22px auto 0;
+}
+
+.custom-eye {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+}
+
+.custom-mouth {
+  width: 30px;
+  height: 6px;
+  margin: 10px auto 0;
+}
+
+.custom-blush-row {
+  width: 82px;
+  margin: 8px auto 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.custom-blush {
+  width: 12px;
+  height: 6px;
+  display: inline-block;
+}
+
+.custom-body {
+  width: 100px;
+  height: 102px;
+  margin: 6px auto 0;
+  position: relative;
+  border: 2px solid rgba(15, 23, 42, 0.2);
+}
+
+.custom-arms {
+  width: 140px;
+  position: absolute;
+  left: -20px;
+  top: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.custom-arm {
+  width: 14px;
+  display: inline-block;
+  min-height: 16px;
+  border-radius: 999px;
+}
+
+.custom-shirt {
+  width: 76px;
+  min-height: 30px;
+  margin: 16px auto 0;
+  padding: 6px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.custom-legs {
+  width: 72px;
+  position: absolute;
+  left: 14px;
+  bottom: -20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.custom-leg {
+  width: 14px;
+  display: inline-block;
+  min-height: 16px;
+  border-radius: 999px;
 }

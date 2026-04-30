@@ -1,6 +1,21 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import type { CharacterPosition, CustomCharacter } from "./types/characters";
+import { CharacterCreatorModal } from "./components/CharacterCreatorModal";
+import { CustomCharacter as CustomCharacterView } from "./components/CustomCharacter";
+import { MAX_CUSTOM_CHARACTERS, createDefaultComponents } from "./constants/characterCreator";
+import type { CharacterComponentKey, CharacterPosition, CustomCharacter } from "./types/characters";
 import { storage } from "./utils/storage";
+
+type CharacterDraft = {
+  name: string;
+  messageText: string;
+  components: CustomCharacter["components"];
+};
+
+const createDefaultDraft = (): CharacterDraft => ({
+  name: "",
+  messageText: "",
+  components: createDefaultComponents()
+});
 
 function App() {
   const [isNightMode, setIsNightMode] = useState(() => storage.getNightMode());
@@ -11,6 +26,9 @@ function App() {
   const [characterPositions, setCharacterPositions] = useState<Record<string, CharacterPosition>>(() =>
     storage.getCharacterPositions()
   );
+  const [isCreatorOpen, setIsCreatorOpen] = useState(false);
+  const [characterDraft, setCharacterDraft] = useState<CharacterDraft>(() => createDefaultDraft());
+  const [creatorError, setCreatorError] = useState("");
 
   const modeLabel = useMemo(() => (isNightMode ? "Night Mode" : "Day Mode"), [isNightMode]);
 
@@ -46,6 +64,56 @@ function App() {
     setCustomCharacters([]);
     setCharacterPositions({});
     storage.resetCustomCharacters();
+  };
+
+  const handleOpenCreator = () => {
+    if (customCharacters.length >= MAX_CUSTOM_CHARACTERS) {
+      setCreatorError(`You can only create ${MAX_CUSTOM_CHARACTERS} custom characters.`);
+      return;
+    }
+    setCreatorError("");
+    setCharacterDraft(createDefaultDraft());
+    setIsCreatorOpen(true);
+  };
+
+  const handleSaveCharacter = () => {
+    if (customCharacters.length >= MAX_CUSTOM_CHARACTERS) {
+      setCreatorError(`You can only create ${MAX_CUSTOM_CHARACTERS} custom characters.`);
+      return;
+    }
+
+    const trimmedName = characterDraft.name.trim();
+    const id = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `custom-${Date.now()}`;
+    const position = { x: 220 + customCharacters.length * 140, y: 220 };
+    const newCharacter: CustomCharacter = {
+      id,
+      type: "custom",
+      name: trimmedName || `Custom ${customCharacters.length + 1}`,
+      position,
+      messageText: characterDraft.messageText,
+      components: characterDraft.components
+    };
+
+    setCustomCharacters((prev) => [...prev, newCharacter]);
+    setCharacterPositions((prev) => ({
+      ...prev,
+      [newCharacter.id]: position
+    }));
+    setIsCreatorOpen(false);
+    setCreatorError("");
+  };
+
+  const updateDraftComponent = (key: CharacterComponentKey, updates: Partial<CustomCharacter["components"][CharacterComponentKey]>) => {
+    setCharacterDraft((prev) => ({
+      ...prev,
+      components: {
+        ...prev.components,
+        [key]: {
+          ...prev.components[key],
+          ...updates
+        }
+      }
+    }));
   };
 
   const withDarkMode = (className: string) => (isNightMode ? `${className} dark-mode` : className);
@@ -115,6 +183,15 @@ function App() {
           <div className="bear_foot right"></div>
         </div>
       </div>
+
+      {customCharacters.map((character) => (
+        <CustomCharacterView
+          key={character.id}
+          character={character}
+          position={characterPositions[character.id] ?? character.position}
+        />
+      ))}
+
       <div className={withDarkMode("ground")}></div>
       <div className="switch-container">
         <label className="switch">
@@ -125,7 +202,22 @@ function App() {
         <button className="ml-4 rounded bg-slate-800 px-3 py-2 text-sm text-white" onClick={handleResetCustomCharacters}>
           Reset Custom Characters
         </button>
+        <button className="ml-2 rounded bg-sky-700 px-3 py-2 text-sm text-white" onClick={handleOpenCreator}>
+          Create Character
+        </button>
+        {creatorError ? <span className="ml-3 text-sm font-medium text-red-600">{creatorError}</span> : null}
       </div>
+
+      <CharacterCreatorModal
+        isOpen={isCreatorOpen}
+        draft={characterDraft}
+        onClose={() => setIsCreatorOpen(false)}
+        onSave={handleSaveCharacter}
+        onNameChange={(value) => setCharacterDraft((prev) => ({ ...prev, name: value }))}
+        onMessageChange={(value) => setCharacterDraft((prev) => ({ ...prev, messageText: value }))}
+        onComponentVariantChange={(key, variantId) => updateDraftComponent(key, { variantId })}
+        onComponentColorChange={(key, color) => updateDraftComponent(key, { color })}
+      />
     </>
   );
 }
