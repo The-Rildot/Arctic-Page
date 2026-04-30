@@ -1,9 +1,12 @@
-import { ChangeEvent, PointerEvent, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { CharacterCreatorModal } from "./components/CharacterCreatorModal";
 import { CustomCharacter as CustomCharacterView } from "./components/CustomCharacter";
 import { SceneBackground } from "./components/backgrounds/SceneBackground";
+import { BACKGROUND_OPTIONS, DEFAULT_BACKGROUND_CLASS } from "./constants/backgrounds";
 import { MAX_CUSTOM_CHARACTERS, createDefaultComponents } from "./constants/characterCreator";
-import type { CharacterComponentKey, CharacterPosition, CustomCharacter } from "./types/characters";
+import { BASE_CHARACTER_DEFAULTS, CHARACTER_SIZES } from "./constants/motion";
+import { useCharacterMotion } from "./hooks/useCharacterMotion";
+import type { CharacterComponentKey, CustomCharacter } from "./types/characters";
 import { storage } from "./utils/storage";
 
 type CharacterDraft = {
@@ -18,28 +21,6 @@ const createDefaultDraft = (): CharacterDraft => ({
   components: createDefaultComponents()
 });
 
-const BASE_CHARACTER_DEFAULTS: Record<string, CharacterPosition> = {
-  penguin: { x: 140, y: 120 },
-  bear: { x: 520, y: 120 }
-};
-
-const CHARACTER_SIZES = {
-  base: { width: 300, height: 300 },
-  custom: { width: 140, height: 180 }
-} as const;
-
-const BACKGROUND_OPTIONS = [
-  { className: "bg-theme-arctic", label: "Arctic Blue" },
-  { className: "bg-theme-snow", label: "Snow White" },
-  { className: "bg-theme-lavender", label: "Lavender" },
-  { className: "bg-theme-aurora", label: "Aurora Mint" },
-  { className: "bg-theme-sunset", label: "Sunset Peach" }
-] as const;
-
-const DEFAULT_BACKGROUND_CLASS = BACKGROUND_OPTIONS[0].className;
-
-const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
-
 function App() {
   const [isNightMode, setIsNightMode] = useState(() => storage.getNightMode());
   const [selectedBackground, setSelectedBackground] = useState(
@@ -48,33 +29,24 @@ function App() {
   const [customCharacters, setCustomCharacters] = useState<CustomCharacter[]>(() =>
     storage.getCustomCharacters()
   );
-  const [characterPositions, setCharacterPositions] = useState<Record<string, CharacterPosition>>(() =>
-    storage.getCharacterPositions()
-  );
   const [isCreatorOpen, setIsCreatorOpen] = useState(false);
   const [characterDraft, setCharacterDraft] = useState<CharacterDraft>(() => createDefaultDraft());
   const [creatorError, setCreatorError] = useState("");
-  const [draggingCharacterId, setDraggingCharacterId] = useState<string | null>(null);
   const [selectedCustomCharacterId, setSelectedCustomCharacterId] = useState<string | null>(null);
   const [editingCharacterId, setEditingCharacterId] = useState<string | null>(null);
 
-  const dragStateRef = useRef<{
-    id: string;
-    pointerOffsetX: number;
-    pointerOffsetY: number;
-    width: number;
-    height: number;
-    startX: number;
-    startY: number;
-    moved: boolean;
-  } | null>(null);
-  const suppressSelectRef = useRef<string | null>(null);
-
   const modeLabel = useMemo(() => (isNightMode ? "Night Mode" : "Day Mode"), [isNightMode]);
   const customCharacterIds = useMemo(() => customCharacters.map((character) => character.id), [customCharacters]);
-  const draggableCharacterIds = useMemo(
-    () => ["penguin", "bear", ...customCharacterIds],
-    [customCharacterIds]
+  const { characterPositions, setCharacterPositions, draggingCharacterId, startDrag, suppressSelectRef } =
+    useCharacterMotion({
+      customCharacterIds,
+      initialPositions: storage.getCharacterPositions()
+    });
+  const startCharacterDrag = useMemo(
+    () =>
+      (id: string, size: { width: number; height: number }) =>
+        startDrag(id, size, (dragId) => setSelectedCustomCharacterId((prev) => (dragId === prev ? prev : null))),
+    [startDrag]
   );
 
   useEffect(() => {
@@ -108,50 +80,6 @@ function App() {
   useEffect(() => {
     storage.setCharacterPositions(characterPositions);
   }, [characterPositions]);
-
-  useEffect(() => {
-    setCharacterPositions((prev) => ({
-      ...BASE_CHARACTER_DEFAULTS,
-      ...prev
-    }));
-  }, []);
-
-  useEffect(() => {
-    const wanderInterval = window.setInterval(() => {
-      setCharacterPositions((prev) => {
-        const next = { ...prev };
-
-        draggableCharacterIds.forEach((id) => {
-          if (dragStateRef.current?.id === id) {
-            return;
-          }
-
-          if (Math.random() > 0.35) {
-            return;
-          }
-
-          const isCustomCharacter = customCharacterIds.includes(id);
-          const size = isCustomCharacter ? CHARACTER_SIZES.custom : CHARACTER_SIZES.base;
-          const current = next[id] ?? (isCustomCharacter ? { x: 200, y: 220 } : BASE_CHARACTER_DEFAULTS[id]);
-          const deltaX = Math.floor(Math.random() * 121) - 60;
-          const deltaY = Math.floor(Math.random() * 101) - 50;
-          const maxX = Math.max(0, window.innerWidth - size.width);
-          const maxY = Math.max(0, window.innerHeight - size.height);
-
-          next[id] = {
-            x: clamp(current.x + deltaX, 0, maxX),
-            y: clamp(current.y + deltaY, 0, maxY)
-          };
-        });
-
-        return next;
-      });
-    }, 1800);
-
-    return () => {
-      window.clearInterval(wanderInterval);
-    };
-  }, [customCharacterIds, draggableCharacterIds]);
 
   const handleModeChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIsNightMode(event.target.checked);
@@ -261,73 +189,6 @@ function App() {
     }));
   };
 
-  const startDrag =
-    (id: string, size: { width: number; height: number }) => (event: PointerEvent<HTMLDivElement>) => {
-      event.preventDefault();
-      const currentPosition = characterPositions[id] ?? BASE_CHARACTER_DEFAULTS[id] ?? { x: 200, y: 220 };
-      dragStateRef.current = {
-        id,
-        pointerOffsetX: event.clientX - currentPosition.x,
-        pointerOffsetY: event.clientY - currentPosition.y,
-        width: size.width,
-        height: size.height,
-        startX: event.clientX,
-        startY: event.clientY,
-        moved: false
-      };
-      setDraggingCharacterId(id);
-      setSelectedCustomCharacterId((prev) => (id === prev ? prev : null));
-    };
-
-  useEffect(() => {
-    const handlePointerMove = (event: globalThis.PointerEvent) => {
-      const dragState = dragStateRef.current;
-      if (!dragState) {
-        return;
-      }
-
-      if (
-        !dragState.moved &&
-        (Math.abs(event.clientX - dragState.startX) > 4 || Math.abs(event.clientY - dragState.startY) > 4)
-      ) {
-        dragState.moved = true;
-      }
-
-      const maxX = Math.max(0, window.innerWidth - dragState.width);
-      const maxY = Math.max(0, window.innerHeight - dragState.height);
-      const nextPosition = {
-        x: clamp(event.clientX - dragState.pointerOffsetX, 0, maxX),
-        y: clamp(event.clientY - dragState.pointerOffsetY, 0, maxY)
-      };
-
-      setCharacterPositions((prev) => ({
-        ...prev,
-        [dragState.id]: nextPosition
-      }));
-    };
-
-    const stopDragging = () => {
-      if (!dragStateRef.current) {
-        return;
-      }
-      if (dragStateRef.current.moved) {
-        suppressSelectRef.current = dragStateRef.current.id;
-      }
-      dragStateRef.current = null;
-      setDraggingCharacterId(null);
-    };
-
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerup", stopDragging);
-    window.addEventListener("pointercancel", stopDragging);
-
-    return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerup", stopDragging);
-      window.removeEventListener("pointercancel", stopDragging);
-    };
-  }, []);
-
   useEffect(() => {
     const handlePointerDown = (event: globalThis.PointerEvent) => {
       const target = event.target as HTMLElement | null;
@@ -357,7 +218,7 @@ function App() {
           top: (characterPositions.penguin ?? BASE_CHARACTER_DEFAULTS.penguin).y,
           margin: 0
         }}
-        onPointerDown={startDrag("penguin", CHARACTER_SIZES.base)}
+        onPointerDown={startCharacterDrag("penguin", CHARACTER_SIZES.base)}
       >
         <div className="penguin-head">
           <div className="face left"></div>
@@ -391,7 +252,7 @@ function App() {
           left: (characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear).x,
           top: (characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear).y
         }}
-        onPointerDown={startDrag("bear", CHARACTER_SIZES.base)}
+        onPointerDown={startCharacterDrag("bear", CHARACTER_SIZES.base)}
       >
         <div className="bear-head">
           <div className="bear_ear left">
@@ -428,7 +289,7 @@ function App() {
           <CustomCharacterView
             character={character}
             position={characterPositions[character.id] ?? character.position}
-            onPointerDown={startDrag(character.id, CHARACTER_SIZES.custom)}
+            onPointerDown={startCharacterDrag(character.id, CHARACTER_SIZES.custom)}
             onPointerUp={() => {
               if (suppressSelectRef.current === character.id) {
                 suppressSelectRef.current = null;
