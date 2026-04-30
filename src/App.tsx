@@ -28,11 +28,23 @@ const CHARACTER_SIZES = {
   custom: { width: 140, height: 180 }
 } as const;
 
+const BACKGROUND_OPTIONS = [
+  { className: "bg-theme-arctic", label: "Arctic Blue" },
+  { className: "bg-theme-snow", label: "Snow White" },
+  { className: "bg-theme-lavender", label: "Lavender" },
+  { className: "bg-theme-aurora", label: "Aurora Mint" },
+  { className: "bg-theme-sunset", label: "Sunset Peach" }
+] as const;
+
+const DEFAULT_BACKGROUND_CLASS = BACKGROUND_OPTIONS[0].className;
+
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
 function App() {
   const [isNightMode, setIsNightMode] = useState(() => storage.getNightMode());
-  const [selectedBackground, setSelectedBackground] = useState(() => storage.getSelectedBackground());
+  const [selectedBackground, setSelectedBackground] = useState(
+    () => storage.getSelectedBackground() || DEFAULT_BACKGROUND_CLASS
+  );
   const [customCharacters, setCustomCharacters] = useState<CustomCharacter[]>(() =>
     storage.getCustomCharacters()
   );
@@ -77,8 +89,16 @@ function App() {
   }, [isNightMode]);
 
   useEffect(() => {
-    storage.setSelectedBackground(selectedBackground);
-    document.body.dataset.background = selectedBackground;
+    const nextBackgroundClass = selectedBackground || DEFAULT_BACKGROUND_CLASS;
+    storage.setSelectedBackground(nextBackgroundClass);
+    document.body.dataset.background = nextBackgroundClass;
+    BACKGROUND_OPTIONS.forEach((option) => {
+      document.body.classList.remove(option.className);
+    });
+    document.body.classList.add(nextBackgroundClass);
+    return () => {
+      document.body.classList.remove(nextBackgroundClass);
+    };
   }, [selectedBackground]);
 
   useEffect(() => {
@@ -448,6 +468,20 @@ function App() {
         <button className="ml-2 rounded bg-sky-700 px-3 py-2 text-sm text-white" onClick={handleOpenCreator}>
           Create Character
         </button>
+        <label className="ml-2 flex items-center gap-2 rounded bg-white/80 px-2 py-1 text-sm text-slate-700">
+          Background
+          <select
+            className="rounded border border-slate-300 px-2 py-1 text-sm"
+            value={selectedBackground}
+            onChange={(event) => setSelectedBackground(event.target.value)}
+          >
+            {BACKGROUND_OPTIONS.map((option) => (
+              <option key={option.className} value={option.className}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
         {creatorError ? <span className="ml-3 text-sm font-medium text-red-600">{creatorError}</span> : null}
       </div>
 

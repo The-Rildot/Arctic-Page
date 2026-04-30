@@ -15,6 +15,46 @@ body {
     position: relative;
   }
 
+body.bg-theme-arctic {
+  background: #76c9ff;
+}
+
+body.bg-theme-snow {
+  background: #f5f8ff;
+}
+
+body.bg-theme-lavender {
+  background: #d9d2ff;
+}
+
+body.bg-theme-aurora {
+  background: #b9f8e7;
+}
+
+body.bg-theme-sunset {
+  background: #ffd7b0;
+}
+
+body.dark-mode.bg-theme-arctic {
+  background: #76c9ff;
+}
+
+body.dark-mode.bg-theme-snow {
+  background: #f5f8ff;
+}
+
+body.dark-mode.bg-theme-lavender {
+  background: #d9d2ff;
+}
+
+body.dark-mode.bg-theme-aurora {
+  background: #b9f8e7;
+}
+
+body.dark-mode.bg-theme-sunset {
+  background: #ffd7b0;
+}
+
 .scene-background {
   position: absolute;
   inset: 0;
