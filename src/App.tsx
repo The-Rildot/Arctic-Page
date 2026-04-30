@@ -43,6 +43,8 @@ function App() {
   const [characterDraft, setCharacterDraft] = useState<CharacterDraft>(() => createDefaultDraft());
   const [creatorError, setCreatorError] = useState("");
   const [draggingCharacterId, setDraggingCharacterId] = useState<string | null>(null);
+  const [selectedCustomCharacterId, setSelectedCustomCharacterId] = useState<string | null>(null);
+  const [editingCharacterId, setEditingCharacterId] = useState<string | null>(null);
 
   const dragStateRef = useRef<{
     id: string;
@@ -50,7 +52,11 @@ function App() {
     pointerOffsetY: number;
     width: number;
     height: number;
+    startX: number;
+    startY: number;
+    moved: boolean;
   } | null>(null);
+  const suppressSelectRef = useRef<string | null>(null);
 
   const modeLabel = useMemo(() => (isNightMode ? "Night Mode" : "Day Mode"), [isNightMode]);
   const customCharacterIds = useMemo(() => customCharacters.map((character) => character.id), [customCharacters]);
@@ -134,6 +140,8 @@ function App() {
   const handleResetCustomCharacters = () => {
     setCustomCharacters([]);
     setCharacterPositions({ ...BASE_CHARACTER_DEFAULTS });
+    setSelectedCustomCharacterId(null);
+    setEditingCharacterId(null);
     storage.resetCustomCharacters();
   };
 
@@ -144,34 +152,80 @@ function App() {
     }
     setCreatorError("");
     setCharacterDraft(createDefaultDraft());
+    setEditingCharacterId(null);
     setIsCreatorOpen(true);
   };
 
   const handleSaveCharacter = () => {
-    if (customCharacters.length >= MAX_CUSTOM_CHARACTERS) {
+    if (!editingCharacterId && customCharacters.length >= MAX_CUSTOM_CHARACTERS) {
       setCreatorError(`You can only create ${MAX_CUSTOM_CHARACTERS} custom characters.`);
       return;
     }
 
     const trimmedName = characterDraft.name.trim();
-    const id = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `custom-${Date.now()}`;
-    const position = { x: 220 + customCharacters.length * 140, y: 220 };
-    const newCharacter: CustomCharacter = {
-      id,
-      type: "custom",
-      name: trimmedName || `Custom ${customCharacters.length + 1}`,
-      position,
-      messageText: characterDraft.messageText,
-      components: characterDraft.components
-    };
+    if (editingCharacterId) {
+      setCustomCharacters((prev) =>
+        prev.map((character) =>
+          character.id === editingCharacterId
+            ? {
+                ...character,
+                name: trimmedName || character.name,
+                messageText: characterDraft.messageText,
+                components: characterDraft.components
+              }
+            : character
+        )
+      );
+      setSelectedCustomCharacterId(editingCharacterId);
+      setEditingCharacterId(null);
+    } else {
+      const id = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `custom-${Date.now()}`;
+      const position = { x: 220 + customCharacters.length * 140, y: 220 };
+      const newCharacter: CustomCharacter = {
+        id,
+        type: "custom",
+        name: trimmedName || `Custom ${customCharacters.length + 1}`,
+        position,
+        messageText: characterDraft.messageText,
+        components: characterDraft.components
+      };
 
-    setCustomCharacters((prev) => [...prev, newCharacter]);
-    setCharacterPositions((prev) => ({
-      ...prev,
-      [newCharacter.id]: position
-    }));
+      setCustomCharacters((prev) => [...prev, newCharacter]);
+      setCharacterPositions((prev) => ({
+        ...prev,
+        [newCharacter.id]: position
+      }));
+      setSelectedCustomCharacterId(newCharacter.id);
+    }
+
     setIsCreatorOpen(false);
     setCreatorError("");
+  };
+
+  const handleEditCharacter = (id: string) => {
+    const character = customCharacters.find((item) => item.id === id);
+    if (!character) {
+      return;
+    }
+    setCharacterDraft({
+      name: character.name,
+      messageText: character.messageText,
+      components: character.components
+    });
+    setEditingCharacterId(id);
+    setCreatorError("");
+    setIsCreatorOpen(true);
+  };
+
+  const handleDeleteCharacter = (id: string) => {
+    setCustomCharacters((prev) => prev.filter((character) => character.id !== id));
+    setCharacterPositions((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    setSelectedCustomCharacterId((prev) => (prev === id ? null : prev));
+    setEditingCharacterId((prev) => (prev === id ? null : prev));
   };
 
   const updateDraftComponent = (key: CharacterComponentKey, updates: Partial<CustomCharacter["components"][CharacterComponentKey]>) => {
@@ -196,9 +250,13 @@ function App() {
         pointerOffsetX: event.clientX - currentPosition.x,
         pointerOffsetY: event.clientY - currentPosition.y,
         width: size.width,
-        height: size.height
+        height: size.height,
+        startX: event.clientX,
+        startY: event.clientY,
+        moved: false
       };
       setDraggingCharacterId(id);
+      setSelectedCustomCharacterId((prev) => (id === prev ? prev : null));
     };
 
   useEffect(() => {
@@ -206,6 +264,13 @@ function App() {
       const dragState = dragStateRef.current;
       if (!dragState) {
         return;
+      }
+
+      if (
+        !dragState.moved &&
+        (Math.abs(event.clientX - dragState.startX) > 4 || Math.abs(event.clientY - dragState.startY) > 4)
+      ) {
+        dragState.moved = true;
       }
 
       const maxX = Math.max(0, window.innerWidth - dragState.width);
@@ -225,6 +290,9 @@ function App() {
       if (!dragStateRef.current) {
         return;
       }
+      if (dragStateRef.current.moved) {
+        suppressSelectRef.current = dragStateRef.current.id;
+      }
       dragStateRef.current = null;
       setDraggingCharacterId(null);
     };
@@ -237,6 +305,24 @@ function App() {
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", stopDragging);
       window.removeEventListener("pointercancel", stopDragging);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handlePointerDown = (event: globalThis.PointerEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) {
+        return;
+      }
+      if (target.closest(".custom-character") || target.closest(".character-action-controls")) {
+        return;
+      }
+      setSelectedCustomCharacterId(null);
+    };
+
+    window.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      window.removeEventListener("pointerdown", handlePointerDown);
     };
   }, []);
 
@@ -318,13 +404,37 @@ function App() {
       </div>
 
       {customCharacters.map((character) => (
-        <CustomCharacterView
-          key={character.id}
-          character={character}
-          position={characterPositions[character.id] ?? character.position}
-          onPointerDown={startDrag(character.id, CHARACTER_SIZES.custom)}
-          isDragging={draggingCharacterId === character.id}
-        />
+        <div key={character.id}>
+          <CustomCharacterView
+            character={character}
+            position={characterPositions[character.id] ?? character.position}
+            onPointerDown={startDrag(character.id, CHARACTER_SIZES.custom)}
+            onPointerUp={() => {
+              if (suppressSelectRef.current === character.id) {
+                suppressSelectRef.current = null;
+                return;
+              }
+              setSelectedCustomCharacterId(character.id);
+            }}
+            isDragging={draggingCharacterId === character.id}
+          />
+          {selectedCustomCharacterId === character.id && draggingCharacterId !== character.id ? (
+            <div
+              className="character-action-controls"
+              style={{
+                left: (characterPositions[character.id] ?? character.position).x + 12,
+                top: (characterPositions[character.id] ?? character.position).y - 36
+              }}
+            >
+              <button type="button" className="rounded bg-amber-500 px-2 py-1 text-xs font-semibold text-white" onClick={() => handleEditCharacter(character.id)}>
+                Edit
+              </button>
+              <button type="button" className="rounded bg-rose-600 px-2 py-1 text-xs font-semibold text-white" onClick={() => handleDeleteCharacter(character.id)}>
+                Delete
+              </button>
+            </div>
+          ) : null}
+        </div>
       ))}
       <div className="switch-container">
         <label className="switch">
@@ -344,6 +454,8 @@ function App() {
       <CharacterCreatorModal
         isOpen={isCreatorOpen}
         draft={characterDraft}
+        title={editingCharacterId ? "Edit Character" : "Character Creator"}
+        saveLabel={editingCharacterId ? "Save Changes" : "Save Character"}
         onClose={() => setIsCreatorOpen(false)}
         onSave={handleSaveCharacter}
         onNameChange={(value) => setCharacterDraft((prev) => ({ ...prev, name: value }))}

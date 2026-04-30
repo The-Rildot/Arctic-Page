@@ -739,3 +739,10 @@ input:checked + .slider:before {
 .draggable-character.dragging {
   cursor: grabbing;
 }
+
+.character-action-controls {
+  position: absolute;
+  z-index: 15;
+  display: flex;
+  gap: 8px;
+}

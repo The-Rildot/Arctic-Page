@@ -5,6 +5,7 @@ type CustomCharacterProps = {
   character: CustomCharacter;
   position: CharacterPosition;
   onPointerDown?: (event: PointerEvent<HTMLDivElement>) => void;
+  onPointerUp?: (event: PointerEvent<HTMLDivElement>) => void;
   isDragging?: boolean;
 };
 
@@ -29,7 +30,13 @@ const shapeMap: Record<string, string> = {
   default: "12%"
 };
 
-export function CustomCharacter({ character, position, onPointerDown, isDragging = false }: CustomCharacterProps) {
+export function CustomCharacter({
+  character,
+  position,
+  onPointerDown,
+  onPointerUp,
+  isDragging = false
+}: CustomCharacterProps) {
   const { components } = character;
 
   return (
@@ -40,6 +47,7 @@ export function CustomCharacter({ character, position, onPointerDown, isDragging
         top: position.y
       }}
       onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
     >
       <div
         className="custom-head"

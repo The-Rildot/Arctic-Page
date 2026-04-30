@@ -15,6 +15,8 @@ type CharacterDraft = {
 type CharacterCreatorModalProps = {
   isOpen: boolean;
   draft: CharacterDraft;
+  title?: string;
+  saveLabel?: string;
   onClose: () => void;
   onSave: () => void;
   onNameChange: (value: string) => void;
@@ -26,6 +28,8 @@ type CharacterCreatorModalProps = {
 export function CharacterCreatorModal({
   isOpen,
   draft,
+  title = "Character Creator",
+  saveLabel = "Save Character",
   onClose,
   onSave,
   onNameChange,
@@ -51,7 +55,7 @@ export function CharacterCreatorModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
       <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-white p-6 shadow-2xl">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-slate-900">Character Creator</h2>
+          <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
           <button className="rounded bg-slate-200 px-3 py-1 text-sm" onClick={onClose} type="button">
             Close
           </button>
@@ -100,7 +104,7 @@ export function CharacterCreatorModal({
 
         <div className="mt-5 flex justify-end">
           <button className="rounded bg-sky-600 px-4 py-2 text-sm font-semibold text-white" onClick={onSave} type="button">
-            Save Character
+            {saveLabel}
           </button>
         </div>
       </div>
