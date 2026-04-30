@@ -1,7 +1,16 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import type { CharacterPosition, CustomCharacter } from "./types/characters";
+import { storage } from "./utils/storage";
 
 function App() {
-  const [isNightMode, setIsNightMode] = useState(false);
+  const [isNightMode, setIsNightMode] = useState(() => storage.getNightMode());
+  const [selectedBackground, setSelectedBackground] = useState(() => storage.getSelectedBackground());
+  const [customCharacters, setCustomCharacters] = useState<CustomCharacter[]>(() =>
+    storage.getCustomCharacters()
+  );
+  const [characterPositions, setCharacterPositions] = useState<Record<string, CharacterPosition>>(() =>
+    storage.getCharacterPositions()
+  );
 
   const modeLabel = useMemo(() => (isNightMode ? "Night Mode" : "Day Mode"), [isNightMode]);
 
@@ -12,8 +21,31 @@ function App() {
     };
   }, [isNightMode]);
 
+  useEffect(() => {
+    storage.setNightMode(isNightMode);
+  }, [isNightMode]);
+
+  useEffect(() => {
+    storage.setSelectedBackground(selectedBackground);
+    document.body.dataset.background = selectedBackground;
+  }, [selectedBackground]);
+
+  useEffect(() => {
+    storage.setCustomCharacters(customCharacters);
+  }, [customCharacters]);
+
+  useEffect(() => {
+    storage.setCharacterPositions(characterPositions);
+  }, [characterPositions]);
+
   const handleModeChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIsNightMode(event.target.checked);
+  };
+
+  const handleResetCustomCharacters = () => {
+    setCustomCharacters([]);
+    setCharacterPositions({});
+    storage.resetCustomCharacters();
   };
 
   const withDarkMode = (className: string) => (isNightMode ? `${className} dark-mode` : className);
@@ -90,6 +122,9 @@ function App() {
           <span className="slider"></span>
         </label>
         <span id="mode-label">{modeLabel}</span>
+        <button className="ml-4 rounded bg-slate-800 px-3 py-2 text-sm text-white" onClick={handleResetCustomCharacters}>
+          Reset Custom Characters
+        </button>
       </div>
     </>
   );
