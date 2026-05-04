@@ -1133,3 +1133,13 @@ input:checked + .slider:before {
   transform: none;
   cursor: grabbing;
 }
+
+/* Creator modal: static preview (no wander/drag; pause distracting animations) */
+
+.creator-preview .character-root .arm.left {
+  animation: none;
+}
+
+.creator-preview .character-root .bear-head {
+  animation: none;
+}
