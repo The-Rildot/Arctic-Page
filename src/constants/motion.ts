@@ -7,7 +7,7 @@ export const BASE_CHARACTER_DEFAULTS: Record<string, CharacterPosition> = {
 
 export const CHARACTER_SIZES = {
   base: { width: 300, height: 300 },
-  custom: { width: 140, height: 180 }
+  custom: { width: 300, height: 300 }
 } as const;
 
 export const WANDER_INTERVAL_MS = 1800;

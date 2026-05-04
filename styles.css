@@ -786,3 +786,350 @@ input:checked + .slider:before {
   display: flex;
   gap: 8px;
 }
+
+/* Unified character assembly (all characters share one scale) */
+
+.character-root {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.character-root * {
+  position: absolute;
+}
+
+.character-root .penguin-head {
+  background: linear-gradient(45deg, var(--char-head), rgb(239, 240, 228));
+}
+
+.character-root .face,
+.character-root .chin {
+  background-color: var(--char-face);
+}
+
+.character-root .eye {
+  background-color: var(--char-eyes);
+}
+
+.character-root .eye-lid {
+  background-color: var(--char-face);
+}
+
+.character-root .blush {
+  background-color: var(--char-blush);
+}
+
+.character-root .beak {
+  background-color: var(--char-mouth);
+}
+
+.character-root .penguin-body {
+  background: linear-gradient(45deg, var(--char-body) 0%, rgb(234, 231, 231) 25%, white 67%);
+}
+
+.character-root .penguin-body::before {
+  background-color: var(--char-body);
+  opacity: 0.7;
+}
+
+.character-root .arm {
+  background: linear-gradient(90deg, var(--char-arms), rgb(209, 210, 199));
+}
+
+.character-root .foot {
+  background-color: var(--char-legs);
+}
+
+.character-root .shirt {
+  color: var(--char-message);
+}
+
+.character-root .shirt p,
+.character-root .part-message {
+  color: var(--char-message);
+}
+
+.character-root .bear-head {
+  background-color: var(--char-head);
+  animation: none;
+}
+
+.character-root .bear_ear {
+  background-color: var(--char-head);
+}
+
+.character-root .bear_eye {
+  background-color: var(--char-eyes);
+}
+
+.character-root .bear_eye-lid {
+  background-color: var(--char-head);
+}
+
+.character-root .bear_blush {
+  background-color: var(--char-blush);
+}
+
+.character-root .nose {
+  background-color: var(--char-mouth);
+}
+
+.character-root .bear-body {
+  background: linear-gradient(45deg, var(--char-body) 0%, rgb(70, 69, 69) 15%, white 90%);
+}
+
+.character-root .bear-body::before {
+  background-color: var(--char-body);
+}
+
+.character-root .bear_arm {
+  background-color: var(--char-arms);
+}
+
+.character-root .bear_foot {
+  background-color: var(--char-legs);
+}
+
+.character-root .bear_shirt {
+  color: var(--char-message);
+}
+
+.character-root .part-head--seal {
+  width: 50%;
+  height: 45%;
+  top: 10%;
+  left: 25%;
+  z-index: 1;
+  border-radius: 45% 55% 50% 50%;
+  background: linear-gradient(160deg, var(--char-head), #bae6fd);
+}
+
+.character-root .part-body--seal {
+  width: 53%;
+  height: 45%;
+  top: 40%;
+  left: 23.5%;
+  border-radius: 50% 50% 45% 45%;
+  background: linear-gradient(180deg, var(--char-body), #e0f2fe);
+}
+
+.character-root .part-body--robot {
+  width: 50%;
+  height: 48%;
+  top: 40%;
+  left: 25%;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--char-body), #94a3b8);
+  border: 2px solid rgba(15, 23, 42, 0.3);
+}
+
+.character-root .part-head--owl {
+  width: 52%;
+  height: 48%;
+  top: 8%;
+  left: 24%;
+  z-index: 1;
+  border-radius: 45% 45% 55% 55%;
+  background: linear-gradient(145deg, var(--char-head), #fbbf24);
+}
+
+.character-root .part-arms--seal {
+  left: 5%;
+  right: 5%;
+  top: 32%;
+  width: 90%;
+  height: 20%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.character-root .part-arms--seal span {
+  position: relative;
+  width: 22%;
+  height: 100%;
+  background: var(--char-arms);
+  border-radius: 40% 60% 50% 50%;
+}
+
+.character-root .part-arms--robot {
+  left: 2%;
+  right: 2%;
+  top: 30%;
+  width: 96%;
+  height: 18%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.character-root .part-arms--robot span {
+  position: relative;
+  width: 10%;
+  height: 100%;
+  background: var(--char-arms);
+  border-radius: 3px;
+}
+
+.character-root .part-legs--seal {
+  width: 35%;
+  height: 12%;
+  left: 32.5%;
+  bottom: 8%;
+  border-radius: 40%;
+  background: var(--char-legs);
+}
+
+.character-root .part-legs--robot {
+  left: 18%;
+  right: 18%;
+  bottom: 6%;
+  height: 14%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.character-root .part-legs--robot span {
+  position: relative;
+  width: 14%;
+  height: 100%;
+  background: var(--char-legs);
+  border-radius: 3px;
+}
+
+.character-root .part-mouth--seal {
+  width: 28%;
+  height: 8%;
+  top: 62%;
+  left: 36%;
+  border-radius: 999px;
+  background: var(--char-mouth);
+}
+
+.character-root .part-mouth--robot {
+  width: 34%;
+  height: 6%;
+  top: 58%;
+  left: 33%;
+  border-radius: 4px;
+  background: var(--char-mouth);
+}
+
+.character-root .part-eyes {
+  top: 42%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 55%;
+  height: 16%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.character-root .part-eyes--sleepy .part-eyes__lid {
+  width: 42%;
+  height: 35%;
+  background: var(--char-eyes);
+  border-radius: 999px;
+  top: 10%;
+}
+
+.character-root .part-eyes--sleepy .part-eyes__lid--left {
+  left: 0;
+}
+
+.character-root .part-eyes--sleepy .part-eyes__lid--right {
+  right: 0;
+}
+
+.character-root .part-eyes--wide .part-eyes__dot {
+  width: 18%;
+  height: 55%;
+  background: var(--char-eyes);
+  border-radius: 45%;
+  top: 10%;
+}
+
+.character-root .part-blush--sunset span {
+  width: 18%;
+  height: 10%;
+  background: var(--char-blush);
+  border-radius: 999px;
+  top: 70%;
+}
+
+.character-root .part-blush--sunset span:first-child {
+  left: 10%;
+}
+
+.character-root .part-blush--sunset span:last-child {
+  right: 10%;
+}
+
+.character-root .part-blush--freckles span {
+  width: 6px;
+  height: 6px;
+  background: var(--char-blush);
+  border-radius: 2px;
+  top: 66%;
+}
+
+.character-root .part-blush--freckles span:nth-child(1) {
+  left: 22%;
+}
+
+.character-root .part-blush--freckles span:nth-child(2) {
+  left: 35%;
+}
+
+.character-root .part-blush--freckles span:nth-child(3) {
+  right: 35%;
+}
+
+.character-root .part-blush--freckles span:nth-child(4) {
+  right: 22%;
+}
+
+.character-root .part-shirt {
+  font: bold 25px Helvetica, sans-serif;
+  top: 165px;
+  left: 127.5px;
+  z-index: 1;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background-color: var(--char-shirt);
+}
+
+.character-root .part-shirt--hoodie {
+  top: 158px;
+  border-radius: 14px;
+}
+
+.character-root .part-shirt--jacket {
+  top: 162px;
+  border-radius: 8px;
+}
+
+.character-root .part-message--bubble {
+  font-weight: 700;
+}
+
+.character-root .part-message--badge {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 16px;
+}
+
+.custom-character {
+  width: 300px;
+  height: 300px;
+}
+
+.character-instance.draggable-character:active {
+  transform: none;
+  cursor: grabbing;
+}

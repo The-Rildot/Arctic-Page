@@ -1,8 +1,10 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { CharacterCreatorModal } from "./components/CharacterCreatorModal";
 import { CustomCharacter as CustomCharacterView } from "./components/CustomCharacter";
+import { CharacterView } from "./components/character/CharacterView";
 import { SceneBackground } from "./components/backgrounds/SceneBackground";
 import { BACKGROUND_OPTIONS, DEFAULT_BACKGROUND_CLASS } from "./constants/backgrounds";
+import { BEAR_PRESET, PENGUIN_PRESET } from "./constants/builtInCharacters";
 import { MAX_CUSTOM_CHARACTERS, createDefaultComponents } from "./constants/characterCreator";
 import { BASE_CHARACTER_DEFAULTS, CHARACTER_SIZES } from "./constants/motion";
 import { useCharacterMotion } from "./hooks/useCharacterMotion";
@@ -195,7 +197,7 @@ function App() {
       if (!target) {
         return;
       }
-      if (target.closest(".custom-character") || target.closest(".character-action-controls")) {
+      if (target.closest(".character-instance") || target.closest(".character-action-controls")) {
         return;
       }
       setSelectedCustomCharacterId(null);
@@ -210,79 +212,22 @@ function App() {
   return (
     <>
       <SceneBackground isNightMode={isNightMode} />
-      <div
-        className={`penguin draggable-character${draggingCharacterId === "penguin" ? " dragging" : ""}`}
-        style={{
-          position: "absolute",
-          left: (characterPositions.penguin ?? BASE_CHARACTER_DEFAULTS.penguin).x,
-          top: (characterPositions.penguin ?? BASE_CHARACTER_DEFAULTS.penguin).y,
-          margin: 0
-        }}
+      <CharacterView
+        className={`character-instance draggable-character${draggingCharacterId === "penguin" ? " dragging" : ""}`}
+        components={PENGUIN_PRESET}
+        messageText="I CSS"
+        shirtEmoji="💜"
+        position={characterPositions.penguin ?? BASE_CHARACTER_DEFAULTS.penguin}
         onPointerDown={startCharacterDrag("penguin", CHARACTER_SIZES.base)}
-      >
-        <div className="penguin-head">
-          <div className="face left"></div>
-          <div className="face right"></div>
-          <div className="chin"></div>
-          <div className="eye left">
-            <div className="eye-lid"></div>
-          </div>
-          <div className="eye right">
-            <div className="eye-lid"></div>
-          </div>
-          <div className="blush left"></div>
-          <div className="blush right"></div>
-          <div className="beak top"></div>
-          <div className="beak bottom"></div>
-        </div>
-        <div className="shirt">
-          <div>💜</div>
-          <p>I CSS</p>
-        </div>
-        <div className="penguin-body">
-          <div className="arm left"></div>
-          <div className="arm right"></div>
-          <div className="foot left"></div>
-          <div className="foot right"></div>
-        </div>
-      </div>
-      <div
-        className={`bear draggable-character${draggingCharacterId === "bear" ? " dragging" : ""}`}
-        style={{
-          left: (characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear).x,
-          top: (characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear).y
-        }}
+      />
+      <CharacterView
+        className={`character-instance draggable-character${draggingCharacterId === "bear" ? " dragging" : ""}`}
+        components={BEAR_PRESET}
+        messageText="I HTML"
+        shirtEmoji="💖"
+        position={characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear}
         onPointerDown={startCharacterDrag("bear", CHARACTER_SIZES.base)}
-      >
-        <div className="bear-head">
-          <div className="bear_ear left">
-            <div className="bear_ear_in left"></div>
-          </div>
-          <div className="bear_ear right">
-            <div className="bear_ear_in right"></div>
-          </div>
-          <div className="bear_eye left">
-            <div className="bear_eye-lid"></div>
-          </div>
-          <div className="bear_eye right">
-            <div className="bear_eye-lid"></div>
-          </div>
-          <div className="bear_blush left"></div>
-          <div className="bear_blush right"></div>
-          <div className="nose top"></div>
-          <div className="nose bottom"></div>
-        </div>
-        <div className="bear_shirt">
-          <div>💖</div>
-          <p>I HTML</p>
-        </div>
-        <div className="bear-body">
-          <div className="bear_arm left"></div>
-          <div className="bear_arm right"></div>
-          <div className="bear_foot left"></div>
-          <div className="bear_foot right"></div>
-        </div>
-      </div>
+      />
 
       {customCharacters.map((character) => (
         <div key={character.id}>

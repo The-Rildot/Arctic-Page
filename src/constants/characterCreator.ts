@@ -15,15 +15,15 @@ export const CHARACTER_COMPONENT_LABELS: Record<CharacterComponentKey, string> =
 };
 
 export const CHARACTER_VARIANT_OPTIONS: Record<CharacterComponentKey, string[]> = {
-  head: ["round", "oval", "square"],
-  body: ["round", "oval", "capsule"],
-  arms: ["short", "medium", "long"],
-  legs: ["short", "medium", "long"],
-  shirt: ["plain", "stripe", "badge"],
-  eyes: ["round", "oval", "dot"],
-  mouthNose: ["smile", "flat", "triangle"],
-  blush: ["soft", "wide", "none"],
-  message: ["default"]
+  head: ["penguin-head", "polar-bear-head", "seal-head", "owl-head"],
+  body: ["penguin-body", "polar-bear-body", "seal-body", "robot-body"],
+  arms: ["penguin-arms", "polar-bear-arms", "seal-fins", "robot-arms"],
+  legs: ["penguin-legs", "polar-bear-legs", "seal-tail", "robot-legs"],
+  shirt: ["penguin-shirt", "polar-bear-shirt", "hoodie-shirt", "jacket-shirt"],
+  eyes: ["penguin-eyes", "polar-bear-eyes", "sleepy-eyes", "wide-eyes"],
+  mouthNose: ["penguin-beak", "polar-bear-nose", "seal-snout", "robot-mouth"],
+  blush: ["penguin-blush", "polar-bear-blush", "sunset-blush", "freckles"],
+  message: ["classic-message", "bubble-message", "badge-message"]
 };
 
 export const DEFAULT_COMPONENT_COLORS: Record<CharacterComponentKey, string> = {
@@ -39,13 +39,13 @@ export const DEFAULT_COMPONENT_COLORS: Record<CharacterComponentKey, string> = {
 };
 
 export const createDefaultComponents = (): CharacterComponents => ({
-  head: { variantId: "round", color: DEFAULT_COMPONENT_COLORS.head },
-  body: { variantId: "round", color: DEFAULT_COMPONENT_COLORS.body },
-  arms: { variantId: "medium", color: DEFAULT_COMPONENT_COLORS.arms },
-  legs: { variantId: "medium", color: DEFAULT_COMPONENT_COLORS.legs },
-  shirt: { variantId: "plain", color: DEFAULT_COMPONENT_COLORS.shirt },
-  eyes: { variantId: "round", color: DEFAULT_COMPONENT_COLORS.eyes },
-  mouthNose: { variantId: "smile", color: DEFAULT_COMPONENT_COLORS.mouthNose },
-  blush: { variantId: "soft", color: DEFAULT_COMPONENT_COLORS.blush },
-  message: { variantId: "default", color: DEFAULT_COMPONENT_COLORS.message }
+  head: { variantId: "penguin-head", color: DEFAULT_COMPONENT_COLORS.head },
+  body: { variantId: "penguin-body", color: DEFAULT_COMPONENT_COLORS.body },
+  arms: { variantId: "penguin-arms", color: DEFAULT_COMPONENT_COLORS.arms },
+  legs: { variantId: "penguin-legs", color: DEFAULT_COMPONENT_COLORS.legs },
+  shirt: { variantId: "penguin-shirt", color: DEFAULT_COMPONENT_COLORS.shirt },
+  eyes: { variantId: "penguin-eyes", color: DEFAULT_COMPONENT_COLORS.eyes },
+  mouthNose: { variantId: "penguin-beak", color: DEFAULT_COMPONENT_COLORS.mouthNose },
+  blush: { variantId: "penguin-blush", color: DEFAULT_COMPONENT_COLORS.blush },
+  message: { variantId: "classic-message", color: DEFAULT_COMPONENT_COLORS.message }
 });
