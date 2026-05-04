@@ -11,6 +11,9 @@ type CharacterViewProps = {
   position: CharacterPosition;
   className?: string;
   style?: CSSProperties;
+  /** Visible above the character when `showNameLabel` is true (custom uses creator name; built-ins use stored labels). */
+  nameLabel?: string;
+  showNameLabel?: boolean;
   onPointerDown?: (event: PointerEvent<HTMLDivElement>) => void;
   onPointerUp?: (event: PointerEvent<HTMLDivElement>) => void;
 };
@@ -22,9 +25,14 @@ export function CharacterView({
   position,
   className = "",
   style,
+  nameLabel,
+  showNameLabel = false,
   onPointerDown,
   onPointerUp
 }: CharacterViewProps) {
+  const resolvedLabel = nameLabel?.trim();
+  const showLabel = Boolean(showNameLabel && resolvedLabel);
+
   return (
     <div
       className={className}
@@ -36,9 +44,15 @@ export function CharacterView({
         height: 300,
         ...style
       }}
+      aria-label={showLabel ? resolvedLabel : undefined}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
     >
+      {showLabel ? (
+        <div className="character-name-label" aria-hidden="true">
+          {resolvedLabel}
+        </div>
+      ) : null}
       <CharacterRoot components={components}>
         <CharacterAssembler components={components} messageText={messageText} shirtEmoji={shirtEmoji} />
       </CharacterRoot>

@@ -614,8 +614,10 @@ body.dark-mode.bg-theme-sunset {
   left: 16px;
   z-index: 20;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  row-gap: 8px;
+  max-width: min(100vw - 32px, 56rem);
 }
 
 .switch {
@@ -802,6 +804,34 @@ input:checked + .slider:before {
 }
 
 /* Unified character assembly (all characters share one scale) */
+
+.character-name-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -26px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #0f172a;
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  z-index: 2;
+}
+
+body.dark-mode .character-name-label {
+  color: #e2e8f0;
+  text-shadow:
+    0 0 8px rgba(15, 23, 42, 0.95),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+}
 
 .character-root {
   width: 300px;

@@ -9,7 +9,7 @@ import { MAX_CUSTOM_CHARACTERS, createDefaultComponents } from "./constants/char
 import { BASE_CHARACTER_DEFAULTS, CHARACTER_SIZES } from "./constants/motion";
 import { useCharacterMotion } from "./hooks/useCharacterMotion";
 import type { CharacterComponentKey, CustomCharacter } from "./types/characters";
-import { storage } from "./utils/storage";
+import { DEFAULT_BUILT_IN_CHARACTER_NAMES, storage } from "./utils/storage";
 
 type CharacterDraft = {
   name: string;
@@ -36,6 +36,8 @@ function App() {
   const [creatorError, setCreatorError] = useState("");
   const [selectedCustomCharacterId, setSelectedCustomCharacterId] = useState<string | null>(null);
   const [editingCharacterId, setEditingCharacterId] = useState<string | null>(null);
+  const [showCharacterNames, setShowCharacterNames] = useState(() => storage.getShowCharacterNames());
+  const [builtInCharacterNames, setBuiltInCharacterNames] = useState(() => storage.getBuiltInCharacterNames());
 
   const modeLabel = useMemo(() => (isNightMode ? "Night Mode" : "Day Mode"), [isNightMode]);
   const customCharacterIds = useMemo(() => customCharacters.map((character) => character.id), [customCharacters]);
@@ -82,6 +84,14 @@ function App() {
   useEffect(() => {
     storage.setCharacterPositions(characterPositions);
   }, [characterPositions]);
+
+  useEffect(() => {
+    storage.setShowCharacterNames(showCharacterNames);
+  }, [showCharacterNames]);
+
+  useEffect(() => {
+    storage.setBuiltInCharacterNames(builtInCharacterNames);
+  }, [builtInCharacterNames]);
 
   const handleModeChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIsNightMode(event.target.checked);
@@ -218,6 +228,10 @@ function App() {
         messageText="I CSS"
         shirtEmoji="💜"
         position={characterPositions.penguin ?? BASE_CHARACTER_DEFAULTS.penguin}
+        nameLabel={
+          builtInCharacterNames.penguin.trim() || DEFAULT_BUILT_IN_CHARACTER_NAMES.penguin
+        }
+        showNameLabel={showCharacterNames}
         onPointerDown={startCharacterDrag("penguin", CHARACTER_SIZES.base)}
       />
       <CharacterView
@@ -226,6 +240,8 @@ function App() {
         messageText="I HTML"
         shirtEmoji="💖"
         position={characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear}
+        nameLabel={builtInCharacterNames.bear.trim() || DEFAULT_BUILT_IN_CHARACTER_NAMES.bear}
+        showNameLabel={showCharacterNames}
         onPointerDown={startCharacterDrag("bear", CHARACTER_SIZES.base)}
       />
 
@@ -234,6 +250,7 @@ function App() {
           <CustomCharacterView
             character={character}
             position={characterPositions[character.id] ?? character.position}
+            showNameLabel={showCharacterNames}
             onPointerDown={startCharacterDrag(character.id, CHARACTER_SIZES.custom)}
             onPointerUp={() => {
               if (suppressSelectRef.current === character.id) {
@@ -268,6 +285,44 @@ function App() {
           <span className="slider"></span>
         </label>
         <span id="mode-label">{modeLabel}</span>
+        <label className="ml-2 flex cursor-pointer items-center gap-2 rounded bg-white/80 px-2 py-1 text-sm text-slate-700">
+          <input
+            type="checkbox"
+            checked={showCharacterNames}
+            onChange={(event) => setShowCharacterNames(event.target.checked)}
+          />
+          Show names
+        </label>
+        {showCharacterNames ? (
+          <>
+            <label className="flex items-center gap-1.5 rounded bg-white/80 px-2 py-1 text-xs text-slate-700">
+              <span className="whitespace-nowrap font-medium">Penguin</span>
+              <input
+                type="text"
+                className="w-[7.5rem] max-w-[28vw] rounded border border-slate-300 px-1.5 py-0.5 text-sm"
+                value={builtInCharacterNames.penguin}
+                onChange={(event) =>
+                  setBuiltInCharacterNames((prev) => ({ ...prev, penguin: event.target.value }))
+                }
+                maxLength={48}
+                aria-label="Display name for Penguin"
+              />
+            </label>
+            <label className="flex items-center gap-1.5 rounded bg-white/80 px-2 py-1 text-xs text-slate-700">
+              <span className="whitespace-nowrap font-medium">Polar bear</span>
+              <input
+                type="text"
+                className="w-[7.5rem] max-w-[28vw] rounded border border-slate-300 px-1.5 py-0.5 text-sm"
+                value={builtInCharacterNames.bear}
+                onChange={(event) =>
+                  setBuiltInCharacterNames((prev) => ({ ...prev, bear: event.target.value }))
+                }
+                maxLength={48}
+                aria-label="Display name for Polar Bear"
+              />
+            </label>
+          </>
+        ) : null}
         <button className="ml-4 rounded bg-slate-800 px-3 py-2 text-sm text-white" onClick={handleResetCustomCharacters}>
           Reset Custom Characters
         </button>
