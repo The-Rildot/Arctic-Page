@@ -10,9 +10,12 @@ export const CHARACTER_SIZES = {
   custom: { width: 300, height: 300 }
 } as const;
 
-export const WANDER_INTERVAL_MS = 1800;
-export const WANDER_MOVE_CHANCE = 0.35;
-export const WANDER_DELTA_X = 60;
-export const WANDER_DELTA_Y = 50;
+/** How often the wander loop considers each character (slower = calmer scene). */
+export const WANDER_INTERVAL_MS = 4200;
+/** Per tick, probability a given character picks a new wander target (lower = rarer moves). */
+export const WANDER_MOVE_CHANCE = 0.2;
+/** Max pixels added to X/Y when wandering (smaller = gentler slides). */
+export const WANDER_DELTA_X = 48;
+export const WANDER_DELTA_Y = 40;
 
 export const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);

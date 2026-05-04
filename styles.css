@@ -780,11 +780,25 @@ input:checked + .slider:before {
   cursor: grabbing;
 }
 
+/* Wander: smooth slide between targets (disabled while .dragging so pointer follows instantly). */
+.character-instance.draggable-character:not(.dragging) {
+  transition:
+    left 0.88s cubic-bezier(0.33, 1, 0.68, 1),
+    top 0.88s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.character-instance.draggable-character.dragging {
+  transition: none;
+}
+
 .character-action-controls {
   position: absolute;
   z-index: 15;
   display: flex;
   gap: 8px;
+  transition:
+    left 0.88s cubic-bezier(0.33, 1, 0.68, 1),
+    top 0.88s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 /* Unified character assembly (all characters share one scale) */
