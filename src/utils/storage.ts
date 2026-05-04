@@ -1,3 +1,4 @@
+import { DEFAULT_SCENE_ID, isSceneId, type SceneId } from "../constants/scenes";
 import type { CharacterPosition, CustomCharacter } from "../types/characters";
 
 export type BuiltInCharacterNames = {
@@ -10,9 +11,19 @@ export const DEFAULT_BUILT_IN_CHARACTER_NAMES: BuiltInCharacterNames = {
   bear: "Polar Bear"
 };
 
+/** Legacy body theme classes → scene preset (migration only). */
+const LEGACY_BACKGROUND_SCENE_HINT: Record<string, SceneId> = {
+  "bg-theme-sunset": "desert",
+  "bg-theme-aurora": "ocean",
+  "bg-theme-lavender": "city",
+  "bg-theme-arctic": "arctic",
+  "bg-theme-snow": "arctic"
+};
+
 const STORAGE_KEYS = {
   isNightMode: "arctic:isNightMode",
   selectedBackground: "arctic:selectedBackground",
+  selectedScene: "arctic:selectedScene",
   customCharacters: "arctic:customCharacters",
   characterPositions: "arctic:characterPositions",
   showCharacterNames: "arctic:showCharacterNames",
@@ -59,6 +70,23 @@ export const storage = {
   },
   setSelectedBackground(value: string): void {
     localStorage.setItem(STORAGE_KEYS.selectedBackground, value);
+  },
+  getSelectedScene(): SceneId {
+    const stored = localStorage.getItem(STORAGE_KEYS.selectedScene);
+    if (stored && isSceneId(stored)) {
+      return stored;
+    }
+    const legacyBg = localStorage.getItem(STORAGE_KEYS.selectedBackground);
+    if (legacyBg && LEGACY_BACKGROUND_SCENE_HINT[legacyBg]) {
+      return LEGACY_BACKGROUND_SCENE_HINT[legacyBg];
+    }
+    if (legacyBg?.startsWith("bg-theme-")) {
+      return DEFAULT_SCENE_ID;
+    }
+    return DEFAULT_SCENE_ID;
+  },
+  setSelectedScene(value: SceneId): void {
+    localStorage.setItem(STORAGE_KEYS.selectedScene, value);
   },
   getCustomCharacters(): CustomCharacter[] {
     return safeParse<CustomCharacter[]>(localStorage.getItem(STORAGE_KEYS.customCharacters), []);

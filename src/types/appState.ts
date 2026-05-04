@@ -1,8 +1,9 @@
+import type { SceneId } from "../constants/scenes";
 import type { CharacterPosition, CustomCharacter } from "./characters";
 
 export type AppStateStorage = {
   isNightMode: boolean;
-  selectedBackground: string;
+  selectedScene: SceneId;
   customCharacters: CustomCharacter[];
   characterPositions: Record<string, CharacterPosition>;
 };

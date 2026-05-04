@@ -3,7 +3,7 @@ import { CharacterCreatorModal } from "./components/CharacterCreatorModal";
 import { CustomCharacter as CustomCharacterView } from "./components/CustomCharacter";
 import { CharacterView } from "./components/character/CharacterView";
 import { SceneBackground } from "./components/backgrounds/SceneBackground";
-import { BACKGROUND_OPTIONS, DEFAULT_BACKGROUND_CLASS } from "./constants/backgrounds";
+import { DEFAULT_SCENE_ID, isSceneId, SCENE_PRESETS, type SceneId } from "./constants/scenes";
 import { BEAR_PRESET, PENGUIN_PRESET } from "./constants/builtInCharacters";
 import { MAX_CUSTOM_CHARACTERS, createDefaultComponents } from "./constants/characterCreator";
 import { BASE_CHARACTER_DEFAULTS, CHARACTER_SIZES } from "./constants/motion";
@@ -25,9 +25,7 @@ const createDefaultDraft = (): CharacterDraft => ({
 
 function App() {
   const [isNightMode, setIsNightMode] = useState(() => storage.getNightMode());
-  const [selectedBackground, setSelectedBackground] = useState(
-    () => storage.getSelectedBackground() || DEFAULT_BACKGROUND_CLASS
-  );
+  const [selectedScene, setSelectedScene] = useState<SceneId>(() => storage.getSelectedScene());
   const [customCharacters, setCustomCharacters] = useState<CustomCharacter[]>(() =>
     storage.getCustomCharacters()
   );
@@ -65,17 +63,10 @@ function App() {
   }, [isNightMode]);
 
   useEffect(() => {
-    const nextBackgroundClass = selectedBackground || DEFAULT_BACKGROUND_CLASS;
-    storage.setSelectedBackground(nextBackgroundClass);
-    document.body.dataset.background = nextBackgroundClass;
-    BACKGROUND_OPTIONS.forEach((option) => {
-      document.body.classList.remove(option.className);
-    });
-    document.body.classList.add(nextBackgroundClass);
-    return () => {
-      document.body.classList.remove(nextBackgroundClass);
-    };
-  }, [selectedBackground]);
+    const scene = selectedScene || DEFAULT_SCENE_ID;
+    storage.setSelectedScene(scene);
+    document.body.dataset.scene = scene;
+  }, [selectedScene]);
 
   useEffect(() => {
     storage.setCustomCharacters(customCharacters);
@@ -221,7 +212,7 @@ function App() {
 
   return (
     <>
-      <SceneBackground isNightMode={isNightMode} />
+      <SceneBackground sceneId={selectedScene} isNightMode={isNightMode} />
       <CharacterView
         className={`character-instance draggable-character${draggingCharacterId === "penguin" ? " dragging" : ""}`}
         components={PENGUIN_PRESET}
@@ -330,15 +321,20 @@ function App() {
           Create Character
         </button>
         <label className="ml-2 flex items-center gap-2 rounded bg-white/80 px-2 py-1 text-sm text-slate-700">
-          Background
+          Scene
           <select
             className="rounded border border-slate-300 px-2 py-1 text-sm"
-            value={selectedBackground}
-            onChange={(event) => setSelectedBackground(event.target.value)}
+            value={selectedScene}
+            onChange={(event) => {
+              const value = event.target.value;
+              if (isSceneId(value)) {
+                setSelectedScene(value);
+              }
+            }}
           >
-            {BACKGROUND_OPTIONS.map((option) => (
-              <option key={option.className} value={option.className}>
-                {option.label}
+            {SCENE_PRESETS.map((preset) => (
+              <option key={preset.id} value={preset.id}>
+                {preset.label}
               </option>
             ))}
           </select>
