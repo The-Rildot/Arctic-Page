@@ -1,0 +1,264 @@
+/* --- Ocean scene --- */
+
+.scene-background.scene-ocean .ocean-celestial {
+  width: 170px;
+  height: 170px;
+  position: absolute;
+  border-radius: 50%;
+  top: -55px;
+  right: -35px;
+  background: radial-gradient(circle at 30% 30%, #fef9c3 0%, #fde047 40%, #eab308 100%);
+  z-index: 2;
+}
+
+.scene-background.scene-ocean .ocean-celestial.scene-night {
+  background: radial-gradient(circle at 35% 35%, #f1f5f9 0%, #cbd5e1 50%, #94a3b8 100%);
+  box-shadow: 0 0 36px rgba(186, 230, 253, 0.25);
+}
+
+.scene-background.scene-ocean .ocean-horizon-glow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 38vh;
+  height: 24px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 50%, transparent 100%);
+  z-index: 2;
+  opacity: 0.75;
+}
+
+.scene-background.scene-ocean .ocean-horizon-glow.scene-night {
+  opacity: 0.25;
+  background: linear-gradient(90deg, transparent 0%, rgba(125, 211, 252, 0.2) 50%, transparent 100%);
+}
+
+.scene-background.scene-ocean .ocean-water {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 56vh;
+  background: linear-gradient(
+    180deg,
+    #38bdf8 0%,
+    #0284c7 28%,
+    #0369a1 55%,
+    #0c4a6e 85%,
+    #082f49 100%
+  );
+  z-index: 3;
+  overflow: hidden;
+}
+
+.scene-background.scene-ocean .ocean-water.scene-night {
+  background: linear-gradient(
+    180deg,
+    #0c4a6e 0%,
+    #075985 25%,
+    #164e63 55%,
+    #0f172a 90%,
+    #020617 100%
+  );
+}
+
+.scene-background.scene-ocean .ocean-wave {
+  position: absolute;
+  left: -10%;
+  width: 120%;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.scene-background.scene-ocean .ocean-wave--1 {
+  top: 12%;
+  animation: ocean-wave-shift 7s ease-in-out infinite;
+}
+
+.scene-background.scene-ocean .ocean-wave--2 {
+  top: 42%;
+  opacity: 0.65;
+  animation: ocean-wave-shift 11s ease-in-out infinite reverse;
+}
+
+@keyframes ocean-wave-shift {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(24px);
+  }
+}
+
+.scene-background.scene-ocean .ocean-reef {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.scene-background.scene-ocean .ocean-reef-img {
+  position: absolute;
+  bottom: 0;
+  height: auto;
+  max-height: min(1260px, 75vh);
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.scene-background.scene-ocean .ocean-coral--left {
+  left: -2vw;
+  max-width: min(1140px, 126vw);
+  opacity: 0.88;
+}
+
+.scene-background.scene-ocean .ocean-coral--center {
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(1320px, 144vw);
+  bottom: 2%;
+  z-index: 1;
+}
+
+.scene-background.scene-ocean .ocean-coral--right {
+  right: -3vw;
+  max-width: min(960px, 108vw);
+  opacity: 0.92;
+}
+
+.scene-background.scene-ocean .ocean-reef.scene-night .ocean-reef-img {
+  filter: brightness(0.82) saturate(1.06);
+}
+
+.scene-background.scene-ocean .ocean-seaweed {
+  position: absolute;
+  bottom: 0;
+  height: auto;
+  max-height: min(720px, 84vh);
+  width: auto;
+  display: block;
+  opacity: 0.9;
+}
+
+.scene-background.scene-ocean .ocean-seaweed--1 {
+  left: 18%;
+  max-width: clamp(216px, 36vw, 420px);
+  transform: rotate(-7deg);
+}
+
+.scene-background.scene-ocean .ocean-seaweed--2 {
+  left: 44%;
+  max-width: clamp(288px, 42vw, 480px);
+  transform: rotate(6deg);
+  bottom: -2%;
+  z-index: 2;
+}
+
+.scene-background.scene-ocean .ocean-seaweed--3 {
+  right: 16%;
+  max-width: clamp(240px, 33vw, 390px);
+  transform: rotate(-4deg);
+}
+
+.scene-background.scene-ocean .ocean-reef.scene-night .ocean-seaweed {
+  filter: brightness(0.75);
+  opacity: 0.82;
+}
+
+.scene-background.scene-ocean .ocean-fish-wrap {
+  position: absolute;
+  z-index: 3;
+  opacity: 0.92;
+  width: min(104px, 14vw);
+  height: min(72px, 10vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scene-background.scene-ocean .ocean-fish-img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.scene-background.scene-ocean .ocean-fish-wrap--1 {
+  left: 0;
+  top: 60%;
+  animation: ocean-fish-swim-left 14s linear infinite;
+}
+
+.scene-background.scene-ocean .ocean-fish-wrap--2 {
+  left: 0;
+  top: 44%;
+  animation: ocean-fish-swim-right 19s linear infinite 2s;
+}
+
+.scene-background.scene-ocean .ocean-fish-wrap--3 {
+  left: 0;
+  top: 52%;
+  animation: ocean-fish-swim-right 16s linear infinite 1s;
+}
+
+.scene-background.scene-ocean .ocean-fish-wrap--4 {
+  left: 0;
+  top: 70%;
+  animation: ocean-fish-swim-right 22s linear infinite 4s;
+}
+
+/* Yellow fish asset faces left — travel left only (no flip). */
+@keyframes ocean-fish-swim-left {
+  0% {
+    transform: translateX(calc(100vw + 120px));
+  }
+  100% {
+    transform: translateX(calc(-100vw - 120px));
+  }
+}
+
+/* Pink / red fish assets face right — travel right only (no flip). */
+@keyframes ocean-fish-swim-right {
+  0% {
+    transform: translateX(calc(-100vw - 120px));
+  }
+  100% {
+    transform: translateX(calc(100vw + 120px));
+  }
+}
+
+.scene-background.scene-ocean .ocean-foam {
+  position: absolute;
+  left: 0;
+  bottom: 56vh;
+  width: 100vw;
+  height: 14px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, transparent 100%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.scene-background.scene-ocean .ocean-foam.scene-night {
+  opacity: 0.25;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-background.scene-ocean .ocean-wave--1,
+  .scene-background.scene-ocean .ocean-wave--2 {
+    animation: none;
+  }
+
+  .scene-background.scene-ocean .ocean-fish-wrap--1,
+  .scene-background.scene-ocean .ocean-fish-wrap--2,
+  .scene-background.scene-ocean .ocean-fish-wrap--3,
+  .scene-background.scene-ocean .ocean-fish-wrap--4 {
+    animation: none;
+    opacity: 0.45;
+  }
+}

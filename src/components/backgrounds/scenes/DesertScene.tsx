@@ -1,3 +1,4 @@
+import "./desert.scene.css";
 import { sceneNight } from "./sceneNight";
 
 type DesertSceneProps = {
@@ -9,7 +10,15 @@ export function DesertScene({ isNightMode }: DesertSceneProps) {
     <>
       <div className={sceneNight("desert-dune desert-dune--back", isNightMode)} />
       <div className="desert-pyramid-wrap">
-        <img className="desert-pyramid" src="/assets/pyramid.png" alt="" draggable={false} />
+        <img
+          className="desert-pyramid"
+          src="/assets/pyramid.png"
+          alt=""
+          width={480}
+          height={360}
+          decoding="async"
+          draggable={false}
+        />
       </div>
       <div className={sceneNight("desert-dune desert-dune--mid", isNightMode)} />
       <div className={sceneNight("desert-dune desert-dune--front", isNightMode)} />

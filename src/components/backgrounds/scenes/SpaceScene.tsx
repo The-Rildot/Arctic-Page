@@ -1,3 +1,4 @@
+import "./space.scene.css";
 import { sceneNight } from "./sceneNight";
 
 type SpaceSceneProps = {
@@ -18,6 +19,9 @@ export function SpaceScene({ isNightMode }: SpaceSceneProps) {
           className="space-station-img"
           src="/assets/spaceStation.png"
           alt=""
+          width={560}
+          height={420}
+          decoding="async"
           draggable={false}
         />
       </div>

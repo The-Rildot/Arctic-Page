@@ -1,4 +1,4 @@
-import { PointerEvent, useEffect, useMemo, useRef, useState } from "react";
+import { PointerEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   BASE_CHARACTER_DEFAULTS,
   CHARACTER_SIZES,
@@ -107,6 +107,23 @@ export function useCharacterMotion({ customCharacterIds, initialPositions }: Use
     };
   }, [customCharacterIds, draggableCharacterIds, reduceMotion]);
 
+  const nudgeCharacter = useCallback(
+    (id: string, deltaX: number, deltaY: number) => {
+      setCharacterPositions((prev) => {
+        const isCustomCharacter = customCharacterIds.includes(id);
+        const size = isCustomCharacter ? CHARACTER_SIZES.custom : CHARACTER_SIZES.base;
+        const current =
+          prev[id] ??
+          (isCustomCharacter ? { x: 200, y: 220 } : (BASE_CHARACTER_DEFAULTS[id] ?? { x: 200, y: 220 }));
+        return {
+          ...prev,
+          [id]: clampPositionToViewport({ x: current.x + deltaX, y: current.y + deltaY }, size)
+        };
+      });
+    },
+    [customCharacterIds]
+  );
+
   const startDrag =
     (id: string, size: { width: number; height: number }, onDragStart?: (id: string) => void) =>
     (event: PointerEvent<HTMLDivElement>) => {
@@ -181,6 +198,7 @@ export function useCharacterMotion({ customCharacterIds, initialPositions }: Use
     setCharacterPositions,
     draggingCharacterId,
     startDrag,
+    nudgeCharacter,
     suppressSelectRef
   };
 }

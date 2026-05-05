@@ -34,6 +34,9 @@ export function clampPositionToViewport(
 }
 
 /** Clamp every draggable character to the viewport (resize, restored localStorage, etc.). */
+/** Arrow-key move per keypress when a character has keyboard focus. */
+export const KEYBOARD_NUDGE_PX = 20;
+
 export function clampAllCharacterPositions(
   positions: Record<string, CharacterPosition>,
   draggableCharacterIds: readonly string[],

@@ -1,10 +1,50 @@
+import { lazy, Suspense, type ReactNode } from "react";
 import type { SceneId } from "../../constants/scenes";
-import { ArcticScene } from "./scenes/ArcticScene.tsx";
-import { CityScene } from "./scenes/CityScene.tsx";
-import { DesertScene } from "./scenes/DesertScene.tsx";
-import { ForestScene } from "./scenes/ForestScene.tsx";
-import { OceanScene } from "./scenes/OceanScene.tsx";
-import { SpaceScene } from "./scenes/SpaceScene.tsx";
+
+const ArcticScene = lazy(() =>
+  import("./scenes/ArcticScene").then((m) => ({ default: m.ArcticScene }))
+);
+const DesertScene = lazy(() =>
+  import("./scenes/DesertScene").then((m) => ({ default: m.DesertScene }))
+);
+const OceanScene = lazy(() =>
+  import("./scenes/OceanScene").then((m) => ({ default: m.OceanScene }))
+);
+const CityScene = lazy(() =>
+  import("./scenes/CityScene").then((m) => ({ default: m.CityScene }))
+);
+const ForestScene = lazy(() =>
+  import("./scenes/ForestScene").then((m) => ({ default: m.ForestScene }))
+);
+const SpaceScene = lazy(() =>
+  import("./scenes/SpaceScene").then((m) => ({ default: m.SpaceScene }))
+);
+
+type SceneChunkProps = {
+  sceneId: SceneId;
+  isNightMode: boolean;
+};
+
+function SceneChunk({ sceneId, isNightMode }: SceneChunkProps): ReactNode {
+  switch (sceneId) {
+    case "arctic":
+      return <ArcticScene isNightMode={isNightMode} />;
+    case "desert":
+      return <DesertScene isNightMode={isNightMode} />;
+    case "ocean":
+      return <OceanScene isNightMode={isNightMode} />;
+    case "city":
+      return <CityScene isNightMode={isNightMode} />;
+    case "forest":
+      return <ForestScene isNightMode={isNightMode} />;
+    case "space":
+      return <SpaceScene isNightMode={isNightMode} />;
+    default: {
+      const _exhaustive: never = sceneId;
+      return _exhaustive;
+    }
+  }
+}
 
 type SceneBackgroundProps = {
   sceneId: SceneId;
@@ -14,12 +54,9 @@ type SceneBackgroundProps = {
 export function SceneBackground({ sceneId, isNightMode }: SceneBackgroundProps) {
   return (
     <div className={`scene-background scene-${sceneId}`} aria-hidden="true">
-      {sceneId === "arctic" ? <ArcticScene isNightMode={isNightMode} /> : null}
-      {sceneId === "desert" ? <DesertScene isNightMode={isNightMode} /> : null}
-      {sceneId === "ocean" ? <OceanScene isNightMode={isNightMode} /> : null}
-      {sceneId === "city" ? <CityScene isNightMode={isNightMode} /> : null}
-      {sceneId === "forest" ? <ForestScene isNightMode={isNightMode} /> : null}
-      {sceneId === "space" ? <SpaceScene isNightMode={isNightMode} /> : null}
+      <Suspense fallback={null}>
+        <SceneChunk sceneId={sceneId} isNightMode={isNightMode} />
+      </Suspense>
     </div>
   );
 }

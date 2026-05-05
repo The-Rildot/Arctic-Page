@@ -1,4 +1,5 @@
-import { ChangeEvent } from "react";
+import type { ChangeEvent } from "react";
+import { useEffect, useId, useRef } from "react";
 import {
   CHARACTER_COMPONENT_KEYS,
   CharacterComponentKey,
@@ -6,6 +7,7 @@ import {
 } from "../types/characters";
 import { CHARACTER_COMPONENT_LABELS, CHARACTER_VARIANT_OPTIONS } from "../constants/characterCreator";
 import { CharacterCreatorPreview } from "./character/CharacterCreatorPreview";
+import { useModalFocusTrap } from "../hooks/useModalFocusTrap";
 
 type CharacterDraft = {
   name: string;
@@ -38,9 +40,29 @@ export function CharacterCreatorModal({
   onComponentVariantChange,
   onComponentColorChange
 }: CharacterCreatorModalProps) {
-  if (!isOpen) {
-    return null;
-  }
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+  useModalFocusTrap(panelRef, isOpen, onClose);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const node = overlayRef.current;
+    if (!node) {
+      return;
+    }
+    const onBackdropMouseDown = (event: globalThis.MouseEvent) => {
+      if (event.target === node) {
+        onClose();
+      }
+    };
+    node.addEventListener("mousedown", onBackdropMouseDown);
+    return () => {
+      node.removeEventListener("mousedown", onBackdropMouseDown);
+    };
+  }, [isOpen, onClose]);
 
   const handleVariantChange =
     (key: CharacterComponentKey) => (event: ChangeEvent<HTMLSelectElement>) => {
@@ -52,11 +74,27 @@ export function CharacterCreatorModal({
       onComponentColorChange(key, event.target.value);
     };
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
-      <div className="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-xl bg-white p-6 shadow-2xl">
+    <div
+      ref={overlayRef}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4"
+      role="presentation"
+    >
+      <div
+        ref={panelRef}
+        className="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-xl bg-white p-6 shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+      >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+          <h2 id={titleId} className="text-xl font-semibold text-slate-900">
+            {title}
+          </h2>
           <button className="rounded bg-slate-200 px-3 py-1 text-sm" onClick={onClose} type="button">
             Close
           </button>
@@ -75,6 +113,7 @@ export function CharacterCreatorModal({
                   className="rounded border border-slate-300 px-3 py-2"
                   value={draft.name}
                   onChange={(event) => onNameChange(event.target.value)}
+                  autoComplete="off"
                 />
               </label>
               <label className="flex flex-col gap-1 text-sm font-medium text-slate-700">
@@ -83,36 +122,52 @@ export function CharacterCreatorModal({
                   className="rounded border border-slate-300 px-3 py-2"
                   value={draft.messageText}
                   onChange={(event) => onMessageChange(event.target.value)}
+                  autoComplete="off"
                 />
               </label>
             </div>
 
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              {CHARACTER_COMPONENT_KEYS.map((key) => (
-                <div className="rounded border border-slate-200 p-3" key={key}>
-                  <p className="mb-2 text-sm font-semibold text-slate-800">{CHARACTER_COMPONENT_LABELS[key]}</p>
-                  <div className="flex items-center gap-2">
-                    <select
-                      className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
-                      value={draft.components[key].variantId}
-                      onChange={handleVariantChange(key)}
-                    >
-                      {CHARACTER_VARIANT_OPTIONS[key].map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                    <input type="color" value={draft.components[key].color} onChange={handleColorChange(key)} />
+              {CHARACTER_COMPONENT_KEYS.map((key) => {
+                const headingId = `creator-slot-heading-${key}`;
+                return (
+                  <div className="rounded border border-slate-200 p-3" key={key}>
+                    <p id={headingId} className="mb-2 text-sm font-semibold text-slate-800">
+                      {CHARACTER_COMPONENT_LABELS[key]}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <select
+                        className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
+                        aria-labelledby={headingId}
+                        value={draft.components[key].variantId}
+                        onChange={handleVariantChange(key)}
+                      >
+                        {CHARACTER_VARIANT_OPTIONS[key].map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        type="color"
+                        value={draft.components[key].color}
+                        onChange={handleColorChange(key)}
+                        aria-label={`${CHARACTER_COMPONENT_LABELS[key]} color`}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
 
         <div className="mt-5 flex justify-end">
-          <button className="rounded bg-sky-600 px-4 py-2 text-sm font-semibold text-white" onClick={onSave} type="button">
+          <button
+            className="rounded bg-sky-600 px-4 py-2 text-sm font-semibold text-white"
+            onClick={onSave}
+            type="button"
+          >
             {saveLabel}
           </button>
         </div>

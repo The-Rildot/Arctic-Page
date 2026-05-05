@@ -1,3 +1,4 @@
+import "./arctic.scene.css";
 import { sceneNight } from "./sceneNight";
 
 type ArcticSceneProps = {
@@ -25,7 +26,14 @@ export function ArcticScene({ isNightMode }: ArcticSceneProps) {
       <div className={sceneNight("arctic-celestial", isNightMode)} />
       <div className={sceneNight("arctic-ground", isNightMode)} />
       <div className="arctic-igloo">
-        <img src="/assets/igloo.png" alt="" draggable={false} />
+        <img
+          src="/assets/igloo.png"
+          alt=""
+          width={320}
+          height={240}
+          decoding="async"
+          draggable={false}
+        />
       </div>
     </>
   );

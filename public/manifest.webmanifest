@@ -1,0 +1,9 @@
+{
+  "name": "Arctic Page",
+  "short_name": "Arctic Page",
+  "description": "Interactive scene playground with draggable characters and a character creator.",
+  "start_url": ".",
+  "display": "browser",
+  "background_color": "#e0f2fe",
+  "theme_color": "#0f172a"
+}

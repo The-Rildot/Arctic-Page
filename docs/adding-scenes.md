@@ -11,7 +11,8 @@ Each **Scene** is a fullscreen decorative stack behind draggable characters.
 | **`src/constants/scenes.ts`** | Authoritative **`SceneId`** union, ordered **`SCENE_IDS`**, **`SCENE_PRESETS`** (dropdown `{ id, label }`), **`isSceneId`** guard |
 | **`src/components/backgrounds/SceneBackground.tsx`** | Root wrapper `scene-${sceneId}` + switch to scene component |
 | **`src/components/backgrounds/scenes/<Name>Scene.tsx`** | JSX layers (.sky, dunes, planets, …) |
-| **`styles.css`** | `body[data-scene="your-id"]` day/night backdrops + **`.scene-background.scene-your-id ...`** positioning |
+| **`styles.css`** | `body[data-scene="your-id"]` day/night backdrops; **`.scene-background`** shell |
+| **`src/components/backgrounds/scenes/<name>.scene.css`** | Scene-specific rules (import from matching **`<Name>Scene.tsx`** so CSS lazy-loads with the scene chunk) |
 | **`index.html`** (optional) | `data-scene` on `<body>` avoids a one-frame blank before React sets `dataset.scene` |
 
 Persistence: **`storage.getSelectedScene` / `setSelectedScene`** in **`src/utils/storage.ts`** accepts any **`SceneId`** from **`SCENE_IDS`** automatically — no registry change unless you migrate legacy keys.

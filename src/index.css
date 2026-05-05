@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+.character-instance.draggable-character:focus-visible {
+  outline: 3px solid #0284c7;
+  outline-offset: 3px;
+}

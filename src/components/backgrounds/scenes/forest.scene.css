@@ -1,0 +1,337 @@
+/* --- Forest scene --- */
+
+.scene-background.scene-forest .forest-hill {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.scene-background.scene-forest .forest-hill--far {
+  width: 168vw;
+  height: 62vh;
+  left: -34vw;
+  bottom: 26vh;
+  background: linear-gradient(180deg, #4ade80 0%, #22c55e 55%, #15803d 100%);
+  opacity: 0.85;
+}
+
+.scene-background.scene-forest .forest-hill--far.scene-night {
+  background: linear-gradient(180deg, #14532d 0%, #166534 55%, #14532d 100%);
+  opacity: 0.95;
+}
+
+.scene-background.scene-forest .forest-hill--near {
+  width: 132vw;
+  height: 52vh;
+  right: -26vw;
+  bottom: 13vh;
+  background: linear-gradient(185deg, #86efac 0%, #22c55e 50%, #166534 100%);
+  z-index: 2;
+}
+
+.scene-background.scene-forest .forest-hill--near.scene-night {
+  background: linear-gradient(185deg, #166534 0%, #14532d 50%, #052e16 100%);
+}
+
+.scene-background.scene-forest .forest-celestial {
+  width: 180px;
+  height: 180px;
+  position: absolute;
+  border-radius: 50%;
+  top: -52px;
+  left: 14vw;
+  background: radial-gradient(circle at 35% 35%, #fef08a 0%, #facc15 55%, #eab308 100%);
+  z-index: 3;
+  opacity: 0.95;
+}
+
+.scene-background.scene-forest .forest-celestial.scene-night {
+  background: radial-gradient(circle at 40% 40%, #e2e8f0 0%, #cbd5e1 70%, #94a3b8 100%);
+  opacity: 0.85;
+}
+
+.scene-background.scene-forest .forest-trees {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.scene-background.scene-forest .forest-trees--mid {
+  bottom: 15vh;
+  height: min(420px, 56vh);
+  z-index: 3;
+  opacity: 0.72;
+}
+
+.scene-background.scene-forest .forest-trees--front {
+  bottom: 8vh;
+  height: min(720px, 78vh);
+  z-index: 4;
+}
+
+.scene-background.scene-forest .forest-tree-min {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  background: none;
+  filter: drop-shadow(0 2px 4px rgba(5, 46, 22, 0.28));
+}
+
+.scene-background.scene-forest .forest-tree-min--a {
+  left: 3%;
+  border-left: 41px solid transparent;
+  border-right: 41px solid transparent;
+  border-bottom: 178px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree-min--a.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree-min--b {
+  left: 18%;
+  border-left: 34px solid transparent;
+  border-right: 34px solid transparent;
+  border-bottom: 138px solid #166534;
+}
+
+.scene-background.scene-forest .forest-tree-min--b.scene-night {
+  border-bottom-color: #052e16;
+}
+
+.scene-background.scene-forest .forest-tree-min--c {
+  left: 38%;
+  border-left: 46px solid transparent;
+  border-right: 46px solid transparent;
+  border-bottom: 206px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree-min--c.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree-min--d {
+  right: 32%;
+  border-left: 38px solid transparent;
+  border-right: 38px solid transparent;
+  border-bottom: 164px solid #166534;
+}
+
+.scene-background.scene-forest .forest-tree-min--d.scene-night {
+  border-bottom-color: #052e16;
+}
+
+.scene-background.scene-forest .forest-tree-min--e {
+  right: 15%;
+  border-left: 36px solid transparent;
+  border-right: 36px solid transparent;
+  border-bottom: 148px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree-min--e.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree-min--f {
+  left: 52%;
+  transform: translateX(-50%);
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-bottom: 118px solid #166534;
+}
+
+.scene-background.scene-forest .forest-tree-min--f.scene-night {
+  border-bottom-color: #052e16;
+}
+
+.scene-background.scene-forest .forest-tree-min--g {
+  right: 4%;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 172px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree-min--g.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  background: none;
+  filter: drop-shadow(0 4px 6px rgba(5, 46, 22, 0.35));
+}
+
+.scene-background.scene-forest .forest-tree--1 {
+  left: 4%;
+  border-left: 63px solid transparent;
+  border-right: 63px solid transparent;
+  border-bottom: 258px solid #166534;
+}
+
+.scene-background.scene-forest .forest-tree--1.scene-night {
+  border-bottom-color: #052e16;
+}
+
+.scene-background.scene-forest .forest-tree--2 {
+  left: 11%;
+  border-left: 48px solid transparent;
+  border-right: 48px solid transparent;
+  border-bottom: 204px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree--2.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree--3 {
+  left: 20%;
+  border-left: 78px solid transparent;
+  border-right: 78px solid transparent;
+  border-bottom: 352px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree--3.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree--4 {
+  left: 30%;
+  border-left: 56px solid transparent;
+  border-right: 56px solid transparent;
+  border-bottom: 232px solid #166534;
+}
+
+.scene-background.scene-forest .forest-tree--4.scene-night {
+  border-bottom-color: #052e16;
+}
+
+.scene-background.scene-forest .forest-tree--5 {
+  left: 40%;
+  border-left: 67px solid transparent;
+  border-right: 67px solid transparent;
+  border-bottom: 306px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree--5.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree--6 {
+  left: 48%;
+  transform: translateX(-50%);
+  border-left: 89px solid transparent;
+  border-right: 89px solid transparent;
+  border-bottom: 407px solid #166534;
+}
+
+.scene-background.scene-forest .forest-tree--6.scene-night {
+  border-bottom-color: #052e16;
+}
+
+.scene-background.scene-forest .forest-tree--7 {
+  left: 56%;
+  border-left: 52px solid transparent;
+  border-right: 52px solid transparent;
+  border-bottom: 218px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree--7.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree--8 {
+  left: 64%;
+  border-left: 70px solid transparent;
+  border-right: 70px solid transparent;
+  border-bottom: 319px solid #166534;
+}
+
+.scene-background.scene-forest .forest-tree--8.scene-night {
+  border-bottom-color: #052e16;
+}
+
+.scene-background.scene-forest .forest-tree--9 {
+  right: 26%;
+  border-left: 59px solid transparent;
+  border-right: 59px solid transparent;
+  border-bottom: 255px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree--9.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree--10 {
+  right: 18%;
+  border-left: 82px solid transparent;
+  border-right: 82px solid transparent;
+  border-bottom: 367px solid #166534;
+}
+
+.scene-background.scene-forest .forest-tree--10.scene-night {
+  border-bottom-color: #052e16;
+}
+
+.scene-background.scene-forest .forest-tree--11 {
+  right: 11%;
+  border-left: 56px solid transparent;
+  border-right: 56px solid transparent;
+  border-bottom: 237px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree--11.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree--12 {
+  right: 6%;
+  border-left: 67px solid transparent;
+  border-right: 67px solid transparent;
+  border-bottom: 287px solid #166534;
+}
+
+.scene-background.scene-forest .forest-tree--12.scene-night {
+  border-bottom-color: #052e16;
+}
+
+.scene-background.scene-forest .forest-tree--13 {
+  left: 73%;
+  border-left: 44px solid transparent;
+  border-right: 44px solid transparent;
+  border-bottom: 182px solid #15803d;
+}
+
+.scene-background.scene-forest .forest-tree--13.scene-night {
+  border-bottom-color: #14532d;
+}
+
+.scene-background.scene-forest .forest-tree--14 {
+  right: 1%;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 200px solid #166534;
+}
+
+.scene-background.scene-forest .forest-tree--14.scene-night {
+  border-bottom-color: #052e16;
+}
+
+.scene-background.scene-forest .forest-ground {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 10vh;
+  background: linear-gradient(180deg, #4d7c0f 0%, #365314 100%);
+  z-index: 5;
+}
+
+.scene-background.scene-forest .forest-ground.scene-night {
+  background: linear-gradient(180deg, #052e16 0%, #022c22 100%);
+}
+

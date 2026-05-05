@@ -1,3 +1,4 @@
+import "./city.scene.css";
 import { sceneNight } from "./sceneNight";
 
 const CITY_BACK_HEIGHTS = [28, 34, 26, 38, 30, 32, 27, 35, 29, 31, 28, 33, 26, 30] as const;
@@ -42,13 +43,69 @@ export function CityScene({ isNightMode }: CitySceneProps) {
       </div>
       <div className={sceneNight("city-street-vanish", isNightMode)} />
       <div className={sceneNight("city-street-objects", isNightMode)}>
-        <img className="city-street-light city-street-light--left" src="/assets/street-light.png" alt="" draggable={false} />
-        <img className="city-street-light city-street-light--mid" src="/assets/street-light.png" alt="" draggable={false} />
-        <img className="city-street-light city-street-light--right" src="/assets/street-light.png" alt="" draggable={false} />
-        <img className="city-car city-car--1" src="/assets/red-car.png" alt="" draggable={false} />
-        <img className="city-car city-car--2" src="/assets/orange-car.png" alt="" draggable={false} />
-        <img className="city-car city-car--3" src="/assets/purple-sport-car.png" alt="" draggable={false} />
-        <img className="city-car city-car--4" src="/assets/red-sport-car.png" alt="" draggable={false} />
+        <img
+          className="city-street-light city-street-light--left"
+          src="/assets/street-light.png"
+          alt=""
+          width={56}
+          height={192}
+          decoding="async"
+          draggable={false}
+        />
+        <img
+          className="city-street-light city-street-light--mid"
+          src="/assets/street-light.png"
+          alt=""
+          width={56}
+          height={192}
+          decoding="async"
+          draggable={false}
+        />
+        <img
+          className="city-street-light city-street-light--right"
+          src="/assets/street-light.png"
+          alt=""
+          width={56}
+          height={192}
+          decoding="async"
+          draggable={false}
+        />
+        <img
+          className="city-car city-car--1"
+          src="/assets/red-car.png"
+          alt=""
+          width={220}
+          height={120}
+          decoding="async"
+          draggable={false}
+        />
+        <img
+          className="city-car city-car--2"
+          src="/assets/orange-car.png"
+          alt=""
+          width={220}
+          height={120}
+          decoding="async"
+          draggable={false}
+        />
+        <img
+          className="city-car city-car--3"
+          src="/assets/purple-sport-car.png"
+          alt=""
+          width={220}
+          height={120}
+          decoding="async"
+          draggable={false}
+        />
+        <img
+          className="city-car city-car--4"
+          src="/assets/red-sport-car.png"
+          alt=""
+          width={220}
+          height={120}
+          decoding="async"
+          draggable={false}
+        />
       </div>
       <div className={sceneNight("city-ground", isNightMode)} />
     </>

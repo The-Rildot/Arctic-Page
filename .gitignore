@@ -1,3 +1,7 @@
 node_modules
 dist
 .env
+
+# This project standardizes on npm (package-lock.json)
+pnpm-lock.yaml
+yarn.lock

@@ -1,3 +1,4 @@
+import "./forest.scene.css";
 import { sceneNight } from "./sceneNight";
 
 type ForestSceneProps = {
