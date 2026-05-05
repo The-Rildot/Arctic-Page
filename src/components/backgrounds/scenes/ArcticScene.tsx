@@ -7,15 +7,19 @@ type ArcticSceneProps = {
 export function ArcticScene({ isNightMode }: ArcticSceneProps) {
   return (
     <>
-      <div className={sceneNight("arctic-mountain-left", isNightMode)} />
+      <div className={sceneNight("arctic-peaks arctic-peaks--distant", isNightMode)}>
+        <div className="arctic-peak arctic-peak--a" />
+        <div className="arctic-peak arctic-peak--b" />
+        <div className="arctic-peak arctic-peak--c" />
+        <div className="arctic-peak arctic-peak--d" />
+        <div className="arctic-peak arctic-peak--e" />
+      </div>
       <div className={sceneNight("arctic-mountain-back", isNightMode)} />
+      <div className={sceneNight("arctic-mountain-left", isNightMode)} />
+      <div className={sceneNight("arctic-mountain-right", isNightMode)} />
       <div className={sceneNight("arctic-celestial", isNightMode)} />
       <div className="arctic-igloo">
-        <img
-          src="https://www.pngall.com/wp-content/uploads/4/Igloo-PNG-Image-HD.png"
-          alt=""
-          draggable={false}
-        />
+        <img src="/assets/igloo.png" alt="" draggable={false} />
       </div>
       <div className={sceneNight("arctic-ground", isNightMode)} />
     </>

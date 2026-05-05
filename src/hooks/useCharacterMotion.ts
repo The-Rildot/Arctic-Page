@@ -6,9 +6,11 @@ import {
   WANDER_DELTA_Y,
   WANDER_INTERVAL_MS,
   WANDER_MOVE_CHANCE,
-  clamp
+  clampAllCharacterPositions,
+  clampPositionToViewport
 } from "../constants/motion";
 import type { CharacterPosition } from "../types/characters";
+import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
 type DragState = {
   id: string;
@@ -27,21 +29,52 @@ type UseCharacterMotionArgs = {
 };
 
 export function useCharacterMotion({ customCharacterIds, initialPositions }: UseCharacterMotionArgs) {
-  const [characterPositions, setCharacterPositions] = useState<Record<string, CharacterPosition>>(() => ({
-    ...BASE_CHARACTER_DEFAULTS,
-    ...initialPositions
-  }));
-  const [draggingCharacterId, setDraggingCharacterId] = useState<string | null>(null);
-
-  const dragStateRef = useRef<DragState | null>(null);
-  const suppressSelectRef = useRef<string | null>(null);
+  const reduceMotion = usePrefersReducedMotion();
 
   const draggableCharacterIds = useMemo(
     () => ["penguin", "bear", ...customCharacterIds],
     [customCharacterIds]
   );
 
+  const [characterPositions, setCharacterPositions] = useState<Record<string, CharacterPosition>>(() =>
+    clampAllCharacterPositions(
+      { ...BASE_CHARACTER_DEFAULTS, ...initialPositions },
+      ["penguin", "bear", ...customCharacterIds],
+      customCharacterIds
+    )
+  );
+  const [draggingCharacterId, setDraggingCharacterId] = useState<string | null>(null);
+
+  const dragStateRef = useRef<DragState | null>(null);
+  const suppressSelectRef = useRef<string | null>(null);
+
   useEffect(() => {
+    let raf = 0;
+    const onResize = () => {
+      if (raf !== 0) {
+        cancelAnimationFrame(raf);
+      }
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        setCharacterPositions((prev) =>
+          clampAllCharacterPositions(prev, draggableCharacterIds, customCharacterIds)
+        );
+      });
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      if (raf !== 0) {
+        cancelAnimationFrame(raf);
+      }
+    };
+  }, [customCharacterIds, draggableCharacterIds]);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      return;
+    }
+
     const wanderInterval = window.setInterval(() => {
       setCharacterPositions((prev) => {
         const next = { ...prev };
@@ -56,13 +89,13 @@ export function useCharacterMotion({ customCharacterIds, initialPositions }: Use
           const current = next[id] ?? (isCustomCharacter ? { x: 200, y: 220 } : BASE_CHARACTER_DEFAULTS[id]);
           const deltaX = Math.floor(Math.random() * (WANDER_DELTA_X * 2 + 1)) - WANDER_DELTA_X;
           const deltaY = Math.floor(Math.random() * (WANDER_DELTA_Y * 2 + 1)) - WANDER_DELTA_Y;
-          const maxX = Math.max(0, window.innerWidth - size.width);
-          const maxY = Math.max(0, window.innerHeight - size.height);
-
-          next[id] = {
-            x: clamp(current.x + deltaX, 0, maxX),
-            y: clamp(current.y + deltaY, 0, maxY)
-          };
+          next[id] = clampPositionToViewport(
+            {
+              x: current.x + deltaX,
+              y: current.y + deltaY
+            },
+            size
+          );
         });
 
         return next;
@@ -72,7 +105,7 @@ export function useCharacterMotion({ customCharacterIds, initialPositions }: Use
     return () => {
       window.clearInterval(wanderInterval);
     };
-  }, [customCharacterIds, draggableCharacterIds]);
+  }, [customCharacterIds, draggableCharacterIds, reduceMotion]);
 
   const startDrag =
     (id: string, size: { width: number; height: number }, onDragStart?: (id: string) => void) =>
@@ -107,12 +140,13 @@ export function useCharacterMotion({ customCharacterIds, initialPositions }: Use
         dragState.moved = true;
       }
 
-      const maxX = Math.max(0, window.innerWidth - dragState.width);
-      const maxY = Math.max(0, window.innerHeight - dragState.height);
-      const nextPosition = {
-        x: clamp(event.clientX - dragState.pointerOffsetX, 0, maxX),
-        y: clamp(event.clientY - dragState.pointerOffsetY, 0, maxY)
-      };
+      const nextPosition = clampPositionToViewport(
+        {
+          x: event.clientX - dragState.pointerOffsetX,
+          y: event.clientY - dragState.pointerOffsetY
+        },
+        { width: dragState.width, height: dragState.height }
+      );
 
       setCharacterPositions((prev) => ({
         ...prev,

@@ -1,9 +1,10 @@
 import type { SceneId } from "../../constants/scenes";
-import { ArcticScene } from "./scenes/ArcticScene";
-import { CityScene } from "./scenes/CityScene";
-import { DesertScene } from "./scenes/DesertScene";
-import { ForestScene } from "./scenes/ForestScene";
-import { OceanScene } from "./scenes/OceanScene";
+import { ArcticScene } from "./scenes/ArcticScene.tsx";
+import { CityScene } from "./scenes/CityScene.tsx";
+import { DesertScene } from "./scenes/DesertScene.tsx";
+import { ForestScene } from "./scenes/ForestScene.tsx";
+import { OceanScene } from "./scenes/OceanScene.tsx";
+import { SpaceScene } from "./scenes/SpaceScene.tsx";
 
 type SceneBackgroundProps = {
   sceneId: SceneId;
@@ -18,6 +19,7 @@ export function SceneBackground({ sceneId, isNightMode }: SceneBackgroundProps) 
       {sceneId === "ocean" ? <OceanScene isNightMode={isNightMode} /> : null}
       {sceneId === "city" ? <CityScene isNightMode={isNightMode} /> : null}
       {sceneId === "forest" ? <ForestScene isNightMode={isNightMode} /> : null}
+      {sceneId === "space" ? <SpaceScene isNightMode={isNightMode} /> : null}
     </div>
   );
 }
