@@ -1,7 +1,20 @@
-import { createDefaultComponents } from "./characterCreator";
 import type { CharacterComponents } from "../types/characters";
 
-export const PENGUIN_PRESET: CharacterComponents = createDefaultComponents();
+/**
+ * Frozen looks for on-canvas characters. Not tied to the creator’s draft defaults
+ * (`createDefaultComponents`); change presets here without affecting “Create Character”.
+ */
+export const PENGUIN_PRESET: CharacterComponents = {
+  head: { variantId: "penguin-head", color: "#141414" },
+  body: { variantId: "penguin-body", color: "#030202" },
+  arms: { variantId: "penguin-arms", color: "#141414" },
+  legs: { variantId: "penguin-legs", color: "#545252" },
+  shirt: { variantId: "penguin-shirt", color: "#f9a8d4" },
+  eyes: { variantId: "penguin-eyes", color: "#111827" },
+  mouthNose: { variantId: "penguin-beak", color: "#ed9913" },
+  blush: { variantId: "penguin-blush", color: "#fbcfe8" },
+  message: { variantId: "classic-message", color: "#0f172a" }
+};
 
 export const BEAR_PRESET: CharacterComponents = {
   head: { variantId: "polar-bear-head", color: "#ffffff" },

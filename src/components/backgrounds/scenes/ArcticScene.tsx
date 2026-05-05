@@ -13,15 +13,20 @@ export function ArcticScene({ isNightMode }: ArcticSceneProps) {
         <div className="arctic-peak arctic-peak--c" />
         <div className="arctic-peak arctic-peak--d" />
         <div className="arctic-peak arctic-peak--e" />
+        <div className="arctic-peak arctic-peak--f" />
       </div>
-      <div className={sceneNight("arctic-mountain-back", isNightMode)} />
-      <div className={sceneNight("arctic-mountain-left", isNightMode)} />
-      <div className={sceneNight("arctic-mountain-right", isNightMode)} />
+      <div className={sceneNight("arctic-mountain-range arctic-mountain-range--massif", isNightMode)}>
+        <div className={sceneNight("arctic-mt arctic-mt--1", isNightMode)} />
+        <div className={sceneNight("arctic-mt arctic-mt--2", isNightMode)} />
+        <div className={sceneNight("arctic-mt arctic-mt--3", isNightMode)} />
+      </div>
+      <div className={sceneNight("arctic-mountain-main arctic-mountain-main--left", isNightMode)} />
+      <div className={sceneNight("arctic-mountain-main arctic-mountain-main--right", isNightMode)} />
       <div className={sceneNight("arctic-celestial", isNightMode)} />
+      <div className={sceneNight("arctic-ground", isNightMode)} />
       <div className="arctic-igloo">
         <img src="/assets/igloo.png" alt="" draggable={false} />
       </div>
-      <div className={sceneNight("arctic-ground", isNightMode)} />
     </>
   );
 }

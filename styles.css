@@ -70,113 +70,135 @@ body[data-scene="space"].dark-mode {
   overflow: hidden;
 }
 
-/* --- Arctic scene (low ice floor + layered peaks) --- */
+/* --- Arctic scene (triangular ridges + igloo above ice band) --- */
 
 .scene-background.scene-arctic .arctic-peaks {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 12vh;
-  height: 34vh;
+  bottom: 11vh;
+  height: min(320px, 38vh);
   z-index: 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 0 3%;
-  gap: clamp(4px, 1.5vw, 24px);
+  padding: 0 2%;
+  gap: clamp(2px, 1vw, 18px);
   pointer-events: none;
 }
 
 .scene-background.scene-arctic .arctic-peak {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
-  border-radius: 6px 48% 2px 2px;
-  background: linear-gradient(110deg, #dbeafe 0%, #93c5fd 35%, #3b82f6 92%);
-  opacity: 0.72;
+  max-width: 15%;
+  background: linear-gradient(165deg, #eef6ff 0%, #bae6fd 38%, #3b82f6 88%);
+  opacity: 0.78;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
 }
 
 .scene-background.scene-arctic .arctic-peaks--distant.scene-night .arctic-peak {
-  background: linear-gradient(115deg, #c7d2fe 0%, #818cf8 40%, #4f46e5 95%);
-  opacity: 0.65;
+  background: linear-gradient(168deg, #e8eafd 0%, #a5b4fc 40%, #4f46e5 92%);
+  opacity: 0.68;
 }
 
 .scene-background.scene-arctic .arctic-peak--a {
-  height: 52%;
-  transform: skew(-5deg);
-  max-width: 14%;
+  height: 48%;
+  filter: saturate(1.08);
 }
 
 .scene-background.scene-arctic .arctic-peak--b {
-  height: 78%;
-  transform: skew(3deg);
-  max-width: 16%;
-}
-
-.scene-background.scene-arctic .arctic-peak--c {
-  height: 64%;
-  transform: skew(-3deg);
-  max-width: 15%;
-}
-
-.scene-background.scene-arctic .arctic-peak--d {
-  height: 88%;
-  transform: skew(6deg);
+  height: 72%;
   max-width: 17%;
 }
 
-.scene-background.scene-arctic .arctic-peak--e {
+.scene-background.scene-arctic .arctic-peak--c {
   height: 58%;
-  transform: skew(-4deg);
-  max-width: 14%;
 }
 
-.scene-background.scene-arctic .arctic-mountain-back {
-  width: 280px;
-  height: 300px;
-  background: linear-gradient(rgb(203, 241, 228), rgb(47, 170, 255));
+.scene-background.scene-arctic .arctic-peak--d {
+  height: 94%;
+  max-width: 18%;
+}
+
+.scene-background.scene-arctic .arctic-peak--e {
+  height: 62%;
+}
+
+.scene-background.scene-arctic .arctic-peak--f {
+  height: 44%;
+  max-width: 12%;
+}
+
+.scene-background.scene-arctic .arctic-mountain-range {
   position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 9vh;
+  height: min(340px, 40vh);
   z-index: 1;
-  transform: rotate(45deg);
-  left: clamp(72px, 14vw, 200px);
-  bottom: 8vh;
-  top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(-24px, -1.5vw, -8px);
+  pointer-events: none;
 }
 
-.scene-background.scene-arctic .arctic-mountain-back.scene-night {
-  background: linear-gradient(rgb(203, 226, 241), rgb(61, 47, 255));
+.scene-background.scene-arctic .arctic-mt {
+  position: relative;
+  width: clamp(120px, 22vw, 280px);
+  height: clamp(180px, 28vh, 320px);
+  background: linear-gradient(180deg, #e8faff 8%, #7dd3fc 52%, #1d4ed8 100%);
+  opacity: 0.85;
 }
 
-.scene-background.scene-arctic .arctic-mountain-left {
-  width: 280px;
-  height: 280px;
-  background: linear-gradient(rgb(203, 241, 228), rgb(80, 183, 255));
+.scene-background.scene-arctic .arctic-mt--1 {
+  clip-path: polygon(18% 100%, 50% 0%, 94% 100%);
+  transform: translateX(clamp(8px, 2vw, 28px));
+}
+
+.scene-background.scene-arctic .arctic-mt--2 {
+  clip-path: polygon(12% 100%, 54% 0%, 100% 100%);
+  transform: translateY(-4%);
+  height: clamp(210px, 32vh, 380px);
+  z-index: 1;
+}
+
+.scene-background.scene-arctic .arctic-mt--3 {
+  clip-path: polygon(8% 100%, 62% 0%, 92% 100%);
+  transform: translateX(clamp(-10px, -1.5vw, -4px));
+}
+
+.scene-background.scene-arctic .arctic-mountain-range.scene-night .arctic-mt {
+  background: linear-gradient(180deg, #ddd6fe 6%, #6366f1 55%, #312e81 100%);
+  opacity: 0.78;
+}
+
+.scene-background.scene-arctic .arctic-mountain-main {
   position: absolute;
-  transform: skew(0deg, 40deg);
-  z-index: 2;
-  left: -48px;
   bottom: 6vh;
-  top: auto;
+  width: clamp(200px, 28vw, 360px);
+  height: clamp(260px, 34vh, 440px);
+  z-index: 2;
 }
 
-.scene-background.scene-arctic .arctic-mountain-left.scene-night {
-  background: linear-gradient(rgb(203, 224, 241), rgb(98, 80, 255));
+.scene-background.scene-arctic .arctic-mountain-main--left {
+  left: clamp(-56px, -4vw, 0px);
+  background: linear-gradient(195deg, #f8fafc 0%, #7dd3fc 45%, #2563eb 100%);
+  clip-path: polygon(0% 100%, 55% 0%, 92% 100%, 76% 100%);
 }
 
-.scene-background.scene-arctic .arctic-mountain-right {
-  width: 220px;
-  height: 300px;
-  background: linear-gradient(200deg, rgb(226, 244, 255), rgb(56, 189, 248));
-  position: absolute;
-  z-index: 1;
-  transform: rotate(-38deg);
-  right: clamp(40px, 8vw, 120px);
-  bottom: 7vh;
-  top: auto;
-  border-radius: 4px;
+.scene-background.scene-arctic .arctic-mountain-main--left.scene-night {
+  background: linear-gradient(190deg, #eef2ff 0%, #6366f1 48%, #3730a3 100%);
 }
 
-.scene-background.scene-arctic .arctic-mountain-right.scene-night {
-  background: linear-gradient(195deg, rgb(199, 210, 254), rgb(79, 70, 229));
+.scene-background.scene-arctic .arctic-mountain-main--right {
+  right: clamp(-32px, -2vw, 8px);
+  background: linear-gradient(172deg, #f8fafc 0%, #60a5fa 48%, #1e40af 100%);
+  clip-path: polygon(18% 100%, 48% 4%, 100% 100%);
+}
+
+.scene-background.scene-arctic .arctic-mountain-main--right.scene-night {
+  background: linear-gradient(172deg, #e9d5ff 0%, #7c3aed 45%, #4c1d95 100%);
 }
 
 .scene-background.scene-arctic .arctic-celestial {
@@ -187,7 +209,7 @@ body[data-scene="space"].dark-mode {
   border-radius: 50%;
   top: -75px;
   right: -75px;
-  z-index: 5;
+  z-index: 7;
 }
 
 .scene-background.scene-arctic .arctic-celestial.scene-night {
@@ -200,7 +222,7 @@ body[data-scene="space"].dark-mode {
   height: 13vh;
   min-height: 72px;
   background: linear-gradient(90deg, rgb(88, 175, 236), rgb(182, 255, 255));
-  z-index: 6;
+  z-index: 8;
   position: absolute;
   left: 0;
   bottom: 0;
@@ -212,10 +234,11 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-arctic .arctic-igloo {
   position: absolute;
-  z-index: 5;
-  left: 70vw;
-  bottom: 11vh;
+  z-index: 10;
+  left: 69vw;
+  bottom: clamp(72px, 10vh, 120px);
   top: auto;
+  filter: drop-shadow(2px 4px 10px rgba(15, 23, 42, 0.2));
 }
 
 .scene-background.scene-arctic .arctic-igloo img {
@@ -253,7 +276,7 @@ body[data-scene="space"].dark-mode {
   bottom: 12vh;
   background: linear-gradient(175deg, #fcd34d 0%, #f59e0b 50%, #d97706 100%);
   transform: rotate(4deg);
-  z-index: 2;
+  z-index: 3;
 }
 
 .scene-background.scene-desert .desert-dune--mid.scene-night {
@@ -266,7 +289,7 @@ body[data-scene="space"].dark-mode {
   left: -8vw;
   bottom: 0;
   background: linear-gradient(180deg, #fde68a 0%, #fbbf24 45%, #d97706 100%);
-  z-index: 3;
+  z-index: 4;
 }
 
 .scene-background.scene-desert .desert-dune--front.scene-night {
@@ -281,7 +304,7 @@ body[data-scene="space"].dark-mode {
   top: -60px;
   right: -40px;
   background: radial-gradient(circle at 35% 35%, #fff7ed 0%, #fb923c 45%, #ea580c 100%);
-  z-index: 4;
+  z-index: 5;
 }
 
 .scene-background.scene-desert .desert-celestial.scene-night {
@@ -291,12 +314,14 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-desert .desert-pyramid-wrap {
   position: absolute;
-  left: 8vw;
-  bottom: calc(13vh + 4px);
-  z-index: 4;
-  width: min(200px, 28vw);
+  left: 4vw;
+  bottom: 22vh;
+  z-index: 2;
+  width: min(520px, 58vw);
+  max-width: 92vw;
   pointer-events: none;
-  filter: drop-shadow(2px 6px 10px rgba(120, 53, 15, 0.35));
+  filter: drop-shadow(3px 10px 22px rgba(120, 53, 15, 0.28));
+  opacity: 0.9;
 }
 
 .scene-background.scene-desert .desert-pyramid {
@@ -308,7 +333,7 @@ body[data-scene="space"].dark-mode {
 .scene-background.scene-desert .desert-silhouette {
   position: absolute;
   bottom: calc(14vh + 8px);
-  z-index: 5;
+  z-index: 6;
   border-radius: 60px 60px 4px 4px;
   background:
     radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.12) 0%, transparent 45%),
@@ -408,7 +433,7 @@ body[data-scene="space"].dark-mode {
 .scene-background.scene-desert .desert-barrel-wrap {
   position: absolute;
   bottom: calc(14vh + 2px);
-  z-index: 5;
+  z-index: 6;
 }
 
 .scene-background.scene-desert .desert-barrel-wrap--a {
@@ -456,7 +481,7 @@ body[data-scene="space"].dark-mode {
   width: 100vw;
   height: 14vh;
   background: linear-gradient(180deg, rgba(217, 119, 6, 0.35) 0%, rgba(180, 83, 9, 0.85) 100%);
-  z-index: 6;
+  z-index: 7;
 }
 
 .scene-background.scene-desert .desert-ground.scene-night {
@@ -464,30 +489,6 @@ body[data-scene="space"].dark-mode {
 }
 
 /* --- Ocean scene --- */
-
-.scene-background.scene-ocean .ocean-cloud {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  filter: blur(1px);
-  z-index: 1;
-}
-
-.scene-background.scene-ocean .ocean-cloud--a {
-  width: 140px;
-  height: 52px;
-  top: 8vh;
-  left: 12vw;
-  opacity: 0.9;
-}
-
-.scene-background.scene-ocean .ocean-cloud--b {
-  width: 200px;
-  height: 64px;
-  top: 14vh;
-  right: 18vw;
-  opacity: 0.75;
-}
 
 .scene-background.scene-ocean .ocean-celestial {
   width: 170px;
@@ -585,176 +586,133 @@ body[data-scene="space"].dark-mode {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 38%;
+  height: 44%;
   z-index: 2;
   pointer-events: none;
 }
 
-.scene-background.scene-ocean .reef-mound {
+.scene-background.scene-ocean .ocean-reef-img {
   position: absolute;
   bottom: 0;
-  border-radius: 60% 60% 2px 2px;
-  background: linear-gradient(180deg, #f97316 0%, #c2410c 42%, #7c2d12 100%);
+  height: auto;
+  max-height: min(1260px, 75vh);
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
 
-.scene-background.scene-ocean .reef-mound--1 {
-  left: 4%;
-  width: 28%;
-  height: 52%;
-  opacity: 0.65;
+.scene-background.scene-ocean .ocean-coral--left {
+  left: -2vw;
+  max-width: min(1140px, 126vw);
+  opacity: 0.88;
 }
 
-.scene-background.scene-ocean .reef-mound--2 {
-  left: 36%;
-  width: 35%;
-  height: 72%;
-  opacity: 0.55;
+.scene-background.scene-ocean .ocean-coral--center {
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(1320px, 144vw);
+  bottom: 2%;
+  z-index: 1;
 }
 
-.scene-background.scene-ocean .reef-mound--3 {
-  right: 6%;
-  width: 30%;
-  height: 58%;
-  opacity: 0.62;
+.scene-background.scene-ocean .ocean-coral--right {
+  right: -3vw;
+  max-width: min(960px, 108vw);
+  opacity: 0.92;
 }
 
-.scene-background.scene-ocean .reef-mound.scene-night {
-  background: linear-gradient(180deg, #9f1239 0%, #4c0519 65%, #1e0510 100%);
-  opacity: 0.55;
+.scene-background.scene-ocean .ocean-reef.scene-night .ocean-reef-img {
+  filter: brightness(0.82) saturate(1.06);
 }
 
-.scene-background.scene-ocean .reef-coral {
+.scene-background.scene-ocean .ocean-seaweed {
   position: absolute;
-  bottom: 8%;
+  bottom: 0;
+  height: auto;
+  max-height: min(720px, 84vh);
+  width: auto;
+  display: block;
+  opacity: 0.9;
 }
 
-.scene-background.scene-ocean .reef-coral--fan {
-  left: 12%;
-  width: 72px;
-  height: 64px;
-  background: radial-gradient(ellipse at 50% 100%, #fb923c 0%, #ea580c 45%, transparent 72%);
-  border-radius: 50% 50% 40% 40%;
-  transform: skewY(-12deg);
-  opacity: 0.8;
+.scene-background.scene-ocean .ocean-seaweed--1 {
+  left: 18%;
+  max-width: clamp(216px, 36vw, 420px);
+  transform: rotate(-7deg);
 }
 
-.scene-background.scene-ocean .reef-coral--fan2 {
-  right: 14%;
-  left: auto;
-  width: 64px;
-  height: 58px;
-  background: radial-gradient(ellipse at 40% 100%, #fbcfe8 0%, #db2777 50%, transparent 70%);
+
+.scene-background.scene-ocean .ocean-seaweed--2 {
+  right: 16%;
+  max-width: clamp(240px, 33vw, 390px);
+  transform: rotate(-4deg);
 }
 
-.scene-background.scene-ocean .reef-coral.scene-night {
-  filter: brightness(0.72) saturate(1.05);
+.scene-background.scene-ocean .ocean-reef.scene-night .ocean-seaweed {
+  filter: brightness(0.75);
+  opacity: 0.82;
 }
 
-.scene-background.scene-ocean .reef-sponge {
-  position: absolute;
-  bottom: 4%;
-  left: 48%;
-  width: 52px;
-  height: 40px;
-  border-radius: 40% 50% 30% 50%;
-  background: linear-gradient(160deg, #fde047 0%, #ca8a04 100%);
-  opacity: 0.75;
-}
-
-.scene-background.scene-ocean .reef-sponge.scene-night {
-  background: linear-gradient(160deg, #a855f7 0%, #5b21b6 100%);
-  opacity: 0.65;
-}
-
-.scene-background.scene-ocean .ocean-fish {
+.scene-background.scene-ocean .ocean-fish-wrap {
   position: absolute;
   z-index: 3;
-  opacity: 0.85;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 70% 50%, transparent 42%, transparent 100%),
-    linear-gradient(#fef08a 0%, #facc15 40%, #f59e0b 90%);
+  opacity: 0.92;
+  width: min(104px, 14vw);
+  height: min(72px, 10vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.scene-background.scene-ocean .ocean-fish::after {
-  content: "";
-  position: absolute;
-  right: -6px;
-  top: 35%;
-  width: 14px;
-  height: 10px;
-  background: inherit;
-  border-radius: 0 70% 70% 0;
-  opacity: 0.95;
+.scene-background.scene-ocean .ocean-fish-img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
-.scene-background.scene-ocean .ocean-fish--1 {
-  width: 36px;
-  height: 16px;
-  left: -10%;
-  top: 62%;
-  animation: ocean-fish-swim 14s linear infinite;
+.scene-background.scene-ocean .ocean-fish-wrap--1 {
+  left: 0;
+  top: 60%;
+  animation: ocean-fish-swim-left 14s linear infinite;
 }
 
-.scene-background.scene-ocean .ocean-fish--2 {
-  width: 28px;
-  height: 12px;
-  left: -8%;
-  top: 48%;
-  animation: ocean-fish-swim 19s linear infinite 2s;
-  filter: hue-rotate(-25deg);
+.scene-background.scene-ocean .ocean-fish-wrap--2 {
+  left: 0;
+  top: 44%;
+  animation: ocean-fish-swim-right 19s linear infinite 2s;
 }
 
-.scene-background.scene-ocean .ocean-fish--3 {
-  width: 22px;
-  height: 10px;
-  left: 110%;
-  top: 55%;
-  animation: ocean-fish-swim-reverse 16s linear infinite 1s;
-  filter: hue-rotate(18deg);
+.scene-background.scene-ocean .ocean-fish-wrap--3 {
+  left: 0;
+  top: 52%;
+  animation: ocean-fish-swim-right 16s linear infinite 1s;
 }
 
-.scene-background.scene-ocean .ocean-fish--4 {
-  width: 32px;
-  height: 14px;
-  left: 105%;
-  top: 72%;
-  animation: ocean-fish-swim-reverse 22s linear infinite 4s;
+.scene-background.scene-ocean .ocean-fish-wrap--4 {
+  left: 0;
+  top: 70%;
+  animation: ocean-fish-swim-right 22s linear infinite 4s;
 }
 
-@keyframes ocean-fish-swim {
+/* Yellow fish asset faces left — travel left only (no flip). */
+@keyframes ocean-fish-swim-left {
   0% {
-    transform: translateX(0) scaleX(1);
-  }
-  48% {
-    transform: translateX(calc(110vw + 60px)) scaleX(1);
-  }
-  50% {
-    transform: translateX(calc(110vw + 60px)) scaleX(-1);
-  }
-  98% {
-    transform: translateX(0) scaleX(-1);
+    transform: translateX(calc(100vw + 120px));
   }
   100% {
-    transform: translateX(0) scaleX(1);
+    transform: translateX(calc(-100vw - 120px));
   }
 }
 
-@keyframes ocean-fish-swim-reverse {
+/* Pink / red fish assets face right — travel right only (no flip). */
+@keyframes ocean-fish-swim-right {
   0% {
-    transform: translateX(0) scaleX(-1);
-  }
-  48% {
-    transform: translateX(calc(-110vw - 80px)) scaleX(-1);
-  }
-  50% {
-    transform: translateX(calc(-110vw - 80px)) scaleX(1);
-  }
-  98% {
-    transform: translateX(0) scaleX(1);
+    transform: translateX(calc(-100vw - 120px));
   }
   100% {
-    transform: translateX(0) scaleX(-1);
+    transform: translateX(calc(100vw + 120px));
   }
 }
 
@@ -983,6 +941,66 @@ body[data-scene="space"].dark-mode {
   background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.42) 100%);
 }
 
+.scene-background.scene-city .city-street-objects {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(112px, 15vh, 200px);
+  z-index: 9;
+  pointer-events: none;
+}
+
+.scene-background.scene-city .city-street-light {
+  position: absolute;
+  bottom: 0;
+  height: min(200px, 22vh);
+  width: auto;
+  object-fit: contain;
+}
+
+.scene-background.scene-city .city-street-light--left {
+  left: clamp(8vw, 10vw, 140px);
+  transform: translateX(-50%);
+}
+
+.scene-background.scene-city .city-street-light--mid {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.scene-background.scene-city .city-street-light--right {
+  right: clamp(8vw, 10vw, 140px);
+  transform: translateX(50%);
+}
+
+.scene-background.scene-city .city-car {
+  position: absolute;
+  bottom: clamp(14px, 2.5vh, 28px);
+  height: auto;
+  width: min(148px, 19vw);
+  max-width: 28vw;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+}
+
+.scene-background.scene-city .city-car--1 {
+  left: 18%;
+}
+
+.scene-background.scene-city .city-car--2 {
+  left: 58%;
+}
+
+.scene-background.scene-city .city-car--3 {
+  right: clamp(240px, 28vw, 420px);
+  width: min(132px, 17vw);
+}
+
+.scene-background.scene-city .city-car--4 {
+  right: 10%;
+}
+
 .scene-background.scene-city .city-ground {
   position: absolute;
   left: 0;
@@ -991,7 +1009,7 @@ body[data-scene="space"].dark-mode {
   height: 12vh;
   min-height: 80px;
   background: linear-gradient(180deg, #94a3b8 0%, #475569 45%, #334155 100%);
-  z-index: 6;
+  z-index: 8;
   box-shadow: inset 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
@@ -1009,10 +1027,10 @@ body[data-scene="space"].dark-mode {
 }
 
 .scene-background.scene-forest .forest-hill--far {
-  width: 140vw;
-  height: 48vh;
-  left: -20vw;
-  bottom: 22vh;
+  width: 168vw;
+  height: 62vh;
+  left: -34vw;
+  bottom: 26vh;
   background: linear-gradient(180deg, #4ade80 0%, #22c55e 55%, #15803d 100%);
   opacity: 0.85;
 }
@@ -1023,10 +1041,10 @@ body[data-scene="space"].dark-mode {
 }
 
 .scene-background.scene-forest .forest-hill--near {
-  width: 115vw;
-  height: 36vh;
-  right: -18vw;
-  bottom: 12vh;
+  width: 132vw;
+  height: 52vh;
+  right: -26vw;
+  bottom: 13vh;
   background: linear-gradient(185deg, #86efac 0%, #22c55e 50%, #166534 100%);
   z-index: 2;
 }
@@ -1036,12 +1054,12 @@ body[data-scene="space"].dark-mode {
 }
 
 .scene-background.scene-forest .forest-celestial {
-  width: 150px;
-  height: 150px;
+  width: 180px;
+  height: 180px;
   position: absolute;
   border-radius: 50%;
-  top: -40px;
-  left: 18vw;
+  top: -52px;
+  left: 14vw;
   background: radial-gradient(circle at 35% 35%, #fef08a 0%, #facc15 55%, #eab308 100%);
   z-index: 3;
   opacity: 0.95;
@@ -1060,15 +1078,15 @@ body[data-scene="space"].dark-mode {
 }
 
 .scene-background.scene-forest .forest-trees--mid {
-  bottom: 14vh;
-  height: 36vh;
+  bottom: 15vh;
+  height: min(420px, 56vh);
   z-index: 3;
   opacity: 0.72;
 }
 
 .scene-background.scene-forest .forest-trees--front {
-  bottom: 9vh;
-  height: 48vh;
+  bottom: 8vh;
+  height: min(720px, 78vh);
   z-index: 4;
 }
 
@@ -1083,9 +1101,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree-min--a {
   left: 3%;
-  border-left: 22px solid transparent;
-  border-right: 22px solid transparent;
-  border-bottom: 95px solid #15803d;
+  border-left: 41px solid transparent;
+  border-right: 41px solid transparent;
+  border-bottom: 178px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree-min--a.scene-night {
@@ -1094,9 +1112,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree-min--b {
   left: 18%;
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
-  border-bottom: 72px solid #166534;
+  border-left: 34px solid transparent;
+  border-right: 34px solid transparent;
+  border-bottom: 138px solid #166534;
 }
 
 .scene-background.scene-forest .forest-tree-min--b.scene-night {
@@ -1105,9 +1123,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree-min--c {
   left: 38%;
-  border-left: 24px solid transparent;
-  border-right: 24px solid transparent;
-  border-bottom: 110px solid #15803d;
+  border-left: 46px solid transparent;
+  border-right: 46px solid transparent;
+  border-bottom: 206px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree-min--c.scene-night {
@@ -1116,9 +1134,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree-min--d {
   right: 32%;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 88px solid #166534;
+  border-left: 38px solid transparent;
+  border-right: 38px solid transparent;
+  border-bottom: 164px solid #166534;
 }
 
 .scene-background.scene-forest .forest-tree-min--d.scene-night {
@@ -1127,9 +1145,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree-min--e {
   right: 15%;
-  border-left: 19px solid transparent;
-  border-right: 19px solid transparent;
-  border-bottom: 78px solid #15803d;
+  border-left: 36px solid transparent;
+  border-right: 36px solid transparent;
+  border-bottom: 148px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree-min--e.scene-night {
@@ -1139,9 +1157,9 @@ body[data-scene="space"].dark-mode {
 .scene-background.scene-forest .forest-tree-min--f {
   left: 52%;
   transform: translateX(-50%);
-  border-left: 16px solid transparent;
-  border-right: 16px solid transparent;
-  border-bottom: 62px solid #166534;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-bottom: 118px solid #166534;
 }
 
 .scene-background.scene-forest .forest-tree-min--f.scene-night {
@@ -1150,9 +1168,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree-min--g {
   right: 4%;
-  border-left: 21px solid transparent;
-  border-right: 21px solid transparent;
-  border-bottom: 92px solid #15803d;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 172px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree-min--g.scene-night {
@@ -1170,9 +1188,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--1 {
   left: 4%;
-  border-left: 34px solid transparent;
-  border-right: 34px solid transparent;
-  border-bottom: 140px solid #166534;
+  border-left: 63px solid transparent;
+  border-right: 63px solid transparent;
+  border-bottom: 258px solid #166534;
 }
 
 .scene-background.scene-forest .forest-tree--1.scene-night {
@@ -1181,9 +1199,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--2 {
   left: 11%;
-  border-left: 26px solid transparent;
-  border-right: 26px solid transparent;
-  border-bottom: 110px solid #15803d;
+  border-left: 48px solid transparent;
+  border-right: 48px solid transparent;
+  border-bottom: 204px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree--2.scene-night {
@@ -1192,9 +1210,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--3 {
   left: 20%;
-  border-left: 42px solid transparent;
-  border-right: 42px solid transparent;
-  border-bottom: 190px solid #15803d;
+  border-left: 78px solid transparent;
+  border-right: 78px solid transparent;
+  border-bottom: 352px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree--3.scene-night {
@@ -1203,9 +1221,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--4 {
   left: 30%;
-  border-left: 30px solid transparent;
-  border-right: 30px solid transparent;
-  border-bottom: 125px solid #166534;
+  border-left: 56px solid transparent;
+  border-right: 56px solid transparent;
+  border-bottom: 232px solid #166534;
 }
 
 .scene-background.scene-forest .forest-tree--4.scene-night {
@@ -1214,9 +1232,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--5 {
   left: 40%;
-  border-left: 36px solid transparent;
-  border-right: 36px solid transparent;
-  border-bottom: 165px solid #15803d;
+  border-left: 67px solid transparent;
+  border-right: 67px solid transparent;
+  border-bottom: 306px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree--5.scene-night {
@@ -1226,9 +1244,9 @@ body[data-scene="space"].dark-mode {
 .scene-background.scene-forest .forest-tree--6 {
   left: 48%;
   transform: translateX(-50%);
-  border-left: 48px solid transparent;
-  border-right: 48px solid transparent;
-  border-bottom: 220px solid #166534;
+  border-left: 89px solid transparent;
+  border-right: 89px solid transparent;
+  border-bottom: 407px solid #166534;
 }
 
 .scene-background.scene-forest .forest-tree--6.scene-night {
@@ -1237,9 +1255,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--7 {
   left: 56%;
-  border-left: 28px solid transparent;
-  border-right: 28px solid transparent;
-  border-bottom: 118px solid #15803d;
+  border-left: 52px solid transparent;
+  border-right: 52px solid transparent;
+  border-bottom: 218px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree--7.scene-night {
@@ -1248,9 +1266,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--8 {
   left: 64%;
-  border-left: 38px solid transparent;
-  border-right: 38px solid transparent;
-  border-bottom: 172px solid #166534;
+  border-left: 70px solid transparent;
+  border-right: 70px solid transparent;
+  border-bottom: 319px solid #166534;
 }
 
 .scene-background.scene-forest .forest-tree--8.scene-night {
@@ -1259,9 +1277,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--9 {
   right: 26%;
-  border-left: 32px solid transparent;
-  border-right: 32px solid transparent;
-  border-bottom: 138px solid #15803d;
+  border-left: 59px solid transparent;
+  border-right: 59px solid transparent;
+  border-bottom: 255px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree--9.scene-night {
@@ -1270,9 +1288,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--10 {
   right: 18%;
-  border-left: 44px solid transparent;
-  border-right: 44px solid transparent;
-  border-bottom: 198px solid #166534;
+  border-left: 82px solid transparent;
+  border-right: 82px solid transparent;
+  border-bottom: 367px solid #166534;
 }
 
 .scene-background.scene-forest .forest-tree--10.scene-night {
@@ -1281,9 +1299,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--11 {
   right: 11%;
-  border-left: 30px solid transparent;
-  border-right: 30px solid transparent;
-  border-bottom: 128px solid #15803d;
+  border-left: 56px solid transparent;
+  border-right: 56px solid transparent;
+  border-bottom: 237px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree--11.scene-night {
@@ -1292,9 +1310,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--12 {
   right: 6%;
-  border-left: 36px solid transparent;
-  border-right: 36px solid transparent;
-  border-bottom: 155px solid #166534;
+  border-left: 67px solid transparent;
+  border-right: 67px solid transparent;
+  border-bottom: 287px solid #166534;
 }
 
 .scene-background.scene-forest .forest-tree--12.scene-night {
@@ -1303,9 +1321,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--13 {
   left: 73%;
-  border-left: 24px solid transparent;
-  border-right: 24px solid transparent;
-  border-bottom: 98px solid #15803d;
+  border-left: 44px solid transparent;
+  border-right: 44px solid transparent;
+  border-bottom: 182px solid #15803d;
 }
 
 .scene-background.scene-forest .forest-tree--13.scene-night {
@@ -1314,9 +1332,9 @@ body[data-scene="space"].dark-mode {
 
 .scene-background.scene-forest .forest-tree--14 {
   right: 1%;
-  border-left: 27px solid transparent;
-  border-right: 27px solid transparent;
-  border-bottom: 108px solid #166534;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 200px solid #166534;
 }
 
 .scene-background.scene-forest .forest-tree--14.scene-night {
@@ -1409,8 +1427,8 @@ body[data-scene="space"].dark-mode {
 .scene-background.scene-space .space-planet--red {
   width: min(72px, 11vw);
   height: min(72px, 11vw);
-  right: 12vw;
-  top: 20vh;
+  left: 10vw;
+  bottom: 16vh;
   background: radial-gradient(circle at 30% 30%, #fca5a5 0%, #dc2626 55%, #7f1d1d 100%);
 }
 
@@ -2128,10 +2146,10 @@ input:checked + .slider:before {
     animation: none;
   }
 
-  .scene-background.scene-ocean .ocean-fish--1,
-  .scene-background.scene-ocean .ocean-fish--2,
-  .scene-background.scene-ocean .ocean-fish--3,
-  .scene-background.scene-ocean .ocean-fish--4 {
+  .scene-background.scene-ocean .ocean-fish-wrap--1,
+  .scene-background.scene-ocean .ocean-fish-wrap--2,
+  .scene-background.scene-ocean .ocean-fish-wrap--3,
+  .scene-background.scene-ocean .ocean-fish-wrap--4 {
     animation: none;
     opacity: 0.45;
   }

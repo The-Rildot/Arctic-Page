@@ -26,6 +26,7 @@ export const CHARACTER_VARIANT_OPTIONS: Record<CharacterComponentKey, string[]> 
   message: ["classic-message", "bubble-message", "badge-message"]
 };
 
+/** Initial picker colors for a new draft in Character Creator only (see `builtInCharacters` for presets). */
 export const DEFAULT_COMPONENT_COLORS: Record<CharacterComponentKey, string> = {
   head: "#dbeafe",
   body: "#93c5fd",

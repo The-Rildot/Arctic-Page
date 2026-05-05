@@ -16,7 +16,7 @@ export function SpaceScene({ isNightMode }: SpaceSceneProps) {
       <div className="space-station-wrap">
         <img
           className="space-station-img"
-          src="/assets/spaceStation-removebg-preview.png"
+          src="/assets/spaceStation.png"
           alt=""
           draggable={false}
         />

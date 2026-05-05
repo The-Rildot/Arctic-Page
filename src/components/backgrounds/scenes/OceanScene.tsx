@@ -7,23 +7,43 @@ type OceanSceneProps = {
 export function OceanScene({ isNightMode }: OceanSceneProps) {
   return (
     <>
-      <div className="ocean-cloud ocean-cloud--a" />
-      <div className="ocean-cloud ocean-cloud--b" />
       <div className={sceneNight("ocean-celestial", isNightMode)} />
       <div className={sceneNight("ocean-horizon-glow", isNightMode)} />
       <div className={sceneNight("ocean-water", isNightMode)}>
-        <div className="ocean-reef">
-          <div className={sceneNight("reef-mound reef-mound--1", isNightMode)} />
-          <div className={sceneNight("reef-mound reef-mound--2", isNightMode)} />
-          <div className={sceneNight("reef-mound reef-mound--3", isNightMode)} />
-          <div className={sceneNight("reef-coral reef-coral--fan", isNightMode)} />
-          <div className={sceneNight("reef-coral reef-coral--fan reef-coral--fan2", isNightMode)} />
-          <div className={sceneNight("reef-sponge reef-sponge--1", isNightMode)} />
+        <div className={sceneNight("ocean-reef", isNightMode)}>
+          <img
+            className="ocean-reef-img ocean-coral ocean-coral--left"
+            src="/assets/colorful-coral-reef.png"
+            alt=""
+            draggable={false}
+          />
+          <img
+            className="ocean-reef-img ocean-coral ocean-coral--center"
+            src="/assets/vibrant-coral-reef.png"
+            alt=""
+            draggable={false}
+          />
+          <img
+            className="ocean-reef-img ocean-coral ocean-coral--right"
+            src="/assets/pink-coral.png"
+            alt=""
+            draggable={false}
+          />
+          <img className="ocean-seaweed ocean-seaweed--1" src="/assets/seaweed.png" alt="" draggable={false} />
+          <img className="ocean-seaweed ocean-seaweed--2" src="/assets/seaweed.png" alt="" draggable={false} />
         </div>
-        <div className="ocean-fish ocean-fish--1" />
-        <div className="ocean-fish ocean-fish--2" />
-        <div className="ocean-fish ocean-fish--3" />
-        <div className="ocean-fish ocean-fish--4" />
+        <div className="ocean-fish-wrap ocean-fish-wrap--1">
+          <img className="ocean-fish-img" src="/assets/yellow-fish.png" alt="" draggable={false} />
+        </div>
+        <div className="ocean-fish-wrap ocean-fish-wrap--2">
+          <img className="ocean-fish-img" src="/assets/pink-fish.png" alt="" draggable={false} />
+        </div>
+        <div className="ocean-fish-wrap ocean-fish-wrap--3">
+          <img className="ocean-fish-img" src="/assets/red-fish.png" alt="" draggable={false} />
+        </div>
+        <div className="ocean-fish-wrap ocean-fish-wrap--4">
+          <img className="ocean-fish-img" src="/assets/pink-fish.png" alt="" draggable={false} />
+        </div>
         <div className="ocean-wave ocean-wave--1" />
         <div className="ocean-wave ocean-wave--2" />
       </div>
