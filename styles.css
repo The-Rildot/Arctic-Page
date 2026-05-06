@@ -517,12 +517,47 @@ body[data-scene="space"].dark-mode {
   position: fixed;
   top: 16px;
   left: 16px;
+  bottom: 16px;
   z-index: 20;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  row-gap: 8px;
-  max-width: min(100vw - 32px, 56rem);
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: stretch;
+  gap: 10px;
+  width: min(160px, calc(100vw - 24px));
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(248, 250, 252, 0.82);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.22);
+}
+
+body.dark-mode .switch-container {
+  background: rgba(15, 23, 42, 0.84);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.55);
+}
+
+.control-panel-toggle {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.45);
+}
+
+body.dark-mode .control-panel-toggle {
+  background: rgba(30, 41, 59, 0.95);
+}
+
+.switch-container > :not(.sr-only) {
+  margin: 0;
+}
+
+.switch-container button,
+.switch-container label,
+.switch-container span {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .switch {
@@ -573,9 +608,34 @@ input:checked + .slider:before {
 }
 
 #mode-label {
-  margin-left: 10px;
+  margin: 0;
   font-size: 18px;
   z-index: 3;
+  text-align: center;
+}
+
+body.dark-mode #mode-label {
+  color: #ffffff;
+}
+
+.switch {
+  align-self: center;
+}
+
+@media (max-width: 1024px) {
+  .switch-container {
+    top: auto;
+    left: 12px;
+    bottom: 12px;
+    width: min(160px, calc(100vw - 24px));
+    max-height: 45vh;
+  }
+
+  .control-panel-toggle {
+    top: auto;
+    left: 12px;
+    bottom: 12px;
+  }
 }
 
 /* Custom character visuals */

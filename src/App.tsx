@@ -1,9 +1,10 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CharacterCreatorModal } from "./components/CharacterCreatorModal";
+import { ControlPanel } from "./components/ControlPanel";
 import { CustomCharacter as CustomCharacterView } from "./components/CustomCharacter";
 import { CharacterView } from "./components/character/CharacterView";
 import { SceneBackground } from "./components/backgrounds/SceneBackground";
-import { DEFAULT_SCENE_ID, isSceneId, SCENE_PRESETS, type SceneId } from "./constants/scenes";
+import { DEFAULT_SCENE_ID, SCENE_PRESETS, isSceneId, type SceneId } from "./constants/scenes";
 import { BEAR_PRESET, PENGUIN_PRESET } from "./constants/builtInCharacters";
 import { MAX_CUSTOM_CHARACTERS, createDefaultComponents } from "./constants/characterCreator";
 import { BASE_CHARACTER_DEFAULTS, CHARACTER_SIZES, clampAllCharacterPositions } from "./constants/motion";
@@ -139,6 +140,12 @@ function App() {
 
   const handleModeChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIsNightMode(event.target.checked);
+  };
+
+  const handleSceneChange = (value: string) => {
+    if (isSceneId(value)) {
+      setSelectedScene(value);
+    }
   };
 
   const closeCreatorModal = useCallback(() => {
@@ -400,126 +407,26 @@ function App() {
           ) : null}
         </div>
       ))}
-      <header className="switch-container" role="region" aria-label="Playground controls">
-        <span className="sr-only">
-          Tip: Tab to a character, then use arrow keys to nudge its position without dragging.
-        </span>
-        <label className="switch" htmlFor="mode-switch">
-          <span className="sr-only">Toggle day or night mode. Currently: {modeLabel}.</span>
-          <input type="checkbox" id="mode-switch" checked={isNightMode} onChange={handleModeChange} />
-          <span className="slider" aria-hidden="true" />
-        </label>
-        <span id="mode-label" aria-hidden="true">
-          {modeLabel}
-        </span>
-        <label
-          htmlFor="toggle-show-names"
-          className="ml-2 flex cursor-pointer items-center gap-2 rounded bg-white/80 px-2 py-1 text-sm text-slate-700"
-        >
-          <input
-            id="toggle-show-names"
-            type="checkbox"
-            checked={showCharacterNames}
-            onChange={(event) => setShowCharacterNames(event.target.checked)}
-          />
-          Show names
-        </label>
-        {showCharacterNames ? (
-          <>
-            <label className="flex items-center gap-1.5 rounded bg-white/80 px-2 py-1 text-xs text-slate-700">
-              <span className="whitespace-nowrap font-medium">Penguin</span>
-              <input
-                type="text"
-                className="w-[7.5rem] max-w-[28vw] rounded border border-slate-300 px-1.5 py-0.5 text-sm"
-                value={builtInCharacterNames.penguin}
-                onChange={(event) =>
-                  setBuiltInCharacterNames((prev) => ({ ...prev, penguin: event.target.value }))
-                }
-                maxLength={48}
-                aria-label="Display name for Penguin"
-              />
-            </label>
-            <label className="flex items-center gap-1.5 rounded bg-white/80 px-2 py-1 text-xs text-slate-700">
-              <span className="whitespace-nowrap font-medium">Polar bear</span>
-              <input
-                type="text"
-                className="w-[7.5rem] max-w-[28vw] rounded border border-slate-300 px-1.5 py-0.5 text-sm"
-                value={builtInCharacterNames.bear}
-                onChange={(event) =>
-                  setBuiltInCharacterNames((prev) => ({ ...prev, bear: event.target.value }))
-                }
-                maxLength={48}
-                aria-label="Display name for Polar Bear"
-              />
-            </label>
-          </>
-        ) : null}
-        <button type="button" className="ml-4 rounded bg-slate-800 px-3 py-2 text-sm text-white" onClick={handleResetCustomCharacters}>
-          Reset Custom Characters
-        </button>
-        <button type="button" className="ml-2 rounded bg-sky-700 px-3 py-2 text-sm text-white" onClick={handleOpenCreator}>
-          Create Character
-        </button>
-        <button
-          type="button"
-          className="ml-2 rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800"
-          onClick={handleExportSettings}
-        >
-          Export
-        </button>
-        <button
-          type="button"
-          className="ml-2 rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800"
-          onClick={handleImportSettingsClick}
-        >
-          Import
-        </button>
-        <input
-          ref={importSettingsInputRef}
-          type="file"
-          accept="application/json,.json"
-          className="sr-only"
-          aria-label="Import playground settings from JSON file"
-          onChange={handleImportSettingsFile}
-        />
-        <button
-          type="button"
-          className="ml-2 rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800"
-          onClick={() => void handleCopyShareLink()}
-        >
-          Copy share link
-        </button>
-        <label htmlFor="scene-select" className="ml-2 flex items-center gap-2 rounded bg-white/80 px-2 py-1 text-sm text-slate-700">
-          Scene
-          <select
-            id="scene-select"
-            className="rounded border border-slate-300 px-2 py-1 text-sm"
-            value={selectedScene}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (isSceneId(value)) {
-                setSelectedScene(value);
-              }
-            }}
-          >
-            {SCENE_PRESETS.map((preset) => (
-              <option key={preset.id} value={preset.id}>
-                {preset.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        {creatorError ? (
-          <span className="ml-3 text-sm font-medium text-red-600" role="alert">
-            {creatorError}
-          </span>
-        ) : null}
-        {settingsMessage ? (
-          <span className="ml-3 text-sm font-medium text-emerald-800" role="status" aria-live="polite">
-            {settingsMessage}
-          </span>
-        ) : null}
-      </header>
+      <ControlPanel
+        modeLabel={modeLabel}
+        isNightMode={isNightMode}
+        showCharacterNames={showCharacterNames}
+        builtInCharacterNames={builtInCharacterNames}
+        selectedScene={selectedScene}
+        scenePresets={SCENE_PRESETS}
+        creatorError={creatorError}
+        settingsMessage={settingsMessage}
+        importSettingsInputRef={importSettingsInputRef}
+        onModeChange={handleModeChange}
+        onShowCharacterNamesChange={setShowCharacterNames}
+        onResetCustomCharacters={handleResetCustomCharacters}
+        onOpenCreator={handleOpenCreator}
+        onExportSettings={handleExportSettings}
+        onImportSettingsClick={handleImportSettingsClick}
+        onImportSettingsFile={handleImportSettingsFile}
+        onCopyShareLink={() => void handleCopyShareLink()}
+        onSceneChange={handleSceneChange}
+      />
 
       <CharacterCreatorModal
         isOpen={isCreatorOpen}
