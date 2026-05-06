@@ -9,7 +9,7 @@ A browser **scene playground** built with **React 19** and **Vite**. Pick a them
 | Area | What you get |
 |------|----------------|
 | **Scenes** | Six fullscreen presets: Arctic, Desert, Ocean, City, Forest, Space — each with layered artwork (CSS and PNG assets where used). Scene CSS is **split per scene** and **lazy-loaded** with the scene component so inactive presets are not loaded up front. |
-| **Characters** | Built-in **penguin** and **polar bear** presets plus up to **six custom** characters from the creator (parts, colors, shirt message). |
+| **Characters** | Built-in **penguin** and **polar bear** presets plus up to **six custom** characters from the creator (mix-and-match parts and colors). |
 | **Interaction** | **Pointer drag** to move characters; **Tab** to focus a character and **arrow keys** to nudge position (20px steps). |
 | **Day / night** | Toggle affects scene styling and body backdrop; state is remembered. |
 | **Toolbar** | Scene picker, show/hide name labels, editable display names for built-ins, reset custom characters, open creator, **Export** / **Import** (JSON), **Copy share link** (URL hash when the snapshot is small enough). |

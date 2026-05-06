@@ -411,20 +411,6 @@ body[data-scene="space"].dark-mode {
   transform: rotate(45deg);
 }
 
-.bear_shirt {
-  font: bold 25px Helvetica, sans-serif;
-  top: 150px;
-  left: 125px;
-  z-index: 1;
-  color: #9dc2fa;
-}
-
-.bear_shirt div {
-  font-weight:  initial;
-  top: 22.5px;
-  left: 12px;
-}
-
 .bear-body {
   width: 50%;
   height: 47%;
@@ -872,15 +858,6 @@ body.dark-mode .character-name-label {
   background-color: var(--char-legs);
 }
 
-.character-root .shirt {
-  color: var(--char-message);
-}
-
-.character-root .shirt p,
-.character-root .part-message {
-  color: var(--char-message);
-}
-
 .character-root .bear-head {
   background-color: var(--char-head);
   animation: none;
@@ -922,29 +899,6 @@ body.dark-mode .character-name-label {
   background-color: var(--char-legs);
 }
 
-.character-root .bear_shirt {
-  color: var(--char-message);
-}
-
-.character-root .part-head--seal {
-  width: 50%;
-  height: 45%;
-  top: 10%;
-  left: 25%;
-  z-index: 1;
-  border-radius: 45% 55% 50% 50%;
-  background: linear-gradient(160deg, var(--char-head), #bae6fd);
-}
-
-.character-root .part-body--seal {
-  width: 53%;
-  height: 45%;
-  top: 40%;
-  left: 23.5%;
-  border-radius: 50% 50% 45% 45%;
-  background: linear-gradient(180deg, var(--char-body), #e0f2fe);
-}
-
 .character-root .part-body--robot {
   width: 50%;
   height: 48%;
@@ -953,35 +907,6 @@ body.dark-mode .character-name-label {
   border-radius: 12px;
   background: linear-gradient(180deg, var(--char-body), #94a3b8);
   border: 2px solid rgba(15, 23, 42, 0.3);
-}
-
-.character-root .part-head--owl {
-  width: 52%;
-  height: 48%;
-  top: 8%;
-  left: 24%;
-  z-index: 1;
-  border-radius: 45% 45% 55% 55%;
-  background: linear-gradient(145deg, var(--char-head), #fbbf24);
-}
-
-.character-root .part-arms--seal {
-  left: 5%;
-  right: 5%;
-  top: 32%;
-  width: 90%;
-  height: 20%;
-  display: flex;
-  justify-content: space-between;
-  pointer-events: none;
-}
-
-.character-root .part-arms--seal span {
-  position: relative;
-  width: 22%;
-  height: 100%;
-  background: var(--char-arms);
-  border-radius: 40% 60% 50% 50%;
 }
 
 .character-root .part-arms--robot {
@@ -1003,15 +928,6 @@ body.dark-mode .character-name-label {
   border-radius: 3px;
 }
 
-.character-root .part-legs--seal {
-  width: 35%;
-  height: 12%;
-  left: 32.5%;
-  bottom: 8%;
-  border-radius: 40%;
-  background: var(--char-legs);
-}
-
 .character-root .part-legs--robot {
   left: 18%;
   right: 18%;
@@ -1028,15 +944,6 @@ body.dark-mode .character-name-label {
   height: 100%;
   background: var(--char-legs);
   border-radius: 3px;
-}
-
-.character-root .part-mouth--seal {
-  width: 28%;
-  height: 8%;
-  top: 62%;
-  left: 36%;
-  border-radius: 999px;
-  background: var(--char-mouth);
 }
 
 .character-root .part-mouth--robot {
@@ -1245,30 +1152,6 @@ body.dark-mode .character-name-label {
   pointer-events: none;
 }
 
-.character-root .part-eyes--sleepy .part-eyes__lid {
-  width: 42%;
-  height: 35%;
-  background: var(--char-eyes);
-  border-radius: 999px;
-  top: 10%;
-}
-
-.character-root .part-eyes--sleepy .part-eyes__lid--left {
-  left: 0;
-}
-
-.character-root .part-eyes--sleepy .part-eyes__lid--right {
-  right: 0;
-}
-
-.character-root .part-eyes--wide .part-eyes__dot {
-  width: 18%;
-  height: 55%;
-  background: var(--char-eyes);
-  border-radius: 45%;
-  top: 10%;
-}
-
 .character-root .part-eyes--robot .part-eyes__dot,
 .character-root .part-eyes--lion .part-eyes__dot,
 .character-root .part-eyes--butterfly .part-eyes__dot {
@@ -1290,46 +1173,6 @@ body.dark-mode .character-name-label {
 .character-root .part-eyes--lion .part-eyes__dot--right,
 .character-root .part-eyes--butterfly .part-eyes__dot--right {
   right: 18%;
-}
-
-.character-root .part-blush--sunset span {
-  width: 18%;
-  height: 10%;
-  background: var(--char-blush);
-  border-radius: 999px;
-  top: 70%;
-}
-
-.character-root .part-blush--sunset span:first-child {
-  left: 10%;
-}
-
-.character-root .part-blush--sunset span:last-child {
-  right: 10%;
-}
-
-.character-root .part-blush--freckles span {
-  width: 6px;
-  height: 6px;
-  background: var(--char-blush);
-  border-radius: 2px;
-  top: 66%;
-}
-
-.character-root .part-blush--freckles span:nth-child(1) {
-  left: 22%;
-}
-
-.character-root .part-blush--freckles span:nth-child(2) {
-  left: 35%;
-}
-
-.character-root .part-blush--freckles span:nth-child(3) {
-  right: 35%;
-}
-
-.character-root .part-blush--freckles span:nth-child(4) {
-  right: 22%;
 }
 
 .character-root .part-blush--robot span,
