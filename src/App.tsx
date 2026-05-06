@@ -21,13 +21,11 @@ import { DEFAULT_BUILT_IN_CHARACTER_NAMES, storage } from "./utils/storage";
 
 type CharacterDraft = {
   name: string;
-  messageText: string;
   components: CustomCharacter["components"];
 };
 
 const createDefaultDraft = (): CharacterDraft => ({
   name: "",
-  messageText: "",
   components: createDefaultComponents()
 });
 
@@ -185,7 +183,6 @@ function App() {
             ? {
                 ...character,
                 name: trimmedName || character.name,
-                messageText: characterDraft.messageText,
                 components: characterDraft.components
               }
             : character
@@ -201,7 +198,6 @@ function App() {
         type: "custom",
         name: trimmedName || `Custom ${customCharacters.length + 1}`,
         position,
-        messageText: characterDraft.messageText,
         components: characterDraft.components
       };
 
@@ -224,7 +220,6 @@ function App() {
     }
     setCharacterDraft({
       name: character.name,
-      messageText: character.messageText,
       components: character.components
     });
     setEditingCharacterId(id);
@@ -346,8 +341,6 @@ function App() {
       <CharacterView
         className={`character-instance draggable-character${draggingCharacterId === "penguin" ? " dragging" : ""}`}
         components={PENGUIN_PRESET}
-        messageText="I CSS"
-        shirtEmoji="💜"
         position={characterPositions.penguin ?? BASE_CHARACTER_DEFAULTS.penguin}
         nameLabel={
           builtInCharacterNames.penguin.trim() || DEFAULT_BUILT_IN_CHARACTER_NAMES.penguin
@@ -360,8 +353,6 @@ function App() {
       <CharacterView
         className={`character-instance draggable-character${draggingCharacterId === "bear" ? " dragging" : ""}`}
         components={BEAR_PRESET}
-        messageText="I HTML"
-        shirtEmoji="💖"
         position={characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear}
         nameLabel={builtInCharacterNames.bear.trim() || DEFAULT_BUILT_IN_CHARACTER_NAMES.bear}
         showNameLabel={showCharacterNames}
@@ -419,6 +410,12 @@ function App() {
         importSettingsInputRef={importSettingsInputRef}
         onModeChange={handleModeChange}
         onShowCharacterNamesChange={setShowCharacterNames}
+        onPenguinNameChange={(value) =>
+          setBuiltInCharacterNames((prev) => ({ ...prev, penguin: value }))
+        }
+        onBearNameChange={(value) =>
+          setBuiltInCharacterNames((prev) => ({ ...prev, bear: value }))
+        }
         onResetCustomCharacters={handleResetCustomCharacters}
         onOpenCreator={handleOpenCreator}
         onExportSettings={handleExportSettings}
@@ -436,7 +433,6 @@ function App() {
         onClose={closeCreatorModal}
         onSave={handleSaveCharacter}
         onNameChange={(value) => setCharacterDraft((prev) => ({ ...prev, name: value }))}
-        onMessageChange={(value) => setCharacterDraft((prev) => ({ ...prev, messageText: value }))}
         onComponentVariantChange={(key, variantId) => updateDraftComponent(key, { variantId })}
         onComponentColorChange={(key, color) => updateDraftComponent(key, { color })}
       />

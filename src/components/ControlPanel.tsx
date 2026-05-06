@@ -19,6 +19,8 @@ type ControlPanelProps = {
   importSettingsInputRef: RefObject<HTMLInputElement | null>;
   onModeChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onShowCharacterNamesChange: (checked: boolean) => void;
+  onPenguinNameChange: (value: string) => void;
+  onBearNameChange: (value: string) => void;
   onResetCustomCharacters: () => void;
   onOpenCreator: () => void;
   onExportSettings: () => void;
@@ -40,6 +42,8 @@ export function ControlPanel({
   importSettingsInputRef,
   onModeChange,
   onShowCharacterNamesChange,
+  onPenguinNameChange,
+  onBearNameChange,
   onResetCustomCharacters,
   onOpenCreator,
   onExportSettings,
@@ -95,6 +99,32 @@ export function ControlPanel({
         />
         Show names
       </label>
+      {showCharacterNames ? (
+        <>
+          <label className="flex items-center gap-1.5 rounded bg-white/80 px-2 py-1 text-xs text-slate-700">
+            <span className="whitespace-nowrap font-medium">Penguin</span>
+            <input
+              type="text"
+              className="w-[7.5rem] max-w-[28vw] rounded border border-slate-300 px-1.5 py-0.5 text-sm"
+              value={builtInCharacterNames.penguin}
+              onChange={(event) => onPenguinNameChange(event.target.value)}
+              maxLength={48}
+              aria-label="Display name for Penguin"
+            />
+          </label>
+          <label className="flex items-center gap-1.5 rounded bg-white/80 px-2 py-1 text-xs text-slate-700">
+            <span className="whitespace-nowrap font-medium">Polar bear</span>
+            <input
+              type="text"
+              className="w-[7.5rem] max-w-[28vw] rounded border border-slate-300 px-1.5 py-0.5 text-sm"
+              value={builtInCharacterNames.bear}
+              onChange={(event) => onBearNameChange(event.target.value)}
+              maxLength={48}
+              aria-label="Display name for Polar Bear"
+            />
+          </label>
+        </>
+      ) : null}
       <button type="button" className="rounded bg-slate-800 px-3 py-2 text-sm text-white" onClick={onResetCustomCharacters}>
         Reset Custom Characters
       </button>

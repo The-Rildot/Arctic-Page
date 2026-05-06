@@ -8,10 +8,8 @@ export function characterCssVariables(components: CharacterComponents): CSSPrope
     "--char-body": components.body.color,
     "--char-arms": components.arms.color,
     "--char-legs": components.legs.color,
-    "--char-shirt": components.shirt.color,
     "--char-eyes": components.eyes.color,
     "--char-mouth": components.mouthNose.color,
-    "--char-blush": components.blush.color,
-    "--char-message": components.message.color
+    "--char-blush": components.blush.color
   } as CSSProperties;
 }

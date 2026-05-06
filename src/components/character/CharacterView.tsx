@@ -7,8 +7,6 @@ import { CharacterRoot } from "./CharacterRoot";
 
 type CharacterViewProps = {
   components: CharacterComponents;
-  messageText: string;
-  shirtEmoji: string;
   position: CharacterPosition;
   className?: string;
   style?: CSSProperties;
@@ -24,8 +22,6 @@ type CharacterViewProps = {
 
 export function CharacterView({
   components,
-  messageText,
-  shirtEmoji,
   position,
   className = "",
   style,
@@ -100,7 +96,7 @@ export function CharacterView({
         </div>
       ) : null}
       <CharacterRoot components={components}>
-        <CharacterAssembler components={components} messageText={messageText} shirtEmoji={shirtEmoji} />
+        <CharacterAssembler components={components} />
       </CharacterRoot>
     </div>
   );

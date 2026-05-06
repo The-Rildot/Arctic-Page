@@ -1,23 +1,19 @@
 import type { CharacterComponents } from "../../types/characters";
 import {
-  messageVariantClassSuffix,
   resolveArms,
   resolveBlush,
   resolveBody,
   resolveEyes,
   resolveHead,
   resolveLegs,
-  resolveMouth,
-  resolveShirt
+  resolveMouth
 } from "./partRegistry";
 
 type CharacterAssemblerProps = {
   components: CharacterComponents;
-  messageText: string;
-  shirtEmoji: string;
 };
 
-export function CharacterAssembler({ components, messageText, shirtEmoji }: CharacterAssemblerProps) {
+export function CharacterAssembler({ components }: CharacterAssemblerProps) {
   const Head = resolveHead(components.head.variantId);
   const Eyes = resolveEyes(components.eyes.variantId);
   const Blush = resolveBlush(components.blush.variantId);
@@ -25,8 +21,6 @@ export function CharacterAssembler({ components, messageText, shirtEmoji }: Char
   const Body = resolveBody(components.body.variantId);
   const Arms = resolveArms(components.arms.variantId);
   const Legs = resolveLegs(components.legs.variantId);
-  const Shirt = resolveShirt(components.shirt.variantId);
-  const messageSuffix = messageVariantClassSuffix(components.message.variantId);
 
   return (
     <>
@@ -35,7 +29,6 @@ export function CharacterAssembler({ components, messageText, shirtEmoji }: Char
         <Blush />
         <Mouth />
       </Head>
-      <Shirt messageText={messageText} emoji={shirtEmoji} messageClassSuffix={messageSuffix} />
       <Body>
         <Arms />
         <Legs />

@@ -9,11 +9,9 @@ export const PENGUIN_PRESET: CharacterComponents = {
   body: { variantId: "penguin-body", color: "#030202" },
   arms: { variantId: "penguin-arms", color: "#141414" },
   legs: { variantId: "penguin-legs", color: "#545252" },
-  shirt: { variantId: "penguin-shirt", color: "#f9a8d4" },
   eyes: { variantId: "penguin-eyes", color: "#111827" },
   mouthNose: { variantId: "penguin-beak", color: "#ed9913" },
-  blush: { variantId: "penguin-blush", color: "#fbcfe8" },
-  message: { variantId: "classic-message", color: "#0f172a" }
+  blush: { variantId: "penguin-blush", color: "#fbcfe8" }
 };
 
 export const BEAR_PRESET: CharacterComponents = {
@@ -21,9 +19,7 @@ export const BEAR_PRESET: CharacterComponents = {
   body: { variantId: "polar-bear-body", color: "#4b5563" },
   arms: { variantId: "polar-bear-arms", color: "#ffffff" },
   legs: { variantId: "polar-bear-legs", color: "#e5e7eb" },
-  shirt: { variantId: "polar-bear-shirt", color: "#1f2937" },
   eyes: { variantId: "polar-bear-eyes", color: "#111827" },
   mouthNose: { variantId: "polar-bear-nose", color: "#111827" },
-  blush: { variantId: "polar-bear-blush", color: "#fbcfe8" },
-  message: { variantId: "classic-message", color: "#9dc2fa" }
+  blush: { variantId: "polar-bear-blush", color: "#fbcfe8" }
 };

@@ -25,8 +25,6 @@ export function CustomCharacter({
     <CharacterView
       className={`character-instance custom-character draggable-character${isDragging ? " dragging" : ""}`}
       components={character.components}
-      messageText={character.messageText || "Message"}
-      shirtEmoji="💬"
       position={position}
       nameLabel={character.name}
       showNameLabel={showNameLabel}

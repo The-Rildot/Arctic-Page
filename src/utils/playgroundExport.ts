@@ -70,7 +70,7 @@ function isCustomCharacter(raw: unknown): raw is CustomCharacter {
   if (raw.type !== "custom" || typeof raw.id !== "string") {
     return false;
   }
-  if (typeof raw.name !== "string" || typeof raw.messageText !== "string") {
+  if (typeof raw.name !== "string") {
     return false;
   }
   if (!isCharacterPosition(raw.position)) {

@@ -11,7 +11,6 @@ import { useModalFocusTrap } from "../hooks/useModalFocusTrap";
 
 type CharacterDraft = {
   name: string;
-  messageText: string;
   components: CharacterComponents;
 };
 
@@ -23,7 +22,6 @@ type CharacterCreatorModalProps = {
   onClose: () => void;
   onSave: () => void;
   onNameChange: (value: string) => void;
-  onMessageChange: (value: string) => void;
   onComponentVariantChange: (key: CharacterComponentKey, variantId: string) => void;
   onComponentColorChange: (key: CharacterComponentKey, color: string) => void;
 };
@@ -36,7 +34,6 @@ export function CharacterCreatorModal({
   onClose,
   onSave,
   onNameChange,
-  onMessageChange,
   onComponentVariantChange,
   onComponentColorChange
 }: CharacterCreatorModalProps) {
@@ -102,26 +99,17 @@ export function CharacterCreatorModal({
 
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
           <div className="shrink-0 lg:sticky lg:top-0 lg:w-[300px]">
-            <CharacterCreatorPreview components={draft.components} messageText={draft.messageText} />
+            <CharacterCreatorPreview components={draft.components} />
           </div>
 
           <div className="min-w-0 flex-1 space-y-4">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-1">
               <label className="flex flex-col gap-1 text-sm font-medium text-slate-700">
                 Name
                 <input
                   className="rounded border border-slate-300 px-3 py-2"
                   value={draft.name}
                   onChange={(event) => onNameChange(event.target.value)}
-                  autoComplete="off"
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm font-medium text-slate-700">
-                Shirt Message
-                <input
-                  className="rounded border border-slate-300 px-3 py-2"
-                  value={draft.messageText}
-                  onChange={(event) => onMessageChange(event.target.value)}
                   autoComplete="off"
                 />
               </label>

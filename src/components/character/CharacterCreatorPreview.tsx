@@ -4,19 +4,13 @@ import { CharacterRoot } from "./CharacterRoot";
 
 type CharacterCreatorPreviewProps = {
   components: CharacterComponents;
-  messageText: string;
-  shirtEmoji?: string;
 };
 
 const PREVIEW_SCALE = 0.72;
 
 export function CharacterCreatorPreview({
-  components,
-  messageText,
-  shirtEmoji = "💬"
+  components
 }: CharacterCreatorPreviewProps) {
-  const displayMessage = messageText.trim() || "Message";
-
   return (
     <div className="creator-preview rounded-xl border border-slate-200 bg-gradient-to-b from-slate-50 to-sky-50 p-4 shadow-inner">
       <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">Live preview</p>
@@ -31,7 +25,7 @@ export function CharacterCreatorPreview({
           }}
         >
           <CharacterRoot components={components}>
-            <CharacterAssembler components={components} messageText={displayMessage} shirtEmoji={shirtEmoji} />
+            <CharacterAssembler components={components} />
           </CharacterRoot>
         </div>
       </div>

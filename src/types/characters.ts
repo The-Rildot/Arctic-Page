@@ -3,11 +3,9 @@ export const CHARACTER_COMPONENT_KEYS = [
   "body",
   "arms",
   "legs",
-  "shirt",
   "eyes",
   "mouthNose",
-  "blush",
-  "message"
+  "blush"
 ] as const;
 
 export type CharacterComponentKey = (typeof CHARACTER_COMPONENT_KEYS)[number];
@@ -36,7 +34,6 @@ export type CustomCharacter = {
   type: "custom";
   name: string;
   position: CharacterPosition;
-  messageText: string;
   components: CharacterComponents;
 };
 
