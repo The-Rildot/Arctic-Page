@@ -20,6 +20,9 @@ export function LionHeadFrame({ children }: { children?: ReactNode }) {
       >
         <polygon points={LION_MANE_POINTS} />
       </svg>
+      <span className="part-head__ear part-head__ear--left" aria-hidden="true" />
+      <span className="part-head__ear part-head__ear--right" aria-hidden="true" />
+      <span className="part-head__face" aria-hidden="true" />
       {children}
     </div>
   );

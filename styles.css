@@ -1036,24 +1036,22 @@ body.dark-mode .character-name-label {
 
 /* ---------- Lion ---------- */
 
+/* Lion head box is square so the face child can be a perfect circle. */
 .character-root .part-head--lion {
-  width: 46%;
-  height: 42%;
-  top: 11%;
-  left: 27%;
+  width: 44%;
+  height: 44%;
+  top: 9%;
+  left: 28%;
   z-index: 2;
-  border-radius: 50%;
-  background: radial-gradient(circle at 32% 32%,
-    color-mix(in srgb, var(--char-head) 92%, white),
-    var(--char-head) 65%);
+  background: transparent;
 }
 
 .character-root .part-head--lion .part-head__mane {
   position: absolute;
-  top: -32%;
-  left: -32%;
-  width: 164%;
-  height: 164%;
+  top: -44%;
+  left: -44%;
+  width: 185%;
+  height: 185%;
   z-index: -1;
   pointer-events: none;
   overflow: visible;
@@ -1064,6 +1062,39 @@ body.dark-mode .character-name-label {
   stroke: color-mix(in srgb, var(--char-head) 12%, #b45309 88%);
   stroke-width: 1.4;
   stroke-linejoin: round;
+}
+
+/* Ears sit in front of the mane but behind the face circle (DOM order). */
+.character-root .part-head--lion .part-head__ear {
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  top: -8%;
+  border-radius: 50%;
+  background: var(--char-head);
+  border: 1.5px solid color-mix(in srgb, var(--char-head) 35%, #b45309);
+}
+
+.character-root .part-head--lion .part-head__ear--left {
+  left: 6%;
+}
+
+.character-root .part-head--lion .part-head__ear--right {
+  right: 6%;
+}
+
+/* Face circle drawn after the ears so it hides the lower portion of each ear. */
+.character-root .part-head--lion .part-head__face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 32%,
+    color-mix(in srgb, var(--char-head) 92%, white),
+    var(--char-head) 65%);
+  border: 1.5px solid color-mix(in srgb, var(--char-head) 35%, #b45309);
 }
 
 .character-root .part-body--lion {
@@ -1077,80 +1108,108 @@ body.dark-mode .character-name-label {
     var(--char-body) 70%);
 }
 
+.character-root .part-body--lion .part-body__belly {
+  position: absolute;
+  width: 64%;
+  height: 70%;
+  top: 16%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50% / 60%;
+  background: radial-gradient(ellipse at 35% 30%,
+    color-mix(in srgb, var(--char-body) 25%, #fff7ed),
+    color-mix(in srgb, var(--char-body) 45%, #fef3c7) 70%);
+  border: 1.5px solid color-mix(in srgb, var(--char-body) 35%, #fde68a);
+  pointer-events: none;
+}
+
+/* Arms hang from the shoulders and point down-and-inward toward the belly. */
 .character-root .part-arms--lion {
   position: absolute;
-  left: -2%;
-  right: -2%;
-  top: 18%;
-  width: 104%;
-  height: 50%;
-  display: flex;
-  justify-content: space-between;
+  inset: 0;
   pointer-events: none;
 }
 
 .character-root .part-arms--lion span {
-  position: relative;
-  width: 22%;
-  height: 100%;
+  position: absolute;
+  top: 4%;
+  width: 18%;
+  height: 56%;
   background: radial-gradient(ellipse at 30% 30%,
     color-mix(in srgb, var(--char-arms) 92%, white),
     var(--char-arms) 70%);
   border-radius: 60% 60% 70% 70%;
+  transform-origin: 50% 0%;
 }
 
+.character-root .part-arms--lion span:first-child {
+  left: 6%;
+  transform: rotate(45deg);
+}
+
+.character-root .part-arms--lion span:last-child {
+  right: 6%;
+  transform: rotate(-45deg);
+}
+
+/* Legs splay out to either side like the lion is sitting / lying down. */
 .character-root .part-legs--lion {
   position: absolute;
-  left: 20%;
-  right: 20%;
-  bottom: -2%;
-  height: 18%;
-  display: flex;
-  justify-content: space-between;
+  inset: 0;
   pointer-events: none;
 }
 
 .character-root .part-legs--lion span {
-  position: relative;
+  position: absolute;
+  bottom: 8%;
   width: 30%;
-  height: 100%;
-  background: radial-gradient(ellipse at 30% 30%,
+  height: 16%;
+  background: radial-gradient(ellipse at 30% 40%,
     color-mix(in srgb, var(--char-legs) 92%, white),
     var(--char-legs) 70%);
-  border-radius: 45% 45% 55% 55%;
+  border-radius: 50%;
+}
+
+.character-root .part-legs--lion span:first-child {
+  left: -10%;
+  transform: rotate(15deg);
+}
+
+.character-root .part-legs--lion span:last-child {
+  right: -10%;
+  transform: rotate(-15deg);
 }
 
 .character-root .part-mouth--lion {
   position: absolute;
   width: 28%;
-  height: 14%;
-  top: 56%;
+  height: 22%;
+  top: 54%;
   left: 36%;
   background: transparent;
 }
 
-.character-root .part-mouth--lion .part-mouth__nose {
+.character-root .part-mouth--lion .part-mouth__svg {
   position: absolute;
+  width: 100%;
+  height: 100%;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 28%;
-  height: 38%;
-  background: var(--char-mouth);
-  border-radius: 50%;
+  left: 0;
+  overflow: visible;
 }
 
-.character-root .part-mouth--lion .part-mouth__frown {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 56%;
-  height: 50%;
-  border: 2px solid var(--char-mouth);
-  border-top: none;
-  border-radius: 0 0 999px 999px;
-  background: transparent;
+.character-root .part-mouth--lion .part-mouth__nose {
+  fill: var(--char-mouth);
+  stroke: none;
+}
+
+.character-root .part-mouth--lion .part-mouth__stroke {
+  fill: none;
+  stroke: var(--char-mouth);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
 /* ---------- Butterfly ---------- */
@@ -1330,7 +1389,6 @@ body.dark-mode .character-name-label {
   right: 12%;
 }
 
-.character-root .part-eyes--lion .part-eyes__dot,
 .character-root .part-eyes--butterfly .part-eyes__dot {
   position: absolute;
   width: 14%;
@@ -1340,14 +1398,36 @@ body.dark-mode .character-name-label {
   border-radius: 999px;
 }
 
-.character-root .part-eyes--lion .part-eyes__dot--left,
 .character-root .part-eyes--butterfly .part-eyes__dot--left {
   left: 18%;
 }
 
-.character-root .part-eyes--lion .part-eyes__dot--right,
 .character-root .part-eyes--butterfly .part-eyes__dot--right {
   right: 18%;
+}
+
+/* Lion eyes: larger to fit the bigger face. */
+.character-root .part-eyes--lion {
+  width: 64%;
+  height: 22%;
+  top: 38%;
+}
+
+.character-root .part-eyes--lion .part-eyes__dot {
+  position: absolute;
+  width: 26%;
+  height: 96%;
+  top: 2%;
+  background: var(--char-eyes);
+  border-radius: 999px;
+}
+
+.character-root .part-eyes--lion .part-eyes__dot--left {
+  left: 10%;
+}
+
+.character-root .part-eyes--lion .part-eyes__dot--right {
+  right: 10%;
 }
 
 /* Blush container must fill its parent head so the dot percentages resolve. */
@@ -1368,11 +1448,34 @@ body.dark-mode .character-name-label {
   pointer-events: none;
 }
 
-.character-root .part-blush--lion span,
 .character-root .part-blush--butterfly span {
   position: absolute;
   background: var(--char-blush);
   border-radius: 999px;
+}
+
+/* Lion: hairline slash strokes per cheek (//// on left, \\\\ on right). */
+.character-root .part-blush--lion .part-blush__strokes {
+  position: absolute;
+  width: 26%;
+  height: 9%;
+  top: 60%;
+  overflow: visible;
+}
+
+.character-root .part-blush--lion .part-blush__strokes--left {
+  left: 8%;
+}
+
+.character-root .part-blush--lion .part-blush__strokes--right {
+  right: 8%;
+}
+
+.character-root .part-blush--lion .part-blush__strokes line {
+  stroke: var(--char-blush);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
 }
 
 /* Robot: zigzag stroke on each cheek (SVG polyline). */
