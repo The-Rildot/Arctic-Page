@@ -26,15 +26,22 @@ type DragState = {
 type UseCharacterMotionArgs = {
   customCharacterIds: string[];
   initialPositions: Record<string, CharacterPosition>;
+  lockedCharacterIds: string[];
 };
 
-export function useCharacterMotion({ customCharacterIds, initialPositions }: UseCharacterMotionArgs) {
+export function useCharacterMotion({
+  customCharacterIds,
+  initialPositions,
+  lockedCharacterIds
+}: UseCharacterMotionArgs) {
   const reduceMotion = usePrefersReducedMotion();
 
   const draggableCharacterIds = useMemo(
     () => ["penguin", "bear", ...customCharacterIds],
     [customCharacterIds]
   );
+
+  const lockedIdSet = useMemo(() => new Set(lockedCharacterIds), [lockedCharacterIds]);
 
   const [characterPositions, setCharacterPositions] = useState<Record<string, CharacterPosition>>(() =>
     clampAllCharacterPositions(
@@ -80,7 +87,11 @@ export function useCharacterMotion({ customCharacterIds, initialPositions }: Use
         const next = { ...prev };
 
         draggableCharacterIds.forEach((id) => {
-          if (dragStateRef.current?.id === id || Math.random() > WANDER_MOVE_CHANCE) {
+          if (
+            dragStateRef.current?.id === id ||
+            lockedIdSet.has(id) ||
+            Math.random() > WANDER_MOVE_CHANCE
+          ) {
             return;
           }
 
@@ -105,7 +116,7 @@ export function useCharacterMotion({ customCharacterIds, initialPositions }: Use
     return () => {
       window.clearInterval(wanderInterval);
     };
-  }, [customCharacterIds, draggableCharacterIds, reduceMotion]);
+  }, [customCharacterIds, draggableCharacterIds, lockedIdSet, reduceMotion]);
 
   const nudgeCharacter = useCallback(
     (id: string, deltaX: number, deltaY: number) => {

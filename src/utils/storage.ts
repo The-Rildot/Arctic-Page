@@ -27,8 +27,22 @@ const STORAGE_KEYS = {
   customCharacters: "arctic:customCharacters",
   characterPositions: "arctic:characterPositions",
   showCharacterNames: "arctic:showCharacterNames",
-  builtInCharacterNames: "arctic:builtInCharacterNames"
+  builtInCharacterNames: "arctic:builtInCharacterNames",
+  lockedCharacterIds: "arctic:lockedCharacterIds"
 } as const;
+
+function normalizeLockedCharacterIds(raw: unknown): string[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  const seen = new Set<string>();
+  for (const item of raw) {
+    if (typeof item === "string" && item.length > 0) {
+      seen.add(item);
+    }
+  }
+  return Array.from(seen);
+}
 
 function normalizeBuiltInCharacterNames(raw: unknown): BuiltInCharacterNames {
   const next = { ...DEFAULT_BUILT_IN_CHARACTER_NAMES };
@@ -106,6 +120,14 @@ export const storage = {
   resetCustomCharacters(): void {
     localStorage.removeItem(STORAGE_KEYS.customCharacters);
     localStorage.removeItem(STORAGE_KEYS.characterPositions);
+  },
+  getLockedCharacterIds(): string[] {
+    return normalizeLockedCharacterIds(
+      safeParse(localStorage.getItem(STORAGE_KEYS.lockedCharacterIds), null)
+    );
+  },
+  setLockedCharacterIds(value: string[]): void {
+    localStorage.setItem(STORAGE_KEYS.lockedCharacterIds, JSON.stringify(normalizeLockedCharacterIds(value)));
   },
   getShowCharacterNames(): boolean {
     return localStorage.getItem(STORAGE_KEYS.showCharacterNames) === "true";

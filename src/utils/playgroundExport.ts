@@ -19,10 +19,25 @@ export type PlaygroundExportV1 = {
   characterPositions: Record<string, CharacterPosition>;
   showCharacterNames: boolean;
   builtInCharacterNames: BuiltInCharacterNames;
+  /** Ids whose wander is paused (penguin/bear/custom). Optional for back-compat. */
+  lockedCharacterIds: string[];
 };
 
 export function buildPlaygroundExport(state: Omit<PlaygroundExportV1, "v">): PlaygroundExportV1 {
   return { v: PLAYGROUND_EXPORT_VERSION, ...state };
+}
+
+function normalizeLockedIds(raw: unknown): string[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  const seen = new Set<string>();
+  for (const item of raw) {
+    if (typeof item === "string" && item.length > 0) {
+      seen.add(item);
+    }
+  }
+  return Array.from(seen);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -119,7 +134,8 @@ export function parsePlaygroundImport(raw: unknown): PlaygroundExportV1 | null {
     customCharacters: raw.customCharacters,
     characterPositions,
     showCharacterNames: raw.showCharacterNames,
-    builtInCharacterNames: normalizeBuiltInNames(raw.builtInCharacterNames)
+    builtInCharacterNames: normalizeBuiltInNames(raw.builtInCharacterNames),
+    lockedCharacterIds: normalizeLockedIds(raw.lockedCharacterIds)
   };
 }
 

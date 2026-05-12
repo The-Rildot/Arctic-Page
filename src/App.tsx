@@ -38,11 +38,14 @@ function App() {
   const [isCreatorOpen, setIsCreatorOpen] = useState(false);
   const [characterDraft, setCharacterDraft] = useState<CharacterDraft>(() => createDefaultDraft());
   const [creatorError, setCreatorError] = useState("");
-  const [selectedCustomCharacterId, setSelectedCustomCharacterId] = useState<string | null>(null);
+  const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
   const [editingCharacterId, setEditingCharacterId] = useState<string | null>(null);
   const [showCharacterNames, setShowCharacterNames] = useState(() => storage.getShowCharacterNames());
   const [builtInCharacterNames, setBuiltInCharacterNames] = useState(() => storage.getBuiltInCharacterNames());
   const [settingsMessage, setSettingsMessage] = useState("");
+  const [lockedCharacterIds, setLockedCharacterIds] = useState<string[]>(() =>
+    storage.getLockedCharacterIds()
+  );
   const importSettingsInputRef = useRef<HTMLInputElement>(null);
 
   const modeLabel = useMemo(() => (isNightMode ? "Night Mode" : "Day Mode"), [isNightMode]);
@@ -56,20 +59,23 @@ function App() {
     suppressSelectRef
   } = useCharacterMotion({
     customCharacterIds,
-    initialPositions: storage.getCharacterPositions()
+    initialPositions: storage.getCharacterPositions(),
+    lockedCharacterIds
   });
 
   const applyPlaygroundSnapshot = useCallback(
     (snap: PlaygroundExportV1) => {
       const ids = snap.customCharacters.map((c) => c.id);
       const draggableIds = ["penguin", "bear", ...ids];
+      const validIds = new Set(draggableIds);
       setIsNightMode(snap.isNightMode);
       setSelectedScene(snap.selectedScene);
       setShowCharacterNames(snap.showCharacterNames);
       setBuiltInCharacterNames(snap.builtInCharacterNames);
       setCustomCharacters(snap.customCharacters);
       setCharacterPositions(clampAllCharacterPositions(snap.characterPositions, draggableIds, ids));
-      setSelectedCustomCharacterId(null);
+      setLockedCharacterIds(snap.lockedCharacterIds.filter((id) => validIds.has(id)));
+      setSelectedCharacterId(null);
       setEditingCharacterId(null);
       setCreatorError("");
     },
@@ -78,8 +84,28 @@ function App() {
   const startCharacterDrag = useMemo(
     () =>
       (id: string, size: { width: number; height: number }) =>
-        startDrag(id, size, (dragId) => setSelectedCustomCharacterId((prev) => (dragId === prev ? prev : null))),
+        startDrag(id, size, (dragId) => setSelectedCharacterId((prev) => (dragId === prev ? prev : null))),
     [startDrag]
+  );
+
+  const isCharacterLocked = useCallback(
+    (id: string) => lockedCharacterIds.includes(id),
+    [lockedCharacterIds]
+  );
+
+  const toggleCharacterLock = useCallback((id: string) => {
+    setLockedCharacterIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  }, []);
+
+  const handleSelectByPointerUp = useCallback(
+    (id: string) => {
+      if (suppressSelectRef.current === id) {
+        suppressSelectRef.current = null;
+        return;
+      }
+      setSelectedCharacterId(id);
+    },
+    [suppressSelectRef]
   );
 
   useEffect(() => {
@@ -114,6 +140,10 @@ function App() {
   useEffect(() => {
     storage.setBuiltInCharacterNames(builtInCharacterNames);
   }, [builtInCharacterNames]);
+
+  useEffect(() => {
+    storage.setLockedCharacterIds(lockedCharacterIds);
+  }, [lockedCharacterIds]);
 
   useEffect(() => {
     if (!settingsMessage) {
@@ -153,7 +183,8 @@ function App() {
   const handleResetCustomCharacters = () => {
     setCustomCharacters([]);
     setCharacterPositions({ ...BASE_CHARACTER_DEFAULTS });
-    setSelectedCustomCharacterId(null);
+    setLockedCharacterIds((prev) => prev.filter((id) => id === "penguin" || id === "bear"));
+    setSelectedCharacterId((prev) => (prev === "penguin" || prev === "bear" ? prev : null));
     setEditingCharacterId(null);
     storage.resetCustomCharacters();
   };
@@ -188,7 +219,7 @@ function App() {
             : character
         )
       );
-      setSelectedCustomCharacterId(editingCharacterId);
+      setSelectedCharacterId(editingCharacterId);
       setEditingCharacterId(null);
     } else {
       const id = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `custom-${Date.now()}`;
@@ -206,7 +237,7 @@ function App() {
         ...prev,
         [newCharacter.id]: position
       }));
-      setSelectedCustomCharacterId(newCharacter.id);
+      setSelectedCharacterId(newCharacter.id);
     }
 
     setIsCreatorOpen(false);
@@ -234,7 +265,8 @@ function App() {
       delete next[id];
       return next;
     });
-    setSelectedCustomCharacterId((prev) => (prev === id ? null : prev));
+    setLockedCharacterIds((prev) => prev.filter((x) => x !== id));
+    setSelectedCharacterId((prev) => (prev === id ? null : prev));
     setEditingCharacterId((prev) => (prev === id ? null : prev));
   };
 
@@ -245,7 +277,8 @@ function App() {
       customCharacters,
       characterPositions,
       showCharacterNames,
-      builtInCharacterNames
+      builtInCharacterNames,
+      lockedCharacterIds
     });
     const blob = new Blob([JSON.stringify(snap, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -264,7 +297,8 @@ function App() {
       customCharacters,
       characterPositions,
       showCharacterNames,
-      builtInCharacterNames
+      builtInCharacterNames,
+      lockedCharacterIds
     });
     const url = buildShareUrl(snap);
     if (!url) {
@@ -326,7 +360,7 @@ function App() {
       if (target.closest(".character-instance") || target.closest(".character-action-controls")) {
         return;
       }
-      setSelectedCustomCharacterId(null);
+      setSelectedCharacterId(null);
     };
 
     window.addEventListener("pointerdown", handlePointerDown);
@@ -334,6 +368,48 @@ function App() {
       window.removeEventListener("pointerdown", handlePointerDown);
     };
   }, []);
+
+  const selectedActionInfo = useMemo(() => {
+    if (!selectedCharacterId) {
+      return null;
+    }
+    if (draggingCharacterId === selectedCharacterId) {
+      return null;
+    }
+    if (selectedCharacterId === "penguin") {
+      return {
+        id: "penguin",
+        name:
+          builtInCharacterNames.penguin.trim() || DEFAULT_BUILT_IN_CHARACTER_NAMES.penguin,
+        position: characterPositions.penguin ?? BASE_CHARACTER_DEFAULTS.penguin,
+        kind: "builtIn" as const
+      };
+    }
+    if (selectedCharacterId === "bear") {
+      return {
+        id: "bear",
+        name: builtInCharacterNames.bear.trim() || DEFAULT_BUILT_IN_CHARACTER_NAMES.bear,
+        position: characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear,
+        kind: "builtIn" as const
+      };
+    }
+    const custom = customCharacters.find((c) => c.id === selectedCharacterId);
+    if (!custom) {
+      return null;
+    }
+    return {
+      id: custom.id,
+      name: custom.name,
+      position: characterPositions[custom.id] ?? custom.position,
+      kind: "custom" as const
+    };
+  }, [
+    selectedCharacterId,
+    draggingCharacterId,
+    builtInCharacterNames,
+    characterPositions,
+    customCharacters
+  ]);
 
   return (
     <>
@@ -349,6 +425,7 @@ function App() {
         characterId="penguin"
         onArrowKeyNudge={nudgeCharacter}
         onPointerDown={startCharacterDrag("penguin", CHARACTER_SIZES.base)}
+        onPointerUp={() => handleSelectByPointerUp("penguin")}
       />
       <CharacterView
         className={`character-instance draggable-character${draggingCharacterId === "bear" ? " dragging" : ""}`}
@@ -359,45 +436,62 @@ function App() {
         characterId="bear"
         onArrowKeyNudge={nudgeCharacter}
         onPointerDown={startCharacterDrag("bear", CHARACTER_SIZES.base)}
+        onPointerUp={() => handleSelectByPointerUp("bear")}
       />
 
       {customCharacters.map((character) => (
-        <div key={character.id}>
-          <CustomCharacterView
-            character={character}
-            position={characterPositions[character.id] ?? character.position}
-            showNameLabel={showCharacterNames}
-            onArrowKeyNudge={nudgeCharacter}
-            onPointerDown={startCharacterDrag(character.id, CHARACTER_SIZES.custom)}
-            onPointerUp={() => {
-              if (suppressSelectRef.current === character.id) {
-                suppressSelectRef.current = null;
-                return;
-              }
-              setSelectedCustomCharacterId(character.id);
-            }}
-            isDragging={draggingCharacterId === character.id}
-          />
-          {selectedCustomCharacterId === character.id && draggingCharacterId !== character.id ? (
-            <div
-              className="character-action-controls"
-              role="group"
-              aria-label={`Actions for ${character.name}`}
-              style={{
-                left: (characterPositions[character.id] ?? character.position).x + 12,
-                top: (characterPositions[character.id] ?? character.position).y - 36
-              }}
-            >
-              <button type="button" className="rounded bg-amber-500 px-2 py-1 text-xs font-semibold text-white" onClick={() => handleEditCharacter(character.id)}>
+        <CustomCharacterView
+          key={character.id}
+          character={character}
+          position={characterPositions[character.id] ?? character.position}
+          showNameLabel={showCharacterNames}
+          onArrowKeyNudge={nudgeCharacter}
+          onPointerDown={startCharacterDrag(character.id, CHARACTER_SIZES.custom)}
+          onPointerUp={() => handleSelectByPointerUp(character.id)}
+          isDragging={draggingCharacterId === character.id}
+        />
+      ))}
+
+      {selectedActionInfo ? (
+        <div
+          className="character-action-controls"
+          role="group"
+          aria-label={`Actions for ${selectedActionInfo.name}`}
+          style={{
+            left: selectedActionInfo.position.x + CHARACTER_SIZES.base.width / 2,
+            top: selectedActionInfo.position.y - 36
+          }}
+        >
+          <button
+            type="button"
+            className={`rounded px-2 py-1 text-xs font-semibold text-white ${
+              isCharacterLocked(selectedActionInfo.id) ? "bg-slate-500" : "bg-sky-600"
+            }`}
+            onClick={() => toggleCharacterLock(selectedActionInfo.id)}
+            aria-pressed={isCharacterLocked(selectedActionInfo.id)}
+          >
+            {isCharacterLocked(selectedActionInfo.id) ? "Unlock" : "Lock"}
+          </button>
+          {selectedActionInfo.kind === "custom" ? (
+            <>
+              <button
+                type="button"
+                className="rounded bg-amber-500 px-2 py-1 text-xs font-semibold text-white"
+                onClick={() => handleEditCharacter(selectedActionInfo.id)}
+              >
                 Edit
               </button>
-              <button type="button" className="rounded bg-rose-600 px-2 py-1 text-xs font-semibold text-white" onClick={() => handleDeleteCharacter(character.id)}>
+              <button
+                type="button"
+                className="rounded bg-rose-600 px-2 py-1 text-xs font-semibold text-white"
+                onClick={() => handleDeleteCharacter(selectedActionInfo.id)}
+              >
                 Delete
               </button>
-            </div>
+            </>
           ) : null}
         </div>
-      ))}
+      ) : null}
       <ControlPanel
         modeLabel={modeLabel}
         isNightMode={isNightMode}
