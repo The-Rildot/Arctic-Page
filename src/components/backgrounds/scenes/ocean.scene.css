@@ -248,6 +248,68 @@
   opacity: 0.25;
 }
 
+/* ----- Mobile (≤480px): shallower water, smaller reef stack, room for Controls ----- */
+@media (max-width: 480px) {
+  .scene-background.scene-ocean .ocean-celestial {
+    width: clamp(100px, 28vw, 140px);
+    height: clamp(100px, 28vw, 140px);
+    top: clamp(-48px, -10vw, -32px);
+    right: clamp(-28px, -6vw, -12px);
+  }
+
+  .scene-background.scene-ocean .ocean-horizon-glow {
+    top: min(32dvh, 36vh);
+  }
+
+  .scene-background.scene-ocean .ocean-water {
+    height: min(44dvh, 48vh);
+  }
+
+  .scene-background.scene-ocean .ocean-foam {
+    bottom: min(44dvh, 48vh);
+  }
+
+  .scene-background.scene-ocean .ocean-reef-img {
+    max-height: min(300px, 36dvh);
+  }
+
+  .scene-background.scene-ocean .ocean-coral--left {
+    left: -14vw;
+    max-width: min(200px, 46vw);
+  }
+
+  .scene-background.scene-ocean .ocean-coral--center {
+    max-width: min(220px, 58vw);
+    bottom: 0;
+  }
+
+  .scene-background.scene-ocean .ocean-coral--right {
+    right: -14vw;
+    max-width: min(200px, 46vw);
+  }
+
+  .scene-background.scene-ocean .ocean-seaweed {
+    max-height: min(160px, 26dvh);
+  }
+
+  .scene-background.scene-ocean .ocean-seaweed--1 {
+    max-width: clamp(120px, 32vw, 220px);
+  }
+
+  .scene-background.scene-ocean .ocean-seaweed--2 {
+    max-width: clamp(140px, 38vw, 260px);
+  }
+
+  .scene-background.scene-ocean .ocean-seaweed--3 {
+    max-width: clamp(120px, 30vw, 220px);
+  }
+
+  .scene-background.scene-ocean .ocean-fish-wrap {
+    width: min(88px, 22vw);
+    height: min(60px, 16vw);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scene-background.scene-ocean .ocean-wave--1,
   .scene-background.scene-ocean .ocean-wave--2 {

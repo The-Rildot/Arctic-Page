@@ -37,6 +37,17 @@ Persistence: **`storage.getSelectedScene` / `setSelectedScene`** in **`src/utils
 
 **Phase 3 (mobile controls, ≤480px):** **`ControlPanel`** uses a **bottom bar** when collapsed (tap to open) and a **50dvh bottom sheet** with a dim **scrim** (tap to close) when expanded; styles live under **`@media (max-width: 480px)`** in **`styles.css`**. Tablet **481px–1024px** still uses the compact corner panel.
 
+**Phase 6 (scene wave 1 — Arctic + Forest):** **`arctic.scene.css`** and **`forest.scene.css`** each end with an **`@media (max-width: 480px)`** block: foreground stacks use **`calc(vh + max(~52px, env(safe-area-inset-bottom)))`**-style **`bottom`** values so hills / trees / ice sit above the fixed Controls bar; oversized **`vh`** tree bands and **`vw`** ellipses are toned down; Forest mid/front trees use **`transform: scale(...)`** with **`transform-origin: bottom center`** (and **`translateX(-50%) scale(...)`** where the desktop rule already translates).
+
+**Phase 7 (scene wave 2 — Ocean, City, Desert, Space):** **`ocean.scene.css`**, **`city.scene.css`**, **`desert.scene.css`**, and **`space.scene.css`** add the same breakpoint: shallower / **`dvh`**-capped water and reef art (Ocean); raised façades, shorter skyline rows, street props, and thicker **`city-ground`** (City); lifted dunes, scaled saguaros, raised pyramid and barrel props (Desert); tighter nebula inset, smaller planets / station, shorter horizon glow (Space).
+
+### Mobile scene layer checklist (when editing `*.scene.css`)
+
+- Wrap rules in **`@media (max-width: 480px)`** and scope with **`.scene-background.scene-<id>`** so desktop stays unchanged.
+- Lift ground-adjacent layers with **`bottom: calc(<existing vh> + max(52px, env(safe-area-inset-bottom, 0px)))`** (tune **52px** if the chrome height changes).
+- Cap tall **`min(..., XXvh)`** bands with **`dvh`** (e.g. **`min(220px, 32dvh)`**) so short viewports keep a playable band for characters.
+- If art is **`vw`-heavy** or many fixed-size triangles, reduce heights, **`vw` span**, or apply a contained **`scale()`** on a wrapper rather than hand-editing dozens of borders.
+
 See the mobile rollout plan in Cursor for the full phased checklist.
 
 ---

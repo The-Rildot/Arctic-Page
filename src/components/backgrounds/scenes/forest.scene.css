@@ -335,3 +335,65 @@
   background: linear-gradient(180deg, #052e16 0%, #022c22 100%);
 }
 
+/* ----- Mobile (≤480px): shrink vw/vh masses, lift stacks above bottom Controls ----- */
+@media (max-width: 480px) {
+  .scene-background.scene-forest .forest-hill--far {
+    width: 210vw;
+    height: min(46dvh, 52vh);
+    left: -52vw;
+    bottom: calc(20vh + max(44px, env(safe-area-inset-bottom, 0px)));
+  }
+
+  .scene-background.scene-forest .forest-hill--near {
+    width: 185vw;
+    height: min(38dvh, 44vh);
+    right: -42vw;
+    bottom: calc(9vh + max(50px, env(safe-area-inset-bottom, 0px)));
+  }
+
+  .scene-background.scene-forest .forest-celestial {
+    width: clamp(96px, 26vw, 132px);
+    height: clamp(96px, 26vw, 132px);
+    top: clamp(-40px, -8vw, -24px);
+    left: max(4vw, env(safe-area-inset-left, 0px));
+  }
+
+  .scene-background.scene-forest .forest-trees--mid {
+    left: -8%;
+    right: -8%;
+    width: auto;
+    bottom: calc(11vh + max(50px, env(safe-area-inset-bottom, 0px)));
+    height: min(180px, 28dvh);
+  }
+
+  .scene-background.scene-forest .forest-trees--mid .forest-tree-min {
+    transform: scale(0.82);
+    transform-origin: bottom center;
+  }
+
+  .scene-background.scene-forest .forest-trees--mid .forest-tree-min--f {
+    transform: translateX(-50%) scale(0.82);
+  }
+
+  .scene-background.scene-forest .forest-trees--front {
+    left: -10%;
+    right: -10%;
+    width: auto;
+    bottom: calc(5vh + max(52px, env(safe-area-inset-bottom, 0px)));
+    height: min(260px, 38dvh);
+  }
+
+  .scene-background.scene-forest .forest-trees--front .forest-tree {
+    transform: scale(0.74);
+    transform-origin: bottom center;
+  }
+
+  .scene-background.scene-forest .forest-trees--front .forest-tree--6 {
+    transform: translateX(-50%) scale(0.74);
+  }
+
+  .scene-background.scene-forest .forest-ground {
+    height: max(52px, calc(9vh + env(safe-area-inset-bottom, 0px)));
+  }
+}
+

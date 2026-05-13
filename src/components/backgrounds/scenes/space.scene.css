@@ -136,3 +136,50 @@
 .scene-background.scene-space .space-glow-horizon.scene-night {
   background: linear-gradient(180deg, transparent 0%, rgba(30, 27, 75, 0.35) 55%, rgba(2, 6, 23, 0.75) 100%);
 }
+
+/* ----- Mobile (≤480px): smaller planets / station, shorter horizon glow ----- */
+@media (max-width: 480px) {
+  .scene-background.scene-space .space-nebula {
+    inset: -6% -12% 28% -12%;
+    opacity: 0.9;
+  }
+
+  .scene-background.scene-space .space-planet--ringed {
+    width: min(88px, 22vw);
+    height: min(88px, 22vw);
+    left: max(4vw, env(safe-area-inset-left, 0px));
+    top: min(10dvh, 12vh);
+  }
+
+  .scene-background.scene-space .space-planet--red {
+    width: min(56px, 14vw);
+    height: min(56px, 14vw);
+    left: 8vw;
+    bottom: calc(14vh + max(48px, env(safe-area-inset-bottom, 0px)));
+  }
+
+  .scene-background.scene-space .space-planet--blue {
+    width: min(120px, 34vw);
+    height: min(120px, 34vw);
+    right: max(0px, env(safe-area-inset-right, 0px));
+    bottom: calc(15vh + max(52px, env(safe-area-inset-bottom, 0px)));
+  }
+
+  .scene-background.scene-space .space-planet--moon {
+    width: min(44px, 12vw);
+    height: min(44px, 12vw);
+    left: 38vw;
+    top: min(7dvh, 9vh);
+  }
+
+  .scene-background.scene-space .space-station-wrap {
+    right: max(8px, env(safe-area-inset-right, 0px));
+    top: clamp(36px, 10dvh, 120px);
+    width: min(200px, 48vw);
+  }
+
+  .scene-background.scene-space .space-glow-horizon {
+    height: min(16dvh, 20vh);
+  }
+}
+

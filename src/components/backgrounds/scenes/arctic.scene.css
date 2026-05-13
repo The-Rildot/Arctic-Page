@@ -29,6 +29,46 @@
   opacity: 0.68;
 }
 
+.scene-background.scene-arctic .arctic-peaks--rim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10vh;
+  height: min(260px, 32vh);
+  z-index: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 5%;
+  gap: clamp(2px, 1.2vw, 14px);
+  pointer-events: none;
+}
+
+.scene-background.scene-arctic .arctic-peaks--rim.scene-night .arctic-peak {
+  background: linear-gradient(168deg, #e8eafd 0%, #a5b4fc 40%, #4f46e5 92%);
+  opacity: 0.55;
+}
+
+.scene-background.scene-arctic .arctic-peak--g {
+  height: 46%;
+  max-width: 12%;
+}
+
+.scene-background.scene-arctic .arctic-peak--h {
+  height: 68%;
+  max-width: 14%;
+}
+
+.scene-background.scene-arctic .arctic-peak--i {
+  height: 52%;
+  max-width: 11%;
+}
+
+.scene-background.scene-arctic .arctic-peak--j {
+  height: 78%;
+  max-width: 15%;
+}
+
 .scene-background.scene-arctic .arctic-peak--a {
   height: 48%;
   filter: saturate(1.08);
@@ -174,5 +214,74 @@
   height: auto;
   max-height: min(240px, 28vh);
   display: block;
+}
+
+/* ----- Mobile (≤480px): clear bottom Controls bar, calmer peaks / massifs ----- */
+@media (max-width: 480px) {
+  .scene-background.scene-arctic .arctic-peaks {
+    bottom: calc(9vh + max(52px, env(safe-area-inset-bottom, 0px)));
+    height: min(230px, 32dvh);
+    padding: 0 1%;
+    gap: clamp(2px, 2vw, 12px);
+  }
+
+  .scene-background.scene-arctic .arctic-peaks--rim {
+    bottom: calc(8vh + max(50px, env(safe-area-inset-bottom, 0px)));
+    height: min(200px, 28dvh);
+    padding: 0 3%;
+    gap: clamp(2px, 1.5vw, 10px);
+  }
+
+  .scene-background.scene-arctic .arctic-mountain-range {
+    bottom: calc(7vh + max(50px, env(safe-area-inset-bottom, 0px)));
+    height: min(300px, 38dvh);
+    gap: clamp(-18px, -2vw, -6px);
+  }
+
+  .scene-background.scene-arctic .arctic-mt {
+    width: clamp(88px, 28vw, 168px);
+    height: clamp(150px, 28dvh, 280px);
+  }
+
+  .scene-background.scene-arctic .arctic-mt--2 {
+    height: clamp(175px, 32dvh, 320px);
+  }
+
+  .scene-background.scene-arctic .arctic-mountain-main {
+    bottom: calc(5vh + max(48px, env(safe-area-inset-bottom, 0px)));
+    width: clamp(120px, 44vw, 240px);
+    height: clamp(168px, 30dvh, 300px);
+  }
+
+  .scene-background.scene-arctic .arctic-mountain-main--left {
+    left: clamp(-22px, -2.5vw, 0px);
+  }
+
+  .scene-background.scene-arctic .arctic-mountain-main--right {
+    right: clamp(-10px, -1.2vw, 8px);
+  }
+
+  .scene-background.scene-arctic .arctic-ground {
+    height: max(68px, calc(12vh + env(safe-area-inset-bottom, 0px)));
+    min-height: 68px;
+  }
+
+  .scene-background.scene-arctic .arctic-celestial {
+    width: clamp(112px, 30vw, 156px);
+    height: clamp(112px, 30vw, 156px);
+    top: clamp(-44px, -10vw, -28px);
+    right: clamp(-36px, -8vw, -16px);
+  }
+
+  .scene-background.scene-arctic .arctic-igloo {
+    left: auto;
+    right: max(6px, env(safe-area-inset-right, 0px));
+    bottom: calc(max(52px, env(safe-area-inset-bottom, 0px)) + 6px);
+  }
+
+  .scene-background.scene-arctic .arctic-igloo img {
+    width: min(200px, 52vw);
+    max-height: min(118px, 20dvh);
+  }
 }
 

@@ -16,6 +16,13 @@
   box-shadow: 0 0 28px rgba(226, 232, 240, 0.12);
 }
 
+.scene-background.scene-city .city-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  isolation: isolate;
+}
+
 .scene-background.scene-city .city-haze {
   position: absolute;
   inset: 0;
@@ -199,7 +206,7 @@
   right: clamp(72px, 11vw, 132px);
   bottom: calc(11vh + 6px);
   height: clamp(140px, 18vh, 220px);
-  z-index: 5;
+  z-index: 20;
   background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.06) 100%);
   pointer-events: none;
 }
@@ -214,7 +221,7 @@
   right: 0;
   bottom: 0;
   height: clamp(112px, 15vh, 200px);
-  z-index: 9;
+  z-index: 40;
   pointer-events: none;
 }
 
@@ -224,6 +231,7 @@
   height: min(200px, 22vh);
   width: auto;
   object-fit: contain;
+  z-index: 2;
 }
 
 .scene-background.scene-city .city-street-light--left {
@@ -249,6 +257,7 @@
   max-width: 28vw;
   object-fit: contain;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+  z-index: 3;
 }
 
 .scene-background.scene-city .city-car--1 {
@@ -276,12 +285,92 @@
   height: 12vh;
   min-height: 80px;
   background: linear-gradient(180deg, #94a3b8 0%, #475569 45%, #334155 100%);
-  z-index: 8;
+  z-index: 1;
   box-shadow: inset 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 .scene-background.scene-city .city-ground.scene-night {
   background: linear-gradient(180deg, #020617 0%, #0f172a 50%, #020617 100%);
   box-shadow: inset 0 6px 0 rgba(250, 204, 21, 0.04);
+}
+
+/* ----- Mobile (≤480px): zoomed “hero” street — one car, one lamp, taller façades ----- */
+@media (max-width: 480px) {
+  .scene-background.scene-city .city-stage {
+    transform: scale(1.22);
+    transform-origin: 50% 100%;
+  }
+
+  .scene-background.scene-city .city-celestial {
+    width: clamp(96px, 26vw, 120px);
+    height: clamp(96px, 26vw, 120px);
+    top: clamp(-44px, -10vw, -28px);
+    right: max(8px, env(safe-area-inset-right, 0px));
+  }
+
+  .scene-background.scene-city .city-canyon {
+    bottom: calc(6vh + max(50px, env(safe-area-inset-bottom, 0px)));
+    width: clamp(48px, 8vw, 88px);
+    height: min(62dvh, 480px);
+  }
+
+  .scene-background.scene-city .city-skyline {
+    left: clamp(28px, 5vw, 64px);
+    right: clamp(28px, 5vw, 64px);
+    gap: clamp(4px, 1.5vw, 10px);
+  }
+
+  .scene-background.scene-city .city-skyline--back {
+    bottom: calc(22vh + max(44px, env(safe-area-inset-bottom, 0px)));
+    height: min(200px, 26dvh);
+  }
+
+  .scene-background.scene-city .city-skyline--front {
+    bottom: calc(10vh + max(52px, env(safe-area-inset-bottom, 0px)));
+    height: min(280px, 42dvh);
+  }
+
+  .scene-background.scene-city .city-street-vanish {
+    left: clamp(28px, 5vw, 64px);
+    right: clamp(28px, 5vw, 64px);
+    bottom: calc(9vh + max(52px, env(safe-area-inset-bottom, 0px)));
+    height: clamp(100px, 14dvh, 160px);
+  }
+
+  .scene-background.scene-city .city-street-objects {
+    height: clamp(96px, 14dvh, 150px);
+  }
+
+  .scene-background.scene-city .city-street-light--left,
+  .scene-background.scene-city .city-street-light--right {
+    display: none;
+  }
+
+  .scene-background.scene-city .city-street-light--mid {
+    display: block;
+    height: min(176px, 22dvh);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .scene-background.scene-city .city-car--2,
+  .scene-background.scene-city .city-car--3,
+  .scene-background.scene-city .city-car--4 {
+    display: none;
+  }
+
+  .scene-background.scene-city .city-car--1 {
+    display: block;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(152px, 42vw);
+    max-width: 46vw;
+    bottom: calc(max(12px, env(safe-area-inset-bottom, 0px)) + 10px);
+  }
+
+  .scene-background.scene-city .city-ground {
+    height: max(56px, calc(11vh + env(safe-area-inset-bottom, 0px)));
+    min-height: 56px;
+  }
 }
 

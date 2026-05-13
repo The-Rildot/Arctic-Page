@@ -54,7 +54,7 @@
   top: -60px;
   right: -40px;
   background: radial-gradient(circle at 35% 35%, #fff7ed 0%, #fb923c 45%, #ea580c 100%);
-  z-index: 5;
+  z-index: 8;
 }
 
 .scene-background.scene-desert .desert-celestial.scene-night {
@@ -65,8 +65,8 @@
 .scene-background.scene-desert .desert-pyramid-wrap {
   position: absolute;
   left: 4vw;
-  bottom: 22vh;
-  z-index: 2;
+  bottom: 17vh;
+  z-index: 5;
   width: min(520px, 58vw);
   max-width: 92vw;
   pointer-events: none;
@@ -236,5 +236,81 @@
 
 .scene-background.scene-desert .desert-ground.scene-night {
   background: linear-gradient(180deg, rgba(28, 25, 23, 0.6) 0%, rgba(12, 10, 9, 0.95) 100%);
+}
+
+/* ----- Mobile (≤480px): lift dunes / props, tame vw-heavy silhouettes ----- */
+@media (max-width: 480px) {
+  .scene-background.scene-desert .desert-dune--back {
+    width: 130vw;
+    height: min(36dvh, 40vh);
+    left: -38vw;
+    bottom: calc(16vh + max(44px, env(safe-area-inset-bottom, 0px)));
+  }
+
+  .scene-background.scene-desert .desert-dune--mid {
+    width: 100vw;
+    height: min(32dvh, 36vh);
+    right: -28vw;
+    bottom: calc(10vh + max(48px, env(safe-area-inset-bottom, 0px)));
+  }
+
+  .scene-background.scene-desert .desert-dune--front {
+    width: 118vw;
+    height: min(22dvh, 26vh);
+    left: -10vw;
+    bottom: 0;
+  }
+
+  .scene-background.scene-desert .desert-celestial {
+    width: clamp(96px, 26vw, 140px);
+    height: clamp(96px, 26vw, 140px);
+    top: clamp(-48px, -10vw, -28px);
+    right: clamp(-32px, -8vw, -12px);
+  }
+
+  .scene-background.scene-desert .desert-pyramid-wrap {
+    left: max(2vw, env(safe-area-inset-left, 0px));
+    bottom: calc(13vh + max(48px, env(safe-area-inset-bottom, 0px)));
+    width: min(280px, 72vw);
+    max-width: 88vw;
+  }
+
+  .scene-background.scene-desert .desert-silhouette {
+    bottom: calc(11vh + max(52px, env(safe-area-inset-bottom, 0px)));
+  }
+
+  .scene-background.scene-desert .desert-saguaro--left {
+    left: 6vw;
+    transform: scale(0.88);
+    transform-origin: bottom center;
+  }
+
+  .scene-background.scene-desert .desert-saguaro--center {
+    left: clamp(96px, 28vw, 200px);
+    transform: scale(0.9);
+    transform-origin: bottom center;
+  }
+
+  .scene-background.scene-desert .desert-saguaro--right {
+    right: 8vw;
+    transform: scale(0.88);
+    transform-origin: bottom center;
+  }
+
+  .scene-background.scene-desert .desert-barrel-wrap {
+    bottom: calc(10vh + max(50px, env(safe-area-inset-bottom, 0px)));
+  }
+
+  .scene-background.scene-desert .desert-barrel-wrap--a {
+    left: 22vw;
+  }
+
+  .scene-background.scene-desert .desert-barrel-wrap--b {
+    right: 20vw;
+  }
+
+  .scene-background.scene-desert .desert-ground {
+    height: max(52px, calc(12vh + env(safe-area-inset-bottom, 0px)));
+  }
 }
 

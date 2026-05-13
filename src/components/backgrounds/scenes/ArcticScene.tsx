@@ -8,6 +8,12 @@ type ArcticSceneProps = {
 export function ArcticScene({ isNightMode }: ArcticSceneProps) {
   return (
     <>
+      <div className={sceneNight("arctic-peaks arctic-peaks--rim", isNightMode)}>
+        <div className="arctic-peak arctic-peak--g" />
+        <div className="arctic-peak arctic-peak--h" />
+        <div className="arctic-peak arctic-peak--i" />
+        <div className="arctic-peak arctic-peak--j" />
+      </div>
       <div className={sceneNight("arctic-peaks arctic-peaks--distant", isNightMode)}>
         <div className="arctic-peak arctic-peak--a" />
         <div className="arctic-peak arctic-peak--b" />
