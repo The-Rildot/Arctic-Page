@@ -42,9 +42,9 @@ export function useModalFocusTrap(
     let focusables = visibleFocusables(container);
     if (focusables.length === 0) {
       container.setAttribute("tabindex", "-1");
-      container.focus();
+      container.focus({ preventScroll: true });
     } else {
-      focusables[0]?.focus();
+      focusables[0]?.focus({ preventScroll: true });
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -60,7 +60,7 @@ export function useModalFocusTrap(
       focusables = visibleFocusables(container);
       if (focusables.length === 0) {
         event.preventDefault();
-        container.focus();
+        container.focus({ preventScroll: true });
         return;
       }
       const first = focusables[0];
@@ -70,11 +70,11 @@ export function useModalFocusTrap(
       if (event.shiftKey) {
         if (active === first || !container.contains(active)) {
           event.preventDefault();
-          last.focus();
+          last.focus({ preventScroll: true });
         }
       } else if (active === last || !container.contains(active)) {
         event.preventDefault();
-        first.focus();
+        first.focus({ preventScroll: true });
       }
     };
 
@@ -85,7 +85,7 @@ export function useModalFocusTrap(
 
       const stillInDom = typeof document !== "undefined" && prevActive && document.body.contains(prevActive);
       if (stillInDom) {
-        prevActive.focus();
+        prevActive.focus({ preventScroll: true });
       }
     };
   }, [isActive, containerRef]);

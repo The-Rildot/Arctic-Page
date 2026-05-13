@@ -1,6 +1,21 @@
-import { useState, type ChangeEvent, type RefObject } from "react";
+import { useEffect, useState, type ChangeEvent, type ReactNode, type RefObject } from "react";
+import { MOBILE_BREAKPOINT_PX } from "../constants/motion";
 import type { SceneId } from "../constants/scenes";
 import type { BuiltInCharacterNames } from "../utils/storage";
+
+const phoneMediaQuery = `(max-width: ${MOBILE_BREAKPOINT_PX}px)`;
+
+function readPhoneLayout(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+  return window.matchMedia(phoneMediaQuery).matches;
+}
+
+/** Mobile: start collapsed (bottom bar only) to maximize the playground. Desktop: panel visible. */
+function readInitialPanelHidden(): boolean {
+  return readPhoneLayout();
+}
 
 type ScenePreset = {
   id: SceneId;
@@ -52,33 +67,28 @@ export function ControlPanel({
   onCopyShareLink,
   onSceneChange
 }: ControlPanelProps) {
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState(readInitialPanelHidden);
+  const [isPhoneLayout, setIsPhoneLayout] = useState(readPhoneLayout);
 
-  if (isHidden) {
-    return (
-      <button
-        type="button"
-        className="control-panel-toggle rounded bg-slate-900/90 px-3 py-2 text-sm font-semibold text-white"
-        onClick={() => setIsHidden(false)}
-        aria-label="Show control panel"
-      >
-        Show Panel
-      </button>
-    );
-  }
+  useEffect(() => {
+    const mq = window.matchMedia(phoneMediaQuery);
+    const sync = () => setIsPhoneLayout(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
-  return (
-    <header className="switch-container" role="region" aria-label="Playground controls">
-      <span className="sr-only">
-        Tip: Tab to a character, then use arrow keys to nudge its position without dragging.
-      </span>
-      <button
-        type="button"
-        className="rounded bg-slate-700 px-3 py-2 text-sm text-white"
-        onClick={() => setIsHidden(true)}
-      >
-        Hide Panel
-      </button>
+  const scenePresetLabel =
+    scenePresets.find((p) => p.id === selectedScene)?.label ?? selectedScene;
+
+  const sharedTip = (
+    <span className="sr-only" key="tip">
+      Tip: Tab to a character, then use arrow keys to nudge its position without dragging.
+    </span>
+  );
+
+  const renderModeBlock = (): ReactNode => (
+    <>
       <label className="switch" htmlFor="mode-switch">
         <span className="sr-only">Toggle day or night mode. Currently: {modeLabel}.</span>
         <input type="checkbox" id="mode-switch" checked={isNightMode} onChange={onModeChange} />
@@ -87,6 +97,16 @@ export function ControlPanel({
       <span id="mode-label" aria-hidden="true">
         {modeLabel}
       </span>
+    </>
+  );
+
+  const renderMainControls = (hideButtonLabel: string, onHide: () => void): ReactNode => (
+    <>
+      {sharedTip}
+      <button type="button" className="rounded bg-slate-700 px-3 py-2 text-sm text-white" onClick={onHide}>
+        {hideButtonLabel}
+      </button>
+      {renderModeBlock()}
       <label
         htmlFor="toggle-show-names"
         className="flex cursor-pointer items-center gap-2 rounded bg-white/80 px-2 py-1 text-sm text-slate-700"
@@ -185,6 +205,64 @@ export function ControlPanel({
           {settingsMessage}
         </span>
       ) : null}
+    </>
+  );
+
+  if (isPhoneLayout && isHidden) {
+    return (
+      <button
+        type="button"
+        className="control-panel-mobile-bar"
+        onClick={() => setIsHidden(false)}
+        aria-label="Open playground controls"
+      >
+        <span className="control-panel-mobile-bar__label">Controls</span>
+        <span className="control-panel-mobile-bar__scene" aria-hidden="true">
+          {scenePresetLabel}
+        </span>
+        <span className="control-panel-mobile-bar__chevron" aria-hidden="true">
+          ▲
+        </span>
+      </button>
+    );
+  }
+
+  if (isPhoneLayout && !isHidden) {
+    return (
+      <>
+        <button
+          type="button"
+          className="control-panel-scrim"
+          aria-label="Close control panel"
+          onClick={() => setIsHidden(true)}
+        />
+        <header
+          className="switch-container switch-container--mobile-sheet"
+          role="region"
+          aria-label="Playground controls"
+        >
+          {renderMainControls("Close", () => setIsHidden(true))}
+        </header>
+      </>
+    );
+  }
+
+  if (isHidden) {
+    return (
+      <button
+        type="button"
+        className="control-panel-toggle rounded bg-slate-900/90 px-3 py-2 text-sm font-semibold text-white"
+        onClick={() => setIsHidden(false)}
+        aria-label="Show control panel"
+      >
+        Show Panel
+      </button>
+    );
+  }
+
+  return (
+    <header className="switch-container" role="region" aria-label="Playground controls">
+      {renderMainControls("Hide Panel", () => setIsHidden(true))}
     </header>
   );
 }

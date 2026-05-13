@@ -19,6 +19,28 @@ Persistence: **`storage.getSelectedScene` / `setSelectedScene`** in **`src/utils
 
 ---
 
+## Mobile viewport and breakpoints
+
+**Convention:** **`max-width: 480px`** is the primary phone breakpoint for new CSS (scene layers, future bottom UI). Example:
+
+```css
+@media (max-width: 480px) {
+  .scene-background.scene-yourscene .your-layer {
+    /* … */
+  }
+}
+```
+
+**Phase 1 layout (playground shell):** **`styles.css`** sets **`html`**, **`body`**, and **`#root`** to fill the viewport using **`100dvh`** with a **`100vh`** fallback so mobile browser chrome does not clip the canvas vertically. **`Index.html`** uses **`viewport-fit=cover`** on the viewport meta so **`env(safe-area-inset-*)`** is available for **UI chrome** (notches / home indicator). Character positioning may still use flush viewport math per product requirements.
+
+**Phase 2 (playground characters):** **`getPlaygroundCharacterSize()`** in **`src/constants/motion.ts`** returns **300×300** above **`480px`** width and a smaller square at **`≤480px`** so about three figures fit with overlap; **`usePlaygroundCharacterSize`** keeps **`App`** / **`CharacterView`** / drag clamping aligned on resize.
+
+**Phase 3 (mobile controls, ≤480px):** **`ControlPanel`** uses a **bottom bar** when collapsed (tap to open) and a **50dvh bottom sheet** with a dim **scrim** (tap to close) when expanded; styles live under **`@media (max-width: 480px)`** in **`styles.css`**. Tablet **481px–1024px** still uses the compact corner panel.
+
+See the mobile rollout plan in Cursor for the full phased checklist.
+
+---
+
 ## Naming rules
 
 Pick a **scene id**:

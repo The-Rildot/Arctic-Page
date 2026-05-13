@@ -1,13 +1,13 @@
 import { PointerEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   BASE_CHARACTER_DEFAULTS,
-  CHARACTER_SIZES,
-  WANDER_DELTA_X,
-  WANDER_DELTA_Y,
   WANDER_INTERVAL_MS,
   WANDER_MOVE_CHANCE,
   clampAllCharacterPositions,
-  clampPositionToViewport
+  clampPositionToViewport,
+  getPlaygroundCharacterSize,
+  getWanderDeltaX,
+  getWanderDeltaY
 } from "../constants/motion";
 import type { CharacterPosition } from "../types/characters";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
@@ -96,10 +96,14 @@ export function useCharacterMotion({
           }
 
           const isCustomCharacter = customCharacterIds.includes(id);
-          const size = isCustomCharacter ? CHARACTER_SIZES.custom : CHARACTER_SIZES.base;
-          const current = next[id] ?? (isCustomCharacter ? { x: 200, y: 220 } : BASE_CHARACTER_DEFAULTS[id]);
-          const deltaX = Math.floor(Math.random() * (WANDER_DELTA_X * 2 + 1)) - WANDER_DELTA_X;
-          const deltaY = Math.floor(Math.random() * (WANDER_DELTA_Y * 2 + 1)) - WANDER_DELTA_Y;
+          const size = getPlaygroundCharacterSize();
+          const current =
+            next[id] ??
+            (isCustomCharacter ? { x: 200, y: 220 } : (BASE_CHARACTER_DEFAULTS[id] ?? { x: 200, y: 220 }));
+          const wx = getWanderDeltaX();
+          const wy = getWanderDeltaY();
+          const deltaX = Math.floor(Math.random() * (wx * 2 + 1)) - wx;
+          const deltaY = Math.floor(Math.random() * (wy * 2 + 1)) - wy;
           next[id] = clampPositionToViewport(
             {
               x: current.x + deltaX,
@@ -122,7 +126,7 @@ export function useCharacterMotion({
     (id: string, deltaX: number, deltaY: number) => {
       setCharacterPositions((prev) => {
         const isCustomCharacter = customCharacterIds.includes(id);
-        const size = isCustomCharacter ? CHARACTER_SIZES.custom : CHARACTER_SIZES.base;
+        const size = getPlaygroundCharacterSize();
         const current =
           prev[id] ??
           (isCustomCharacter ? { x: 200, y: 220 } : (BASE_CHARACTER_DEFAULTS[id] ?? { x: 200, y: 220 }));

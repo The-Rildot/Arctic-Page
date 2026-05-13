@@ -61,6 +61,25 @@ export function CharacterCreatorModal({
     };
   }, [isOpen, onClose]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    return () => {
+      html.style.overflow = prevHtmlOverflow;
+      body.style.overflow = prevBodyOverflow;
+      html.scrollTop = 0;
+      body.scrollTop = 0;
+      window.scrollTo(0, 0);
+    };
+  }, [isOpen]);
+
   const handleVariantChange =
     (key: CharacterComponentKey) => (event: ChangeEvent<HTMLSelectElement>) => {
       onComponentVariantChange(key, event.target.value);
@@ -78,12 +97,12 @@ export function CharacterCreatorModal({
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden overscroll-none bg-black/45 p-4"
       role="presentation"
     >
       <div
         ref={panelRef}
-        className="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-xl bg-white p-6 shadow-2xl"
+        className="max-h-[90vh] min-h-0 w-full max-w-5xl overflow-y-auto overscroll-contain rounded-xl bg-white p-6 shadow-2xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}

@@ -7,8 +7,9 @@ import { SceneBackground } from "./components/backgrounds/SceneBackground";
 import { DEFAULT_SCENE_ID, SCENE_PRESETS, isSceneId, type SceneId } from "./constants/scenes";
 import { BEAR_PRESET, PENGUIN_PRESET } from "./constants/builtInCharacters";
 import { MAX_CUSTOM_CHARACTERS, createDefaultComponents } from "./constants/characterCreator";
-import { BASE_CHARACTER_DEFAULTS, CHARACTER_SIZES, clampAllCharacterPositions } from "./constants/motion";
+import { BASE_CHARACTER_DEFAULTS, clampAllCharacterPositions, getCenteredCharacterPosition, DESKTOP_CHARACTER_PX } from "./constants/motion";
 import { useCharacterMotion } from "./hooks/useCharacterMotion";
+import { usePlaygroundCharacterSize } from "./hooks/usePlaygroundCharacterSize";
 import type { CharacterComponentKey, CustomCharacter } from "./types/characters";
 import {
   buildPlaygroundExport,
@@ -47,6 +48,7 @@ function App() {
     storage.getLockedCharacterIds()
   );
   const importSettingsInputRef = useRef<HTMLInputElement>(null);
+  const playgroundCharacterSize = usePlaygroundCharacterSize();
 
   const modeLabel = useMemo(() => (isNightMode ? "Night Mode" : "Day Mode"), [isNightMode]);
   const customCharacterIds = useMemo(() => customCharacters.map((character) => character.id), [customCharacters]);
@@ -166,6 +168,16 @@ function App() {
     return () => cancelAnimationFrame(frame);
   }, [applyPlaygroundSnapshot]);
 
+  useEffect(() => {
+    if (isCreatorOpen) {
+      return;
+    }
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    document.querySelector<HTMLElement>(".switch-container--mobile-sheet")?.scrollTo(0, 0);
+  }, [isCreatorOpen]);
+
   const handleModeChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIsNightMode(event.target.checked);
   };
@@ -223,7 +235,7 @@ function App() {
       setEditingCharacterId(null);
     } else {
       const id = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `custom-${Date.now()}`;
-      const position = { x: 220 + customCharacters.length * 140, y: 220 };
+      const position = getCenteredCharacterPosition(playgroundCharacterSize);
       const newCharacter: CustomCharacter = {
         id,
         type: "custom",
@@ -416,6 +428,7 @@ function App() {
       <SceneBackground sceneId={selectedScene} isNightMode={isNightMode} />
       <CharacterView
         className={`character-instance draggable-character${draggingCharacterId === "penguin" ? " dragging" : ""}`}
+        boxSize={playgroundCharacterSize}
         components={PENGUIN_PRESET}
         position={characterPositions.penguin ?? BASE_CHARACTER_DEFAULTS.penguin}
         nameLabel={
@@ -424,18 +437,19 @@ function App() {
         showNameLabel={showCharacterNames}
         characterId="penguin"
         onArrowKeyNudge={nudgeCharacter}
-        onPointerDown={startCharacterDrag("penguin", CHARACTER_SIZES.base)}
+        onPointerDown={startCharacterDrag("penguin", playgroundCharacterSize)}
         onPointerUp={() => handleSelectByPointerUp("penguin")}
       />
       <CharacterView
         className={`character-instance draggable-character${draggingCharacterId === "bear" ? " dragging" : ""}`}
+        boxSize={playgroundCharacterSize}
         components={BEAR_PRESET}
         position={characterPositions.bear ?? BASE_CHARACTER_DEFAULTS.bear}
         nameLabel={builtInCharacterNames.bear.trim() || DEFAULT_BUILT_IN_CHARACTER_NAMES.bear}
         showNameLabel={showCharacterNames}
         characterId="bear"
         onArrowKeyNudge={nudgeCharacter}
-        onPointerDown={startCharacterDrag("bear", CHARACTER_SIZES.base)}
+        onPointerDown={startCharacterDrag("bear", playgroundCharacterSize)}
         onPointerUp={() => handleSelectByPointerUp("bear")}
       />
 
@@ -443,10 +457,11 @@ function App() {
         <CustomCharacterView
           key={character.id}
           character={character}
+          boxSize={playgroundCharacterSize}
           position={characterPositions[character.id] ?? character.position}
           showNameLabel={showCharacterNames}
           onArrowKeyNudge={nudgeCharacter}
-          onPointerDown={startCharacterDrag(character.id, CHARACTER_SIZES.custom)}
+          onPointerDown={startCharacterDrag(character.id, playgroundCharacterSize)}
           onPointerUp={() => handleSelectByPointerUp(character.id)}
           isDragging={draggingCharacterId === character.id}
         />
@@ -458,8 +473,8 @@ function App() {
           role="group"
           aria-label={`Actions for ${selectedActionInfo.name}`}
           style={{
-            left: selectedActionInfo.position.x + CHARACTER_SIZES.base.width / 2,
-            top: selectedActionInfo.position.y - 36
+            left: selectedActionInfo.position.x + playgroundCharacterSize.width / 2,
+            top: selectedActionInfo.position.y - Math.max(28, Math.round(36 * (playgroundCharacterSize.height / DESKTOP_CHARACTER_PX)))
           }}
         >
           <button

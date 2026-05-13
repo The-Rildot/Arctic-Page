@@ -1,5 +1,5 @@
 import type { KeyboardEvent, PointerEvent, CSSProperties } from "react";
-import { KEYBOARD_NUDGE_PX } from "../../constants/motion";
+import { getKeyboardNudgePx } from "../../constants/motion";
 import type { CharacterComponents } from "../../types/characters";
 import type { CharacterPosition } from "../../types/characters";
 import { CharacterAssembler } from "./CharacterAssembler";
@@ -8,6 +8,8 @@ import { CharacterRoot } from "./CharacterRoot";
 type CharacterViewProps = {
   components: CharacterComponents;
   position: CharacterPosition;
+  /** Outer hit box / layout size (must match `getPlaygroundCharacterSize()` used for clamping and drag). */
+  boxSize: { width: number; height: number };
   className?: string;
   style?: CSSProperties;
   /** Visible above the character when `showNameLabel` is true (custom uses creator name; built-ins use stored labels). */
@@ -23,6 +25,7 @@ type CharacterViewProps = {
 export function CharacterView({
   components,
   position,
+  boxSize,
   className = "",
   style,
   nameLabel,
@@ -40,7 +43,7 @@ export function CharacterView({
     if (!keyboardMovable || !characterId || !onArrowKeyNudge) {
       return;
     }
-    const step = KEYBOARD_NUDGE_PX;
+    const step = getKeyboardNudgePx();
     switch (event.key) {
       case "ArrowLeft":
         event.preventDefault();
@@ -70,8 +73,8 @@ export function CharacterView({
         position: "absolute",
         left: position.x,
         top: position.y,
-        width: 300,
-        height: 300,
+        width: boxSize.width,
+        height: boxSize.height,
         ...style
       }}
       role={keyboardMovable ? "application" : undefined}
