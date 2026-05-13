@@ -7,7 +7,10 @@ import {
   getCenteredCharacterPosition,
   getCharacterActionControlsIdealAnchor,
   getKeyboardNudgePx,
-  getPlaygroundCharacterSize
+  getPlaygroundCharacterSize,
+  getWanderDeltaX,
+  getWanderDeltaY,
+  MOBILE_BREAKPOINT_PX
 } from "./motion";
 
 describe("clamp", () => {
@@ -84,6 +87,20 @@ describe("clampCharacterActionControlsPosition", () => {
     const viewport = { width: 900, height: 700 };
     expect(clampCharacterActionControlsPosition(ideal, row, viewport)).toEqual({ left: 500, top: 648 });
   });
+
+  it("at exactly the mobile breakpoint uses extra bottom clearance for the control bar", () => {
+    const ideal = { centerX: 160, top: 900 };
+    const row = { width: 200, height: 44 };
+    const viewport = { width: MOBILE_BREAKPOINT_PX, height: 700 };
+    expect(clampCharacterActionControlsPosition(ideal, row, viewport)).toEqual({ left: 160, top: 600 });
+  });
+
+  it("one pixel above the mobile breakpoint uses desktop bottom padding", () => {
+    const ideal = { centerX: 240, top: 900 };
+    const row = { width: 200, height: 44 };
+    const viewport = { width: MOBILE_BREAKPOINT_PX + 1, height: 700 };
+    expect(clampCharacterActionControlsPosition(ideal, row, viewport)).toEqual({ left: 240, top: 648 });
+  });
 });
 
 describe("getPlaygroundCharacterSize", () => {
@@ -100,6 +117,55 @@ describe("getPlaygroundCharacterSize", () => {
   it("sizes for three-abreast at 320px width", () => {
     Object.defineProperty(window, "innerWidth", { value: 320, configurable: true });
     expect(getPlaygroundCharacterSize()).toEqual({ width: 115, height: 115 });
+  });
+
+  it("scales up between 320 and 480 (390px width)", () => {
+    Object.defineProperty(window, "innerWidth", { value: 390, configurable: true });
+    expect(getPlaygroundCharacterSize()).toEqual({ width: 141, height: 141 });
+  });
+
+  it("uses the largest mobile square at 480px width", () => {
+    Object.defineProperty(window, "innerWidth", { value: MOBILE_BREAKPOINT_PX, configurable: true });
+    expect(getPlaygroundCharacterSize()).toEqual({ width: 173, height: 173 });
+  });
+
+  it("returns desktop size one pixel above the breakpoint", () => {
+    Object.defineProperty(window, "innerWidth", { value: MOBILE_BREAKPOINT_PX + 1, configurable: true });
+    expect(getPlaygroundCharacterSize()).toEqual({ width: 300, height: 300 });
+  });
+
+  it("floors to the 64px minimum when vw/denominator is smaller", () => {
+    Object.defineProperty(window, "innerWidth", { value: 150, configurable: true });
+    expect(getPlaygroundCharacterSize()).toEqual({ width: 64, height: 64 });
+  });
+
+  it("uses a larger square when narrow width still clears the 64px floor", () => {
+    Object.defineProperty(window, "innerWidth", { value: 180, configurable: true });
+    expect(getPlaygroundCharacterSize()).toEqual({ width: 65, height: 65 });
+  });
+});
+
+describe("getWanderDeltaX / getWanderDeltaY", () => {
+  afterEach(() => {
+    Object.defineProperty(window, "innerWidth", { value: 1024, configurable: true });
+  });
+
+  it("scale wander deltas with character width on mobile", () => {
+    Object.defineProperty(window, "innerWidth", { value: 320, configurable: true });
+    expect(getWanderDeltaX()).toBe(18);
+    expect(getWanderDeltaY()).toBe(15);
+  });
+
+  it("use larger deltas at 390px width than at 320", () => {
+    Object.defineProperty(window, "innerWidth", { value: 390, configurable: true });
+    expect(getWanderDeltaX()).toBe(23);
+    expect(getWanderDeltaY()).toBe(19);
+  });
+
+  it("match desktop wander range above the mobile breakpoint", () => {
+    Object.defineProperty(window, "innerWidth", { value: 900, configurable: true });
+    expect(getWanderDeltaX()).toBe(48);
+    expect(getWanderDeltaY()).toBe(40);
   });
 });
 

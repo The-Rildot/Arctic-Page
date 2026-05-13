@@ -41,6 +41,8 @@ Persistence: **`storage.getSelectedScene` / `setSelectedScene`** in **`src/utils
 
 **Phase 7 (scene wave 2 — Ocean, City, Desert, Space):** **`ocean.scene.css`**, **`city.scene.css`**, **`desert.scene.css`**, and **`space.scene.css`** add the same breakpoint: shallower / **`dvh`**-capped water and reef art (Ocean); raised façades, shorter skyline rows, street props, and thicker **`city-ground`** (City); lifted dunes, scaled saguaros, raised pyramid and barrel props (Desert); tighter nebula inset, smaller planets / station, shorter horizon glow (Space).
 
+**Phase 8 (QA and tests):** Run **`npm run lint`**, **`npm test`**, and **`npm run build`** before release. Vitest covers **`src/constants/motion.ts`** (viewport sizing, wander deltas, action-row clamp, keyboard nudge) and **`readPhoneLayout`** in **`src/hooks/usePhoneLayout.test.ts`**. For **manual** checks, use DevTools or real devices at **320**, **390**, and **480** portrait widths: character **drag** and **wander**, **scene** changes, **import / export** and **share link**, character **creator** open → edit → save → close. On iOS Safari and Chrome Android when available, confirm the playground does not scroll while dragging figures — **`.draggable-character`** sets **`touch-action: none`** in **`styles.css`**, and **`useCharacterMotion`** uses **pointer capture** so the active pointer stays on the character until release.
+
 ### Mobile scene layer checklist (when editing `*.scene.css`)
 
 - Wrap rules in **`@media (max-width: 480px)`** and scope with **`.scene-background.scene-<id>`** so desktop stays unchanged.
