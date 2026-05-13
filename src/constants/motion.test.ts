@@ -2,8 +2,10 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   clamp,
   clampAllCharacterPositions,
+  clampCharacterActionControlsPosition,
   clampPositionToViewport,
   getCenteredCharacterPosition,
+  getCharacterActionControlsIdealAnchor,
   getKeyboardNudgePx,
   getPlaygroundCharacterSize
 } from "./motion";
@@ -37,6 +39,50 @@ describe("getCenteredCharacterPosition", () => {
     Object.defineProperty(window, "innerHeight", { value: 600, configurable: true });
     const size = { width: 300, height: 300 };
     expect(getCenteredCharacterPosition(size)).toEqual({ x: 250, y: 150 });
+  });
+});
+
+describe("getCharacterActionControlsIdealAnchor", () => {
+  it("centers horizontally on the character box and offsets top by scaled gap", () => {
+    const pos = { x: 100, y: 200 };
+    const box = { width: 300, height: 300 };
+    expect(getCharacterActionControlsIdealAnchor(pos, box)).toEqual({ centerX: 250, top: 164 });
+  });
+
+  it("uses a smaller vertical offset than desktop when the character box is shorter (mobile scale)", () => {
+    const pos = { x: 0, y: 200 };
+    const box = { width: 115, height: 115 };
+    expect(getCharacterActionControlsIdealAnchor(pos, box)).toEqual({ centerX: 57.5, top: 172 });
+  });
+});
+
+describe("clampCharacterActionControlsPosition", () => {
+  it("clamps centerX when the row is narrower than the viewport", () => {
+    const ideal = { centerX: 5, top: 20 };
+    const row = { width: 200, height: 40 };
+    const viewport = { width: 400, height: 600 };
+    expect(clampCharacterActionControlsPosition(ideal, row, viewport)).toEqual({ left: 108, top: 20 });
+  });
+
+  it("uses viewport center when the row cannot fit horizontally", () => {
+    const ideal = { centerX: 50, top: 10 };
+    const row = { width: 400, height: 40 };
+    const viewport = { width: 320, height: 600 };
+    expect(clampCharacterActionControlsPosition(ideal, row, viewport)).toEqual({ left: 160, top: 10 });
+  });
+
+  it("adds extra bottom clearance on narrow widths (fixed control bar)", () => {
+    const ideal = { centerX: 160, top: 900 };
+    const row = { width: 200, height: 44 };
+    const viewport = { width: 400, height: 700 };
+    expect(clampCharacterActionControlsPosition(ideal, row, viewport)).toEqual({ left: 160, top: 600 });
+  });
+
+  it("uses standard bottom padding above the mobile breakpoint", () => {
+    const ideal = { centerX: 500, top: 900 };
+    const row = { width: 200, height: 44 };
+    const viewport = { width: 900, height: 700 };
+    expect(clampCharacterActionControlsPosition(ideal, row, viewport)).toEqual({ left: 500, top: 648 });
   });
 });
 

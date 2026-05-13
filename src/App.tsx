@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { CharacterCreatorModal } from "./components/CharacterCreatorModal";
 import { ControlPanel } from "./components/ControlPanel";
 import { CustomCharacter as CustomCharacterView } from "./components/CustomCharacter";
@@ -7,7 +7,13 @@ import { SceneBackground } from "./components/backgrounds/SceneBackground";
 import { DEFAULT_SCENE_ID, SCENE_PRESETS, isSceneId, type SceneId } from "./constants/scenes";
 import { BEAR_PRESET, PENGUIN_PRESET } from "./constants/builtInCharacters";
 import { MAX_CUSTOM_CHARACTERS, createDefaultComponents } from "./constants/characterCreator";
-import { BASE_CHARACTER_DEFAULTS, clampAllCharacterPositions, getCenteredCharacterPosition, DESKTOP_CHARACTER_PX } from "./constants/motion";
+import {
+  BASE_CHARACTER_DEFAULTS,
+  clampAllCharacterPositions,
+  clampCharacterActionControlsPosition,
+  getCenteredCharacterPosition,
+  getCharacterActionControlsIdealAnchor
+} from "./constants/motion";
 import { useCharacterMotion } from "./hooks/useCharacterMotion";
 import { usePlaygroundCharacterSize } from "./hooks/usePlaygroundCharacterSize";
 import type { CharacterComponentKey, CustomCharacter } from "./types/characters";
@@ -423,6 +429,60 @@ function App() {
     customCharacters
   ]);
 
+  const characterActionControlsRef = useRef<HTMLDivElement>(null);
+  const [characterActionControlsLayout, setCharacterActionControlsLayout] = useState<{
+    characterId: string;
+    left: number;
+    top: number;
+  } | null>(null);
+
+  useLayoutEffect(() => {
+    if (!selectedActionInfo) {
+      return;
+    }
+    const characterId = selectedActionInfo.id;
+    const ideal = getCharacterActionControlsIdealAnchor(selectedActionInfo.position, playgroundCharacterSize);
+
+    const apply = () => {
+      const el = characterActionControlsRef.current;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const w = el?.offsetWidth ?? (selectedActionInfo.kind === "custom" ? 280 : 100);
+      const h = el?.offsetHeight ?? 44;
+      const pos = clampCharacterActionControlsPosition(ideal, { width: w, height: h }, { width: vw, height: vh });
+      setCharacterActionControlsLayout((prev) =>
+        prev?.characterId === characterId && prev.left === pos.left && prev.top === pos.top
+          ? prev
+          : { characterId, ...pos }
+      );
+    };
+
+    apply();
+    window.addEventListener("resize", apply);
+    const ro = new ResizeObserver(() => {
+      apply();
+    });
+    const node = characterActionControlsRef.current;
+    if (node) {
+      ro.observe(node);
+    }
+    return () => {
+      window.removeEventListener("resize", apply);
+      ro.disconnect();
+    };
+  }, [selectedActionInfo, playgroundCharacterSize]);
+
+  const characterActionRowStyle = useMemo(() => {
+    if (!selectedActionInfo) {
+      return null;
+    }
+    const ideal = getCharacterActionControlsIdealAnchor(selectedActionInfo.position, playgroundCharacterSize);
+    if (characterActionControlsLayout?.characterId === selectedActionInfo.id) {
+      return { left: characterActionControlsLayout.left, top: characterActionControlsLayout.top };
+    }
+    return { left: ideal.centerX, top: ideal.top };
+  }, [selectedActionInfo, characterActionControlsLayout, playgroundCharacterSize]);
+
   return (
     <>
       <SceneBackground sceneId={selectedScene} isNightMode={isNightMode} />
@@ -467,15 +527,13 @@ function App() {
         />
       ))}
 
-      {selectedActionInfo ? (
+      {selectedActionInfo && characterActionRowStyle ? (
         <div
+          ref={characterActionControlsRef}
           className="character-action-controls"
           role="group"
           aria-label={`Actions for ${selectedActionInfo.name}`}
-          style={{
-            left: selectedActionInfo.position.x + playgroundCharacterSize.width / 2,
-            top: selectedActionInfo.position.y - Math.max(28, Math.round(36 * (playgroundCharacterSize.height / DESKTOP_CHARACTER_PX)))
-          }}
+          style={{ left: characterActionRowStyle.left, top: characterActionRowStyle.top }}
         >
           <button
             type="button"
@@ -532,6 +590,7 @@ function App() {
         onImportSettingsFile={handleImportSettingsFile}
         onCopyShareLink={() => void handleCopyShareLink()}
         onSceneChange={handleSceneChange}
+        isCharacterCreatorOpen={isCreatorOpen}
       />
 
       <CharacterCreatorModal

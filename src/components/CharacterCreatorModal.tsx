@@ -1,4 +1,4 @@
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, PointerEvent as ReactPointerEvent } from "react";
 import { useEffect, useId, useRef } from "react";
 import {
   CHARACTER_COMPONENT_KEYS,
@@ -8,6 +8,7 @@ import {
 import { CHARACTER_COMPONENT_LABELS, CHARACTER_VARIANT_OPTIONS } from "../constants/characterCreator";
 import { CharacterCreatorPreview } from "./character/CharacterCreatorPreview";
 import { useModalFocusTrap } from "../hooks/useModalFocusTrap";
+import { usePhoneLayout } from "../hooks/usePhoneLayout";
 
 type CharacterDraft = {
   name: string;
@@ -40,26 +41,18 @@ export function CharacterCreatorModal({
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
+  const isPhoneLayout = usePhoneLayout();
   useModalFocusTrap(panelRef, isOpen, onClose);
 
-  useEffect(() => {
-    if (!isOpen) {
+  const onOverlayPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (isPhoneLayout) {
       return;
     }
-    const node = overlayRef.current;
-    if (!node) {
+    if (event.target !== event.currentTarget) {
       return;
     }
-    const onBackdropMouseDown = (event: globalThis.MouseEvent) => {
-      if (event.target === node) {
-        onClose();
-      }
-    };
-    node.addEventListener("mousedown", onBackdropMouseDown);
-    return () => {
-      node.removeEventListener("mousedown", onBackdropMouseDown);
-    };
-  }, [isOpen, onClose]);
+    onClose();
+  };
 
   useEffect(() => {
     if (!isOpen) {
@@ -90,14 +83,103 @@ export function CharacterCreatorModal({
       onComponentColorChange(key, event.target.value);
     };
 
+  const componentSlots = CHARACTER_COMPONENT_KEYS.map((key) => {
+    const headingId = `creator-slot-heading-${key}`;
+    return (
+      <div className="rounded border border-slate-200 p-3" key={key}>
+        <p id={headingId} className="mb-2 text-sm font-semibold text-slate-800">
+          {CHARACTER_COMPONENT_LABELS[key]}
+        </p>
+        <div className="flex items-center gap-2">
+          <select
+            className="min-h-[44px] w-full rounded border border-slate-300 px-2 py-1 text-sm"
+            aria-labelledby={headingId}
+            value={draft.components[key].variantId}
+            onChange={handleVariantChange(key)}
+          >
+            {CHARACTER_VARIANT_OPTIONS[key].map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <input
+            type="color"
+            value={draft.components[key].color}
+            onChange={handleColorChange(key)}
+            aria-label={`${CHARACTER_COMPONENT_LABELS[key]} color`}
+          />
+        </div>
+      </div>
+    );
+  });
+
   if (!isOpen) {
     return null;
+  }
+
+  if (isPhoneLayout) {
+    return (
+      <div
+        ref={panelRef}
+        className="fixed inset-0 z-[100] flex min-h-0 w-full flex-col overflow-hidden overscroll-none bg-white h-dvh max-h-dvh"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+      >
+        <div className="shrink-0 border-b border-slate-200 px-4 py-3 pt-[max(12px,env(safe-area-inset-top,0px))]">
+          <h2 id={titleId} className="text-lg font-semibold text-slate-900">
+            {title}
+          </h2>
+        </div>
+
+        <div className="flex max-h-[38dvh] shrink-0 flex-col justify-center overflow-hidden border-b border-slate-100 bg-slate-50/90 px-2 py-2">
+          <CharacterCreatorPreview
+            components={draft.components}
+            className="rounded-lg border-slate-200 p-2 shadow-none"
+          />
+        </div>
+
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3">
+          <div className="space-y-4">
+            <label className="flex flex-col gap-1 text-sm font-medium text-slate-700">
+              Name
+              <input
+                className="min-h-[44px] rounded border border-slate-300 px-3 py-2 text-base"
+                value={draft.name}
+                onChange={(event) => onNameChange(event.target.value)}
+                autoComplete="off"
+              />
+            </label>
+            <div className="grid grid-cols-1 gap-3">{componentSlots}</div>
+          </div>
+        </div>
+
+        <div className="flex shrink-0 gap-3 border-t border-slate-200 bg-white px-4 py-3 pb-[max(12px,env(safe-area-inset-bottom,0px))] pt-3 shadow-[0_-4px_16px_rgba(15,23,42,0.06)]">
+          <button
+            className="min-h-[44px] min-w-[88px] rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800"
+            onClick={onClose}
+            type="button"
+          >
+            Close
+          </button>
+          <button
+            className="min-h-[44px] flex-1 rounded-lg bg-sky-600 px-4 text-sm font-semibold text-white"
+            onClick={onSave}
+            type="button"
+          >
+            {saveLabel}
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden overscroll-none bg-black/45 p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden overscroll-none bg-black/45 p-4"
+      onPointerDown={onOverlayPointerDown}
       role="presentation"
     >
       <div
@@ -134,38 +216,7 @@ export function CharacterCreatorModal({
               </label>
             </div>
 
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              {CHARACTER_COMPONENT_KEYS.map((key) => {
-                const headingId = `creator-slot-heading-${key}`;
-                return (
-                  <div className="rounded border border-slate-200 p-3" key={key}>
-                    <p id={headingId} className="mb-2 text-sm font-semibold text-slate-800">
-                      {CHARACTER_COMPONENT_LABELS[key]}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <select
-                        className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
-                        aria-labelledby={headingId}
-                        value={draft.components[key].variantId}
-                        onChange={handleVariantChange(key)}
-                      >
-                        {CHARACTER_VARIANT_OPTIONS[key].map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                      <input
-                        type="color"
-                        value={draft.components[key].color}
-                        onChange={handleColorChange(key)}
-                        aria-label={`${CHARACTER_COMPONENT_LABELS[key]} color`}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">{componentSlots}</div>
           </div>
         </div>
 

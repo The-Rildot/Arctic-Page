@@ -32,6 +32,64 @@ export const WANDER_DELTA_Y = 40;
 
 export const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
+/** How much space to leave at the top/bottom of the layout viewport when clamping the character action pill row. */
+const ACTION_CONTROLS_EDGE_PAD_PX = 8;
+
+/**
+ * On ≤480px widths, keep the action row above the fixed bottom controls bar (collapsed bar ≈48px + padding).
+ * Used only for vertical clamping of `.character-action-controls`.
+ */
+const MOBILE_ACTION_ROW_BOTTOM_CLEARANCE_PX = 56;
+
+/** Horizontal center (`left` with `translateX(-50%)`) and `top` for the action row above a character box. */
+export function getCharacterActionControlsIdealAnchor(
+  position: CharacterPosition,
+  boxSize: { width: number; height: number }
+): { centerX: number; top: number } {
+  const offsetAbove = Math.max(28, Math.round(36 * (boxSize.height / DESKTOP_CHARACTER_PX)));
+  return {
+    centerX: position.x + boxSize.width / 2,
+    top: position.y - offsetAbove
+  };
+}
+
+/**
+ * Keeps the Lock / Edit / Delete pill row on-screen. `ideal.centerX` is the CSS `left` anchor (row is centered with
+ * `transform: translateX(-50%)`). Pass measured `rowSize` from the DOM for accurate horizontal bounds.
+ */
+export function clampCharacterActionControlsPosition(
+  ideal: { centerX: number; top: number },
+  rowSize: { width: number; height: number },
+  viewport: { width: number; height: number }
+): { left: number; top: number } {
+  const halfW = rowSize.width / 2;
+  const edge = ACTION_CONTROLS_EDGE_PAD_PX;
+  const bottomPad =
+    viewport.width <= MOBILE_BREAKPOINT_PX
+      ? Math.max(MOBILE_ACTION_ROW_BOTTOM_CLEARANCE_PX, edge)
+      : edge;
+
+  const minCx = halfW + edge;
+  const maxCx = viewport.width - halfW - edge;
+  let centerX = ideal.centerX;
+  if (minCx <= maxCx) {
+    centerX = clamp(ideal.centerX, minCx, maxCx);
+  } else {
+    centerX = viewport.width / 2;
+  }
+
+  const minTop = edge;
+  const maxTop = viewport.height - rowSize.height - bottomPad;
+  let top = ideal.top;
+  if (minTop <= maxTop) {
+    top = clamp(ideal.top, minTop, maxTop);
+  } else {
+    top = Math.max(edge, Math.min(ideal.top, viewport.height - rowSize.height - edge));
+  }
+
+  return { left: Math.round(centerX), top: Math.round(top) };
+}
+
 /** Playground character outer box: desktop 300×300; on narrow viewports, square side fits ~3 figures with overlap. */
 export function getPlaygroundCharacterSize(): { width: number; height: number } {
   if (typeof window === "undefined") {

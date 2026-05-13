@@ -876,6 +876,21 @@ body.dark-mode .control-panel-scrim {
     top 0.88s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
+@media (max-width: 480px) {
+  .character-action-controls {
+    max-width: calc(100vw - 16px);
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 6px;
+  }
+
+  .character-action-controls button {
+    min-height: 44px;
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .character-instance.draggable-character:not(.dragging) {
     transition: none;

@@ -1,16 +1,7 @@
-import { useEffect, useState, type ChangeEvent, type ReactNode, type RefObject } from "react";
-import { MOBILE_BREAKPOINT_PX } from "../constants/motion";
+import { useState, type ChangeEvent, type ReactNode, type RefObject } from "react";
+import { readPhoneLayout, usePhoneLayout } from "../hooks/usePhoneLayout";
 import type { SceneId } from "../constants/scenes";
 import type { BuiltInCharacterNames } from "../utils/storage";
-
-const phoneMediaQuery = `(max-width: ${MOBILE_BREAKPOINT_PX}px)`;
-
-function readPhoneLayout(): boolean {
-  if (typeof window === "undefined") {
-    return false;
-  }
-  return window.matchMedia(phoneMediaQuery).matches;
-}
 
 /** Mobile: start collapsed (bottom bar only) to maximize the playground. Desktop: panel visible. */
 function readInitialPanelHidden(): boolean {
@@ -43,6 +34,8 @@ type ControlPanelProps = {
   onImportSettingsFile: (event: ChangeEvent<HTMLInputElement>) => void;
   onCopyShareLink: () => void;
   onSceneChange: (value: string) => void;
+  /** When true on ≤480px layout, the bottom bar / sheet are not rendered so the character creator can be fullscreen. */
+  isCharacterCreatorOpen?: boolean;
 };
 
 export function ControlPanel({
@@ -65,18 +58,15 @@ export function ControlPanel({
   onImportSettingsClick,
   onImportSettingsFile,
   onCopyShareLink,
-  onSceneChange
+  onSceneChange,
+  isCharacterCreatorOpen = false
 }: ControlPanelProps) {
   const [isHidden, setIsHidden] = useState(readInitialPanelHidden);
-  const [isPhoneLayout, setIsPhoneLayout] = useState(readPhoneLayout);
+  const isPhoneLayout = usePhoneLayout();
 
-  useEffect(() => {
-    const mq = window.matchMedia(phoneMediaQuery);
-    const sync = () => setIsPhoneLayout(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
+  if (isPhoneLayout && isCharacterCreatorOpen) {
+    return null;
+  }
 
   const scenePresetLabel =
     scenePresets.find((p) => p.id === selectedScene)?.label ?? selectedScene;
