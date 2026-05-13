@@ -848,6 +848,7 @@ body.dark-mode .control-panel-scrim {
 
 .draggable-character {
   cursor: grab;
+  touch-action: none;
 }
 
 .draggable-character.dragging {

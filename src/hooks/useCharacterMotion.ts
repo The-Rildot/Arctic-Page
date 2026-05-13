@@ -21,6 +21,9 @@ type DragState = {
   startX: number;
   startY: number;
   moved: boolean;
+  pointerId: number;
+  /** Element that called `setPointerCapture` — must release on drag end. */
+  captureEl: HTMLElement | null;
 };
 
 type UseCharacterMotionArgs = {
@@ -143,6 +146,14 @@ export function useCharacterMotion({
     (id: string, size: { width: number; height: number }, onDragStart?: (id: string) => void) =>
     (event: PointerEvent<HTMLDivElement>) => {
       event.preventDefault();
+      const target = event.currentTarget;
+      if (target instanceof HTMLElement && event.pointerId != null) {
+        try {
+          target.setPointerCapture(event.pointerId);
+        } catch {
+          /* ignore: invalid pointer id in edge environments */
+        }
+      }
       const currentPosition = characterPositions[id] ?? BASE_CHARACTER_DEFAULTS[id] ?? { x: 200, y: 220 };
       dragStateRef.current = {
         id,
@@ -152,7 +163,9 @@ export function useCharacterMotion({
         height: size.height,
         startX: event.clientX,
         startY: event.clientY,
-        moved: false
+        moved: false,
+        pointerId: event.pointerId,
+        captureEl: target instanceof HTMLElement ? target : null
       };
       setDraggingCharacterId(id);
       onDragStart?.(id);
@@ -162,6 +175,9 @@ export function useCharacterMotion({
     const handlePointerMove = (event: globalThis.PointerEvent) => {
       const dragState = dragStateRef.current;
       if (!dragState) {
+        return;
+      }
+      if (event.pointerId !== dragState.pointerId) {
         return;
       }
 
@@ -186,25 +202,46 @@ export function useCharacterMotion({
       }));
     };
 
-    const stopDragging = () => {
-      if (!dragStateRef.current) {
+    const stopDragging = (event?: globalThis.PointerEvent) => {
+      const dragState = dragStateRef.current;
+      if (!dragState) {
         return;
       }
-      if (dragStateRef.current.moved) {
-        suppressSelectRef.current = dragStateRef.current.id;
+      if (event && event.pointerId !== dragState.pointerId) {
+        return;
+      }
+      const { captureEl, pointerId } = dragState;
+      if (captureEl?.hasPointerCapture(pointerId)) {
+        try {
+          captureEl.releasePointerCapture(pointerId);
+        } catch {
+          /* ignore */
+        }
+      }
+      if (dragState.moved) {
+        suppressSelectRef.current = dragState.id;
       }
       dragStateRef.current = null;
       setDraggingCharacterId(null);
     };
 
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerup", stopDragging);
-    window.addEventListener("pointercancel", stopDragging);
+    document.addEventListener("pointermove", handlePointerMove);
+    document.addEventListener("pointerup", stopDragging);
+    document.addEventListener("pointercancel", stopDragging);
 
     return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerup", stopDragging);
-      window.removeEventListener("pointercancel", stopDragging);
+      document.removeEventListener("pointermove", handlePointerMove);
+      document.removeEventListener("pointerup", stopDragging);
+      document.removeEventListener("pointercancel", stopDragging);
+      const leftover = dragStateRef.current;
+      if (leftover?.captureEl?.hasPointerCapture(leftover.pointerId)) {
+        try {
+          leftover.captureEl.releasePointerCapture(leftover.pointerId);
+        } catch {
+          /* ignore */
+        }
+      }
+      dragStateRef.current = null;
     };
   }, []);
 
