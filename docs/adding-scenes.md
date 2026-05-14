@@ -31,7 +31,7 @@ Persistence: **`storage.getSelectedScene` / `setSelectedScene`** in **`src/utils
 }
 ```
 
-**Phase 1 layout (playground shell):** **`styles.css`** sets **`html`**, **`body`**, and **`#root`** to fill the viewport using **`100dvh`** with a **`100vh`** fallback so mobile browser chrome does not clip the canvas vertically. **`Index.html`** uses **`viewport-fit=cover`** on the viewport meta so **`env(safe-area-inset-*)`** is available for **UI chrome** (notches / home indicator). Character positioning may still use flush viewport math per product requirements.
+**Phase 1 layout (playground shell):** **`styles.css`** sets **`html`**, **`body`**, and **`#root`** to fill the viewport using **`100dvh`** with a **`100vh`** fallback so mobile browser chrome does not clip the canvas vertically. **`index.html`** uses **`viewport-fit=cover`** on the viewport meta so **`env(safe-area-inset-*)`** is available for **UI chrome** (notches / home indicator). Character positioning may still use flush viewport math per product requirements.
 
 **Phase 2 (playground characters):** **`getPlaygroundCharacterSize()`** in **`src/constants/motion.ts`** returns **300×300** above **`480px`** width and a smaller square at **`≤480px`** so about three figures fit with overlap; **`usePlaygroundCharacterSize`** keeps **`App`** / **`CharacterView`** / drag clamping aligned on resize.
 
