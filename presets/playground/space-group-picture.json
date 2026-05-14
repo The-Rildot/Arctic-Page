@@ -1,0 +1,229 @@
+{
+  "v": 1,
+  "isNightMode": false,
+  "selectedScene": "space",
+  "customCharacters": [
+    {
+      "id": "2c327aee-6372-4428-bec1-4d3f128ffdb6",
+      "type": "custom",
+      "name": "Lion",
+      "position": {
+        "x": 360,
+        "y": 220
+      },
+      "messageText": "",
+      "components": {
+        "head": {
+          "variantId": "lion-head",
+          "color": "#fef3dc"
+        },
+        "body": {
+          "variantId": "lion-body",
+          "color": "#eace1a"
+        },
+        "arms": {
+          "variantId": "lion-arms",
+          "color": "#ffbd2e"
+        },
+        "legs": {
+          "variantId": "lion-legs",
+          "color": "#ffb957"
+        },
+        "shirt": {
+          "variantId": "lion-shirt",
+          "color": "#f9a8d4"
+        },
+        "eyes": {
+          "variantId": "lion-eyes",
+          "color": "#3b3b3b"
+        },
+        "mouthNose": {
+          "variantId": "lion-mouth",
+          "color": "#000000"
+        },
+        "blush": {
+          "variantId": "lion-blush",
+          "color": "#f472b6"
+        },
+        "message": {
+          "variantId": "classic-message",
+          "color": "#0f172a"
+        }
+      }
+    },
+    {
+      "id": "8612b4a2-1af3-4130-b201-4bd6f08ef5a6",
+      "type": "custom",
+      "name": "Robot",
+      "position": {
+        "x": 360,
+        "y": 220
+      },
+      "messageText": "",
+      "components": {
+        "head": {
+          "variantId": "robot-head",
+          "color": "#dbeafe"
+        },
+        "body": {
+          "variantId": "robot-body",
+          "color": "#93c5fd"
+        },
+        "arms": {
+          "variantId": "robot-arms",
+          "color": "#bfdbfe"
+        },
+        "legs": {
+          "variantId": "robot-legs",
+          "color": "#bfdbfe"
+        },
+        "shirt": {
+          "variantId": "robot-shirt",
+          "color": "#f9a8d4"
+        },
+        "eyes": {
+          "variantId": "robot-eyes",
+          "color": "#111827"
+        },
+        "mouthNose": {
+          "variantId": "robot-mouth",
+          "color": "#7c3aed"
+        },
+        "blush": {
+          "variantId": "robot-blush",
+          "color": "#f472b6"
+        },
+        "message": {
+          "variantId": "classic-message",
+          "color": "#0f172a"
+        }
+      }
+    },
+    {
+      "id": "cf3e14a8-33bd-4b9a-96fd-2a5a1451047b",
+      "type": "custom",
+      "name": "Butterfly",
+      "position": {
+        "x": 500,
+        "y": 220
+      },
+      "messageText": "",
+      "components": {
+        "head": {
+          "variantId": "butterfly-head",
+          "color": "#fcccff"
+        },
+        "body": {
+          "variantId": "butterfly-body",
+          "color": "#c791fd"
+        },
+        "arms": {
+          "variantId": "butterfly-arms",
+          "color": "#ae26f7"
+        },
+        "legs": {
+          "variantId": "butterfly-legs",
+          "color": "#b934ea"
+        },
+        "shirt": {
+          "variantId": "butterfly-shirt",
+          "color": "#f9a8d4"
+        },
+        "eyes": {
+          "variantId": "butterfly-eyes",
+          "color": "#111827"
+        },
+        "mouthNose": {
+          "variantId": "butterfly-mouth",
+          "color": "#ffffff"
+        },
+        "blush": {
+          "variantId": "butterfly-blush",
+          "color": "#a06637"
+        },
+        "message": {
+          "variantId": "badge-message",
+          "color": "#0f172a"
+        }
+      }
+    },
+    {
+      "id": "ac785733-e8d6-46ec-8a27-c7d90e5a0112",
+      "type": "custom",
+      "name": "Custom 5",
+      "position": {
+        "x": 132,
+        "y": 383
+      },
+      "components": {
+        "head": {
+          "variantId": "butterfly-head",
+          "color": "#dbeafe"
+        },
+        "body": {
+          "variantId": "penguin-body",
+          "color": "#93c5fd"
+        },
+        "arms": {
+          "variantId": "robot-arms",
+          "color": "#bfdbfe"
+        },
+        "legs": {
+          "variantId": "robot-legs",
+          "color": "#bfdbfe"
+        },
+        "eyes": {
+          "variantId": "penguin-eyes",
+          "color": "#2fc65c"
+        },
+        "mouthNose": {
+          "variantId": "lion-mouth",
+          "color": "#7c3aed"
+        },
+        "blush": {
+          "variantId": "lion-blush",
+          "color": "#f472b6"
+        }
+      }
+    }
+  ],
+  "characterPositions": {
+    "penguin": {
+      "x": 67.84852600097656,
+      "y": 564.0000610351562
+    },
+    "bear": {
+      "x": 941.6666259765625,
+      "y": 548.6666259765625
+    },
+    "2c327aee-6372-4428-bec1-4d3f128ffdb6": {
+      "x": 514.3333129882812,
+      "y": 563
+    },
+    "8612b4a2-1af3-4130-b201-4bd6f08ef5a6": {
+      "x": 732,
+      "y": 541.3333129882812
+    },
+    "cf3e14a8-33bd-4b9a-96fd-2a5a1451047b": {
+      "x": 616.0000610351562,
+      "y": 250.66665649414062
+    },
+    "ac785733-e8d6-46ec-8a27-c7d90e5a0112": {
+      "x": 288.9393768310547,
+      "y": 554
+    }
+  },
+  "showCharacterNames": false,
+  "builtInCharacterNames": {
+    "penguin": "Tester",
+    "bear": "Polar Bear"
+  },
+  "lockedCharacterIds": [
+    "8612b4a2-1af3-4130-b201-4bd6f08ef5a6",
+    "ac785733-e8d6-46ec-8a27-c7d90e5a0112",
+    "2c327aee-6372-4428-bec1-4d3f128ffdb6",
+    "penguin",
+    "bear",
+    "cf3e14a8-33bd-4b9a-96fd-2a5a1451047b"
+  ]
+}

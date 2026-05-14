@@ -1,0 +1,33 @@
+{
+  "v": 1,
+  "isNightMode": false,
+  "selectedScene": "forest",
+  "customCharacters": [
+    {
+      "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      "type": "custom",
+      "name": "Preset Lion",
+      "position": { "x": 320, "y": 220 },
+      "components": {
+        "head": { "variantId": "lion-head", "color": "#dbeafe" },
+        "body": { "variantId": "lion-body", "color": "#93c5fd" },
+        "arms": { "variantId": "lion-arms", "color": "#bfdbfe" },
+        "legs": { "variantId": "lion-legs", "color": "#bfdbfe" },
+        "eyes": { "variantId": "lion-eyes", "color": "#111827" },
+        "mouthNose": { "variantId": "lion-mouth", "color": "#7c3aed" },
+        "blush": { "variantId": "lion-blush", "color": "#f472b6" }
+      }
+    }
+  ],
+  "characterPositions": {
+    "penguin": { "x": 80, "y": 100 },
+    "bear": { "x": 620, "y": 100 },
+    "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11": { "x": 320, "y": 220 }
+  },
+  "showCharacterNames": true,
+  "builtInCharacterNames": {
+    "penguin": "Penguin",
+    "bear": "Polar Bear"
+  },
+  "lockedCharacterIds": []
+}

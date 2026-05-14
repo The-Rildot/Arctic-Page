@@ -1,0 +1,16 @@
+{
+  "v": 1,
+  "isNightMode": true,
+  "selectedScene": "city",
+  "customCharacters": [],
+  "characterPositions": {
+    "penguin": { "x": 120, "y": 180 },
+    "bear": { "x": 560, "y": 140 }
+  },
+  "showCharacterNames": true,
+  "builtInCharacterNames": {
+    "penguin": "Penguin",
+    "bear": "Polar Bear"
+  },
+  "lockedCharacterIds": []
+}

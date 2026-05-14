@@ -38,3 +38,7 @@ If the site is served from a subpath, set `base` in Vite and any host “base di
 ## Web app manifest
 
 `public/manifest.webmanifest` is linked from `index.html` for install / theme hints in supporting browsers. It does not register a service worker; add one later if you want offline caching.
+
+## Optional preview asset
+
+For README or host-specific docs you can reuse stills under [`docs/media/`](../docs/media/) (see [`docs/media/README.md`](./media/README.md) for filenames such as `readme-arctic-day.png` and `readme-space-group.png`).

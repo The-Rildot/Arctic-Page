@@ -50,7 +50,7 @@ Persistence: **`storage.getSelectedScene` / `setSelectedScene`** in **`src/utils
 - Cap tall **`min(..., XXvh)`** bands with **`dvh`** (e.g. **`min(220px, 32dvh)`**) so short viewports keep a playable band for characters.
 - If art is **`vw`-heavy** or many fixed-size triangles, reduce heights, **`vw` span**, or apply a contained **`scale()`** on a wrapper rather than hand-editing dozens of borders.
 
-See the mobile rollout plan in Cursor for the full phased checklist.
+See the mobile rollout plan in Cursor for the full phased checklist. For **screenshots**, **GIFs**, and **importable playground JSON**, see the root [README](../README.md), [`docs/media/README.md`](./media/README.md), and [`../presets/README.md`](../presets/README.md).
 
 ---
 
